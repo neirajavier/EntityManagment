@@ -1,0 +1,353 @@
+@font-face{font-family:montserrat;font-style:normal;font-weight:400;src:local('Montserrat'),url(https://fonts.cdnfonts.com/s/14883/Montserrat-Regular.woff) format('woff')}@font-face{font-family:montserrat;font-style:italic;font-weight:400;src:local('Montserrat'),url(https://fonts.cdnfonts.com/s/14883/Montserrat-Italic.woff) format('woff')}@font-face{font-family:montserrat;font-style:normal;font-weight:250;src:local('Montserrat'),url(https://fonts.cdnfonts.com/s/14883/Montserrat-Thin.woff) format('woff')}@font-face{font-family:montserrat;font-style:italic;font-weight:250;src:local('Montserrat'),url(https://fonts.cdnfonts.com/s/14883/Montserrat-ThinItalic.woff) format('woff')}@font-face{font-family:montserrat;font-style:normal;font-weight:275;src:local('Montserrat'),url(https://fonts.cdnfonts.com/s/14883/Montserrat-ExtraLight.woff) format('woff')}@font-face{font-family:montserrat;font-style:italic;font-weight:275;src:local('Montserrat'),url(https://fonts.cdnfonts.com/s/14883/Montserrat-ExtraLightItalic.woff) format('woff')}@font-face{font-family:montserrat;font-style:normal;font-weight:300;src:local('Montserrat'),url(https://fonts.cdnfonts.com/s/14883/Montserrat-Light.woff) format('woff')}@font-face{font-family:montserrat;font-style:italic;font-weight:300;src:local('Montserrat'),url(https://fonts.cdnfonts.com/s/14883/Montserrat-LightItalic.woff) format('woff')}@font-face{font-family:montserrat;font-style:normal;font-weight:500;src:local('Montserrat'),url(https://fonts.cdnfonts.com/s/14883/Montserrat-Medium.woff) format('woff')}@font-face{font-family:montserrat;font-style:italic;font-weight:500;src:local('Montserrat'),url(https://fonts.cdnfonts.com/s/14883/Montserrat-MediumItalic.woff) format('woff')}@font-face{font-family:montserrat;font-style:normal;font-weight:600;src:local('Montserrat'),url(https://fonts.cdnfonts.com/s/14883/Montserrat-SemiBold.woff) format('woff')}@font-face{font-family:montserrat;font-style:italic;font-weight:600;src:local('Montserrat'),url(https://fonts.cdnfonts.com/s/14883/Montserrat-SemiBoldItalic.woff) format('woff')}@font-face{font-family:montserrat;font-style:normal;font-weight:700;src:local('Montserrat'),url(https://fonts.cdnfonts.com/s/14883/Montserrat-Bold.woff) format('woff')}@font-face{font-family:montserrat;font-style:italic;font-weight:700;src:local('Montserrat'),url(https://fonts.cdnfonts.com/s/14883/Montserrat-BoldItalic.woff) format('woff')}@font-face{font-family:montserrat;font-style:normal;font-weight:800;src:local('Montserrat'),url(https://fonts.cdnfonts.com/s/14883/Montserrat-ExtraBold.woff) format('woff')}@font-face{font-family:montserrat;font-style:italic;font-weight:800;src:local('Montserrat'),url(https://fonts.cdnfonts.com/s/14883/Montserrat-ExtraBoldItalic.woff) format('woff')}@font-face{font-family:montserrat;font-style:normal;font-weight:900;src:local('Montserrat'),url(https://fonts.cdnfonts.com/s/14883/Montserrat-Black.woff) format('woff')}@font-face{font-family:montserrat;font-style:italic;font-weight:900;src:local('Montserrat'),url(https://fonts.cdnfonts.com/s/14883/Montserrat-BlackItalic.woff) format('woff')}
+
+body
+{
+    font-family: 'Montserrat';
+}
+
+.botones_tabla:hover
+{
+    background: #dadad2;
+}
+
+table#subusuarios
+{
+    border-collapse: collapse;
+    /* border: #9b9a9a 2px solid; */
+}
+
+ul.nav li a
+{
+    font-size: 0.6rem;
+}
+
+ul.nav li a:hover
+{
+    background: rgb(219, 64, 64);
+    color: white;
+}
+
+#grupos a
+{
+    font-size: 0.8rem;
+}
+
+#grupos tbody tr:hover
+{
+    /* background: rgb(219, 64, 64) !important; */
+    cursor: pointer;
+    /* color: white; */
+}
+/* sombrear los grupos al poner el mouse
+ */
+.seleccionada {
+    color: white !important;
+    background: #f52617 !important;
+}
+
+/* #subusuarios tbody tr
+{
+    background: #dedede !important;
+} */
+
+#collapse img
+{
+    a-webkit-transition: 0.4s linear;
+    transition: 0.6s linear;
+}
+
+.img-rotate
+{
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+.img-rotate-90
+{
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+}
+
+.img-rotate-270
+{
+    -webkit-transform: rotate(270deg);
+    transform: rotate(270deg);
+}
+
+#colapsar_grupos img
+{
+    a-webkit-transition: 0.5s linear;
+    transition: 0.6s linear;
+}
+
+.imag-icon
+{
+    height: 25px;
+    width: 25px;
+}
+
+.dataTables_filter, .dataTables_length
+{
+    display: none;
+}
+
+.botones_asignacion
+{
+    background: #c5c5c5;
+}
+
+.mycheck
+{
+    cursor: pointer;
+    /* background-color: rgb(168, 29, 29); */
+    width: 15px;
+    height: 15px;
+    /* appearance: none; */
+    border: 2px solid #888;
+    background: white;
+}
+
+.mycheck:checked {
+    background: #DB0632;
+}
+
+input[type="checkbox"] { accent-color: #DB0632 !important; }
+
+table tbody tr td
+{
+    color: black;
+    font-size: 13px;
+}
+
+.fondo_card
+{
+    background: #f2f1f0;
+    border: none;
+}
+
+.titulos
+{
+    color: #6a6868;
+}
+
+.fondo_cabecera
+{
+    background: #a9a8a8;
+}
+
+.fondo_tbody
+{
+    background: #f2f1f0;
+}
+
+.input
+{
+    background: #F2F2FE;
+}
+
+.letras_funcionalidades
+{
+    background: #818181
+}
+
+/* estilos de los label para inputs de crear subusuarios */
+.estilos_label_input
+{
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.tree{
+    --spacing : 1.5rem;
+    --radius  : 10px;
+  }
+
+  .tree li{
+    display      : block;
+    position     : relative;
+    padding-left : calc(2 * var(--spacing) - var(--radius) - 2px);
+  }
+
+  .tree ul{
+    margin-left  : calc(var(--radius) - var(--spacing));
+    padding-left : 0;
+  }
+
+  .tree ul li{
+    border-left : 2px solid #ddd;
+  }
+
+  .tree ul li:last-child{
+    border-color : transparent;
+  }
+
+  .tree ul li::before{
+    content      : '';
+    display      : block;
+    position     : absolute;
+    top          : calc(var(--spacing) / -2);
+    left         : -2px;
+    width        : calc(var(--spacing) + 2px);
+    height       : calc(var(--spacing) + 1px);
+    border       : solid #ddd;
+    border-width : 0 0 2px 2px;
+  }
+
+  .tree summary{
+    display : block;
+    cursor  : pointer;
+  }
+
+  .tree summary::marker,
+  .tree summary::-webkit-details-marker{
+    display : none;
+  }
+
+  .tree summary:focus{
+    outline : none;
+  }
+
+  .tree summary:focus-visible{
+    outline : 1px dotted #000;
+  }
+
+  /* .tree li::after, */
+  .tree summary::before{
+    content       : '';
+    display       : block;
+    position      : absolute;
+    top           : calc(var(--spacing) / 2 - var(--radius));
+    left          : calc(var(--spacing) - var(--radius) - 1px);
+    width         : calc(2 * var(--radius));
+    height        : calc(2 * var(--radius));
+    border-radius : 50%;
+    background    : #ddd;
+  }
+
+  .tree summary::before{
+    content     : '+';
+    z-index     : 1;
+    background  : #DB0632;
+    color       : #fff;
+    line-height : calc(2 * var(--radius) - 2px);
+    text-align  : center;
+  }
+
+  .tree details[open] > summary::before{
+    content : '−';
+  }
+
+.subrayado
+{
+    text-decoration-line:underline;
+    text-decoration-color:#DB0632;
+    text-decoration-style:solid;
+}
+
+.modal-content{
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+}
+
+/* scrollbar */
+.contenedor {
+    margin: 2rem auto;
+    border: 1px solid #aaa;
+    height: 300px;
+    width:90%;
+    max-width: 400px;
+    background: #f1f2f3;
+    overflow:auto;
+    box-sizing: border-box;
+    padding:0 1rem;
+}
+
+/* Estilos scroll */
+::-webkit-scrollbar {
+    width: 7px;     /* Tamaño del scroll en vertical */
+    height: 7px;    /* Tamaño del scroll en horizontal */
+    display: block;  /* Ocultar scroll */
+}
+
+
+::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+}
+
+/* Cambiamos el fondo y agregamos una sombra cuando esté en hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #b3b3b3;
+    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+/* Cambiamos el fondo cuando esté en active */
+::-webkit-scrollbar-thumb:active {
+    background-color: #999999;
+}
+
+::-webkit-scrollbar-track {
+    background: #e1e1e1;
+    border-radius: 4px;
+}
+
+/* Cambiamos el fondo cuando esté en active o hover */
+::-webkit-scrollbar-track:hover,
+::-webkit-scrollbar-track:active {
+  background: #d4d4d4;
+}
+/* Fin estilos scroll */
+
+table.dataTable thead th,
+table.dataTable thead td
+{
+    padding: '1px' !important;
+}
+
+.dataTables_scrollBody
+{
+    overflow-x: hidden !important;
+}
+
+table td {
+    word-wrap: break-word;
+    max-width: 150px;
+}
+
+.titulo_modales_eliminar
+{
+    color: #6b6868;
+    word-break:break-all;
+}
+
+
+/* Icono de search en input */
+/* .input-icono
+{
+    background-image: url('success.png');
+    background-repeat: no-repeat;
+    background-position: 4px center;
+    background-size: 20px;
+    display: flex;
+    align-items: center;
+    width: 300px;
+    padding-left: 28px;
+    height: 30px;
+    border: 1px solid rgba(9, 113, 163, 1);
+    border-radius: 3px;
+}
+
+.input-icono input
+{
+    width: 100%;
+    font-size: 0.9em;
+    border: none;
+}
+
+.input-icono input:focus
+{
+outline: none;
+}
+
+ */
