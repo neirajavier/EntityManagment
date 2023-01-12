@@ -106,7 +106,7 @@ $(document).ready( function () {
         { width: "20%", targets: 2 },
         { width: "20%", targets: 3 },
         { width: "10%", targets: 4 },
-        { width: "13%", targets: 5 },
+        { width: "15%", targets: 5 },
         { width: "20%", targets: 6 }
         ],
         fixedHeader: {
@@ -123,16 +123,16 @@ $(document).ready( function () {
                 "previous": "Anterior"
             },
             "search": "Buscar:",
-            "zeroRecords": "",
-            "emptyTable": "Sin datos",
+            "zeroRecords": "No se encontraron resultados",
+            "emptyTable": "No se encontraron resultados",
         },
-        /* columnDefs: [
+        columnDefs: [
             {
-                target: 5,
+                target: 1,
                 visible: false,
                 searchable: false,
             },
-        ], */
+        ],
         ajax: `subusuarios/consultar?o=${getParameterByName('o')}&criterio=${JSON.stringify(busqueda)}`
 
     });
@@ -230,15 +230,17 @@ $('#lista_card').on('hidden.bs.collapse', function ()
 //en el modal de crear subusuarios abrir la seccion de recursos
 function abrir_ventana_recursos()
 {
-    document.getElementById('ventana_recursos_subusuario').classList.add('show', 'active')
-    document.getElementById('ventana_detalles_subusuarios').classList.remove('show', 'active')
+    document.getElementById('ventana_recursos_subusuario').classList.add('show', 'active');
+    document.getElementById('ventana_detalles_subusuarios').classList.remove('show', 'active');
+    document.getElementById('busqueda_agrega_recursos_subusuario').focus();
 }
 
 //en el modal de crear subusuarios abrir la seccion de detalle
 function abrir_ventana_detalles()
 {
-    document.getElementById('ventana_recursos_subusuario').classList.remove('show', 'active')
-    document.getElementById('ventana_detalles_subusuarios').classList.add('show', 'active')
+    document.getElementById('ventana_recursos_subusuario').classList.remove('show', 'active');
+    document.getElementById('ventana_detalles_subusuarios').classList.add('show', 'active');
+    document.getElementById('nombrecompleto_subusuario').focus();
 }
 
 //CREAR NUEVO SUBUSUARIO
@@ -261,7 +263,6 @@ document.getElementById('crear_nuevo_subusuario').addEventListener('click', asyn
     document.getElementById('clave_subusuario').value = "";
     document.getElementById('validohasta_subusuario').value = "";
     document.getElementById('email_subusuario').value = "";
-    /* document.getElementById('sin_caducidad').checked = false; */
     document.getElementById('ver_seguimientos').checked = false;
     document.getElementById('adm_puntos_referencia').checked = false;
     document.getElementById('adm_configuracion').checked = false;
@@ -288,7 +289,7 @@ document.getElementById('crear_nuevo_subusuario').addEventListener('click', asyn
     await fetch(`subusuarios/create?o=${getParameterByName('o')}`)
     .then(res => res.json())
     .then(res => {
-        console.log(res);
+        //console.log(res);
         document.body.style.cursor = 'default';
         document.getElementById('busqueda_agrega_recursos_subusuario').value = "";
 
@@ -341,7 +342,17 @@ document.getElementById('crear_nuevo_subusuario').addEventListener('click', asyn
             input.setAttribute('idvehiculo', vehiculo.IdActivo);
             input.classList.add('checkbox_asignar_vehiculo', 'mr-2');
             input.type = 'checkbox';
-            label.textContent = vehiculo.Alias;
+
+            if(vehiculo.Alias.length>30)
+            {
+                label.textContent = vehiculo.Alias.substring(0,30) + '...';
+                label.title = vehiculo.Alias;
+            }
+            else
+            {
+                label.textContent = vehiculo.Alias;
+            }
+
             label.style.fontSize = '12px';
             li.append(input);
             li.append(label);
@@ -385,7 +396,17 @@ document.getElementById('crear_nuevo_subusuario').addEventListener('click', asyn
             input.setAttribute('idalerta', alerta.idAlerta);
             input.classList.add('checkbox_asignar_alerta','mr-2');
             input.type = 'checkbox';
-            label.textContent = alerta.Evento;
+
+            if(alerta.Evento.length>30)
+            {
+                label.textContent = alerta.Evento.substring(0,30) + '...';
+                label.title = alerta.Evento;
+            }
+            else
+            {
+                label.textContent = alerta.Evento;
+            }
+
             label.style.fontSize = '12px';
             li.append(input);
             li.append(label);
@@ -400,7 +421,17 @@ document.getElementById('crear_nuevo_subusuario').addEventListener('click', asyn
             input.setAttribute('idmodulo', modulo.idModulo);
             input.classList.add('checkbox_asignar_modulo','mr-2');
             input.type = 'checkbox';
-            label.textContent = modulo.Nombre;
+
+            if(modulo.Nombre.length>30)
+            {
+                label.textContent = modulo.Nombre.substring(0,30);
+                label.title = modulo.Nombre;
+            }
+            else
+            {
+                label.textContent = modulo.Nombre;
+            }
+
             label.style.fontSize = '12px';
             li.append(input);
             li.append(label);
@@ -415,7 +446,17 @@ document.getElementById('crear_nuevo_subusuario').addEventListener('click', asyn
             input.setAttribute('idgrupopunto', grupo_punto.IdGrupoPunto);
             input.classList.add('checkbox_asignar_grupo_punto', 'mr-2');
             input.type = 'checkbox';
-            label.textContent = grupo_punto.Grupo;
+
+            if(grupo_punto.Grupo.length>30)
+            {
+                label.textContent = grupo_punto.Grupo.substring(0,30);
+                label.title = grupo_punto.Grupo;
+            }
+            else
+            {
+                label.textContent = grupo_punto.Grupo;
+            }
+
             label.style.fontSize = '12px';
             li.append(input);
             li.append(label);
@@ -430,7 +471,17 @@ document.getElementById('crear_nuevo_subusuario').addEventListener('click', asyn
             input.setAttribute('idgrupogeocerca', grupo_geocerca.IdGrupoGeocerca);
             input.classList.add('checkbox_asignar_grupo_geocerca', 'mr-2');
             input.type = 'checkbox';
-            label.textContent = grupo_geocerca.Nombre;
+
+            if(grupo_geocerca.Nombre.length>30)
+            {
+                label.textContent = grupo_geocerca.Nombre.substring(0,30);
+                label.title = grupo_geocerca.Nombre;
+            }
+            else
+            {
+                label.textContent = grupo_geocerca.Nombre;
+            }
+
             label.style.fontSize = '12px';
             li.append(input);
             li.append(label);
@@ -466,7 +517,7 @@ async function editar_subusuario(id)
     await fetch(`subusuarios/${id}/editar?o=${getParameterByName('o')}`)
     .then(res => res.json())
     .then(res => {
-        console.log(res);
+        //console.log(res);
         document.body.style.cursor = 'default';
 
         //Quitar checks principales para marcar todos los recursos
@@ -478,6 +529,8 @@ async function editar_subusuario(id)
         document.getElementById('checkbox_principal_asignar_grupo_puntos').checked = false;
         document.getElementById('checkbox_principal_asignar_grupo_geocercas').checked = false;
         //Fin quitar checks principales para marcar todos los recursos
+
+        document.getElementById('busqueda_agrega_recursos_subusuario').value = "";
 
         document.getElementById('arbol_principal_guardar_subusuario').setAttribute('open', '');
 
@@ -579,7 +632,17 @@ async function editar_subusuario(id)
             input.type = 'checkbox';
             if(res.vehiculos_pertenecen.includes(vehiculo.IdActivo)) input.checked = true;
             else bandera_check_todos_seleccionados_vehiculos = 0; //si algun check esta desmarcado entonces no se marca el check de todos los vehiculos
-            label.textContent = vehiculo.Alias;
+
+            if(vehiculo.Alias.length>30)
+            {
+                label.textContent = vehiculo.Alias.substring(0,30) + '...';
+                label.title = vehiculo.Alias;
+            }
+            else
+            {
+                label.textContent = vehiculo.Alias;
+            }
+
             label.style.fontSize = '12px';
             li.append(input);
             li.append(label);
@@ -627,7 +690,17 @@ async function editar_subusuario(id)
             else bandera_check_todos_seleccionados_alertas = 0;
             input.classList.add('checkbox_asignar_alerta','mr-2');
             input.type = 'checkbox';
-            label.textContent = alerta.Evento;
+
+            if(alerta.Evento.length>30)
+            {
+                label.textContent = alerta.Evento.substring(0,30) + '...';
+                label.title = alerta.Evento;
+            }
+            else
+            {
+                label.textContent = alerta.Evento;
+            }
+
             label.style.fontSize = '12px';
             li.append(input);
             li.append(label);
@@ -644,7 +717,17 @@ async function editar_subusuario(id)
             else bandera_check_todos_seleccionados_modulos = 0;
             input.classList.add('checkbox_asignar_modulo','mr-2');
             input.type = 'checkbox';
-            label.textContent = modulo.Nombre;
+
+            if(modulo.Nombre.length>30)
+            {
+                label.textContent = modulo.Nombre.substring(0,30) + '...';
+                label.title = modulo.Nombre;
+            }
+            else
+            {
+                label.textContent = modulo.Nombre;
+            }
+
             label.style.fontSize = '12px';
             li.append(input);
             li.append(label);
@@ -661,7 +744,17 @@ async function editar_subusuario(id)
             input.setAttribute('idgrupopunto', grupo_punto.IdGrupoPunto);
             input.classList.add('checkbox_asignar_grupo_punto', 'mr-2');
             input.type = 'checkbox';
-            label.textContent = grupo_punto.Grupo;
+
+            if(grupo_punto.Grupo.length>30)
+            {
+                label.textContent = grupo_punto.Grupo.substring(0,30) + '...';
+                label.title = grupo_punto.Grupo;
+            }
+            else
+            {
+                label.textContent = grupo_punto.Grupo;
+            }
+
             label.style.fontSize = '12px';
             li.append(input);
             li.append(label);
@@ -678,7 +771,17 @@ async function editar_subusuario(id)
             input.setAttribute('idgrupogeocerca', grupo_geocerca.IdGrupoGeocerca);
             input.classList.add('checkbox_asignar_grupo_geocerca', 'mr-2');
             input.type = 'checkbox';
-            label.textContent = grupo_geocerca.Nombre;
+
+            if(grupo_geocerca.Nombre.length>30)
+            {
+                label.textContent = grupo_geocerca.Nombre.substring(0,30) + '...';
+                label.title = grupo_geocerca.Nombre;
+            }
+            else
+            {
+                label.textContent = grupo_geocerca.Nombre;
+            }
+
             label.style.fontSize = '12px';
             li.append(input);
             li.append(label);
@@ -719,7 +822,7 @@ async function ver_detalle_subusuario(id)
     await fetch(`subusuarios/${id}/mostrar?o=${getParameterByName('o')}`)
     .then(res => res.json())
     .then(res => {
-        console.log(res);
+        //console.log(res);
 
         document.body.style.cursor = 'default';
 
@@ -748,7 +851,17 @@ async function ver_detalle_subusuario(id)
             let li = document.createElement('li');
             let input = document.createElement('input');
             let label = document.createElement('label');
-            label.textContent = vehiculo.Alias;
+
+            if(vehiculo.Alias.length>30)
+            {
+                label.textContent = vehiculo.Alias.substring(0,30) + '...';
+                label.title = vehiculo.Alias;
+            }
+            else
+            {
+                label.textContent = vehiculo.Alias;
+            }
+
             label.style.fontSize = '12px';
             li.append(label);
             document.getElementById('lista_vehiculos_mostrar').append(li);
@@ -778,7 +891,17 @@ async function ver_detalle_subusuario(id)
         {
             let li = document.createElement('li');
             let label = document.createElement('label');
-            label.textContent = alerta.Nombre;
+
+            if(alerta.Alerta.length>30)
+            {
+                label.textContent = alerta.Alerta.substring(0,30) + '...';
+                label.title = alerta.Alerta;
+            }
+            else
+            {
+                label.textContent = alerta.Alerta;
+            }
+
             label.style.fontSize = '12px';
             li.append(label);
             document.getElementById('lista_alertas_mostrar').append(li);
@@ -788,7 +911,17 @@ async function ver_detalle_subusuario(id)
         {
             let li = document.createElement('li');
             let label = document.createElement('label');
-            label.textContent = modulo.Nombre;
+
+            if(modulo.Nombre.length>30)
+            {
+                label.textContent = modulo.Nombre.substring(0,30) + '...';
+                label.title = modulo.Nombre;
+            }
+            else
+            {
+                label.textContent = modulo.Nombre;
+            }
+
             label.style.fontSize = '12px';
             li.append(label);
             document.getElementById('lista_modulos_mostrar').append(li);
@@ -798,7 +931,17 @@ async function ver_detalle_subusuario(id)
         {
             let li = document.createElement('li');
             let label = document.createElement('label');
-            label.textContent = grupo_punto.Grupo;
+
+            if(grupo_punto.Grupo.length>30)
+            {
+                label.textContent = grupo_punto.Grupo.substring(0,30) + '...';
+                label.title = grupo_punto.Grupo;
+            }
+            else
+            {
+                label.textContent = grupo_punto.Grupo;
+            }
+
             label.style.fontSize = '12px';
             li.append(label);
             document.getElementById('lista_grupo_puntos_mostrar').append(li);
@@ -808,7 +951,17 @@ async function ver_detalle_subusuario(id)
         {
             let li = document.createElement('li');
             let label = document.createElement('label');
-            label.textContent = grupo_geocerca.Nombre;
+
+            if(grupo_geocerca.Nombre.length>30)
+            {
+                label.textContent = grupo_geocerca.Nombre.substring(0,30) + '...';
+                label.title = grupo_geocerca.Nombre;
+            }
+            else
+            {
+                label.textContent = grupo_geocerca.Nombre;
+            }
+
             label.style.fontSize = '12px';
             li.append(label);
             document.getElementById('lista_grupo_geocercas_mostrar').append(li);
@@ -1454,6 +1607,11 @@ document.getElementById('agregar_grupos').addEventListener('click', ()=>{
     document.getElementById('titulo_modal_grupos').textContent = 'NUEVO GRUPO';
     document.getElementById('nombre_grupo').value = '';
     document.getElementById('descripcion_grupo').value = '';
+
+    setTimeout(() => {
+        document.getElementById('nombre_grupo').focus();
+    }, 700);
+
 })
 
 //levantar modal con los datos del grupo para su edicion
@@ -1476,6 +1634,10 @@ async function editar_grupo(id)
     });
 
     $('#grupoSubusuarioModal').modal();
+
+    setTimeout(() => {
+        document.getElementById('nombre_grupo').focus();
+    }, 700);
 }
 
 //levantar modal para confirmar eliminacion del grupo
@@ -1637,8 +1799,9 @@ document.getElementById('boton_asignar_subusuarios_grupos').addEventListener('cl
             input.setAttribute('type', 'checkbox');
             input.classList.add('subusuarios_asignar', 'mr-1');
             input.id = grupo.IdGrupoSubUsuario;
-            label.textContent = grupo.Grupo;
+            label.textContent = grupo.Grupo.substring(0,18);
             label.setAttribute('for', grupo.IdGrupoSubUsuario);
+            label.title = grupo.Grupo;
             if(res.checks.includes(grupo.IdGrupoSubUsuario)) input.checked = true;
             div.append(input);
             div.append(label);
@@ -1796,6 +1959,8 @@ function asignar_masivo(e){
 //filtrar datos al agregarlos
 document.getElementById('busqueda_agrega_recursos_subusuario').addEventListener('input', (e)=>{
 
+    //console.log('busqueda: ', e.target.value);
+
     let total_vehiculos = 0;
     let total_vehiculos_marcados = 0;
     let total_alertas = 0;
@@ -1806,10 +1971,19 @@ document.getElementById('busqueda_agrega_recursos_subusuario').addEventListener(
     let total_grupopuntos_marcados = 0;
     let total_grupogeocercas = 0;
     let total_grupogeocercas_marcados = 0;
+
+    //variables que cambiando cuando se encuentra al 1 menos un recurso para poder abrir el arbol
+    let vehiculos_encontrados = false;
+    let alertas_encontradas = false;
+    let modulos_encontrados = false;
+    let grupopuntos_encontrados = false;
+    let grupogeocercas_encontradas = false;
+
     //filtrando en la tabla de vehiculos
     [...document.getElementById('lista_vehiculos_agregar').children].map(data => {
         if(String(data.textContent).toLowerCase().includes(e.target.value.toLowerCase()))
         {
+            vehiculos_encontrados = true;
             data.classList.add('d-block');
             data.classList.remove('d-none');
             total_vehiculos++;
@@ -1851,6 +2025,7 @@ document.getElementById('busqueda_agrega_recursos_subusuario').addEventListener(
     [...document.getElementById('lista_alertas_agregar').children].map(data => {
         if(String(data.textContent).toLowerCase().includes(e.target.value.toLowerCase()))
         {
+            alertas_encontradas = true;
             data.classList.add('d-block');
             data.classList.remove('d-none');
             total_alertas++;
@@ -1866,6 +2041,7 @@ document.getElementById('busqueda_agrega_recursos_subusuario').addEventListener(
     [...document.getElementById('lista_modulos_agregar').children].map(data => {
         if(String(data.textContent).toLowerCase().includes(e.target.value.toLowerCase()))
         {
+            modulos_encontrados = true;
             data.classList.add('d-block');
             data.classList.remove('d-none');
             total_modulos++;
@@ -1881,6 +2057,7 @@ document.getElementById('busqueda_agrega_recursos_subusuario').addEventListener(
     [...document.getElementById('lista_grupo_puntos_agregar').children].map(data => {
         if(String(data.textContent).toLowerCase().includes(e.target.value.toLowerCase()))
         {
+            grupopuntos_encontrados = true;
             data.classList.add('d-block');
             data.classList.remove('d-none');
             total_grupopuntos++;
@@ -1896,6 +2073,7 @@ document.getElementById('busqueda_agrega_recursos_subusuario').addEventListener(
     [...document.getElementById('lista_grupo_geocercas_agregar').children].map(data => {
         if(String(data.textContent).toLowerCase().includes(e.target.value.toLowerCase()))
         {
+            grupogeocercas_encontradas = true;
             data.classList.add('d-block');
             data.classList.remove('d-none');
             total_grupogeocercas++;
@@ -1908,7 +2086,7 @@ document.getElementById('busqueda_agrega_recursos_subusuario').addEventListener(
         }
     });
 
-    console.log('total_vehiculos: ', total_vehiculos);
+    /* console.log('total_vehiculos: ', total_vehiculos);
     console.log('total_vehiculos_marcados: ', total_vehiculos);
     console.log('total_alertas: ', total_alertas);
     console.log('total_alertas_marcados: ', total_alertas);
@@ -1917,8 +2095,9 @@ document.getElementById('busqueda_agrega_recursos_subusuario').addEventListener(
     console.log('total_grupopuntos: ', total_grupopuntos);
     console.log('total_grupopuntos_marcados: ', total_grupopuntos);
     console.log('total_grupogeocercas: ', total_grupogeocercas);
-    console.log('total_grupogeocercas_marcados: ', total_grupogeocercas);
+    console.log('total_grupogeocercas_marcados: ', total_grupogeocercas); */
 
+    //verificar si todos los recursos encontrados estan marcados para dejar marcado su check principal de cada recurso
     if(total_vehiculos == total_vehiculos_marcados && total_vehiculos_marcados>0)
     {
         document.getElementById('checkbox_principal_asignar_vehiculo').checked = true;
@@ -1963,6 +2142,31 @@ document.getElementById('busqueda_agrega_recursos_subusuario').addEventListener(
     {
         document.getElementById('checkbox_principal_asignar_grupo_geocercas').checked = false;
     }
+    //fin verificacion
+
+    //verificar que se haya encontrado al menos algun registro de un recurso para dejar abierto el arbol en ese recurso
+    if(vehiculos_encontrados && e.target.value !='') document.getElementById('lista_vehiculos_agregar').parentElement.setAttribute('open', '');
+    else document.getElementById('lista_vehiculos_agregar').parentElement.removeAttribute('open');
+
+    if(alertas_encontradas  && e.target.value !='') document.getElementById('lista_alertas_agregar').parentElement.setAttribute('open', '');
+    else document.getElementById('lista_alertas_agregar').parentElement.removeAttribute('open');
+
+    if(modulos_encontrados  && e.target.value !='') document.getElementById('lista_modulos_agregar').parentElement.setAttribute('open', '');
+    else document.getElementById('lista_modulos_agregar').parentElement.removeAttribute('open');
+
+    if(grupopuntos_encontrados  && e.target.value !='') document.getElementById('lista_grupo_puntos_agregar').parentElement.setAttribute('open', '');
+    else document.getElementById('lista_grupo_puntos_agregar').parentElement.removeAttribute('open');
+
+    if(grupogeocercas_encontradas  && e.target.value !='') document.getElementById('lista_grupo_geocercas_agregar').parentElement.setAttribute('open', '');
+    else document.getElementById('lista_grupo_geocercas_agregar').parentElement.removeAttribute('open');
+
+    //fin verificacion
+
+    console.log('vehiculos_encontrados: ', vehiculos_encontrados);
+    console.log('alertas_encontradas: ', alertas_encontradas);
+    console.log('modulos_encontrados: ', modulos_encontrados);
+    console.log('grupopuntos_encontrados: ', grupopuntos_encontrados);
+    console.log('grupogeocercas_encontradas: ', grupogeocercas_encontradas);
 
 })
 
@@ -2155,6 +2359,9 @@ document.getElementById('asignar_subusuarios_grupos').addEventListener('click', 
 //al cerrar el modal filtrar por categorias
 $("#modal_filtrar_subusuarios_categoria").on('hidden.bs.modal', function () {
     busqueda.categorias = [];
+    let bandera_marcar_todas = true;
+    let marcados = 0; //para saber cuantos checkeds están marcados
+
     [...document.getElementById('categorias').children].map(data => {
         if(data.children[0].children[0].checked)
         {
@@ -2172,6 +2379,22 @@ $("#modal_filtrar_subusuarios_categoria").on('hidden.bs.modal', function () {
     {
         document.getElementById('abrir_filtro_categorias').children[0].setAttribute('src',  document.getElementById('abrir_filtro_categorias').children[0].getAttribute('src').replace('filtrado', 'clasificar b') );
     }
+
+    //limpiar el input y mostrar ocultos
+    document.getElementById('input_buscar_categoria').value = '';
+    document.getElementById('seleccionar_todos_filtros_categoria').checked = false;
+    [...document.getElementById('categorias').children].map(data => data.classList.remove('d-none'));
+
+    //verificar si todos los checks estan marcados para poner el checked principal marcado
+
+    [...document.getElementById('categorias').children].map(data => {
+        if(data.children[0].children[0].checked == false) bandera_marcar_todas = false;
+        else marcados++;
+    });
+
+    if(bandera_marcar_todas == true && marcados>0) document.getElementById('seleccionar_todos_filtros_categoria').checked = true;
+    else document.getElementById('seleccionar_todos_filtros_categoria').checked = false;
+
 
 });
 //fin al cerrar el modal filtrar por categorias
@@ -2235,9 +2458,9 @@ document.getElementById('agregar_fecha_caducidad').addEventListener('change', (e
 //*Con la finalidad de ajustar la paginacion de los subusuarios
 addEventListener('resize', ()=>{
     console.log('resize');
-    if(screen.width>1000)
+    if(screen.width>800)
     {
-        if( screen.height > 1000 ) $('#subusuarios').DataTable().page.len( 9 ).draw();
+        if( screen.height > 1000 ) $('#subusuarios').DataTable().page.len( 8 ).draw();
         else $('#subusuarios').DataTable().page.len( 6 ).draw();
     }
     else
@@ -2275,14 +2498,14 @@ function verificar_checkeo_principal_subusuarios()
 
 function detectar_paginacion()
 {
-    if(screen.width>1000)
+    if(screen.width>800)
     {
         if( screen.height > 1000 ) return 8;
         else return 6;
     }
     else
     {
-        if( screen.height > 1000 ) return 7;
+        if( screen.height > 1000 ) return 6;
         else return 3;
     }
 
@@ -2323,7 +2546,7 @@ $('#subusuarios tbody').on('click', 'tr td', async (e)=>{
 
     let id_subusuario;
 
-    if(e.target.cellIndex == 2 || e.target.cellIndex == 3)
+    if(e.target.cellIndex == 1 || e.target.cellIndex == 2)
     {
         //console.log(e.target.cellIndex);
         $('#subusuarios').DataTable().row(e.target._DT_CellIndex.row).data();
@@ -2339,14 +2562,14 @@ $('#subusuarios tbody').on('click', 'tr td', async (e)=>{
         id_tabla_subusuario_anterior_actualizar = id_subusuario;
 
         //guardar en la variable nombrecompleto subusuarios o subusuarios
-        if(e.target.cellIndex == 2)
+        if(e.target.cellIndex == 1)
         {
             nombre_completo_subusuario_tabla = e.target.children[0].value;
             nombre_subusuario_tabla = '';
             campo_actualizar_tabla = 'nombrecompleto';
         }
 
-        if(e.target.cellIndex == 3)
+        if(e.target.cellIndex == 2)
         {
             nombre_completo_subusuario_tabla = '';
             nombre_subusuario_tabla = e.target.children[0].value;
@@ -2601,7 +2824,31 @@ function ajustar_altura(talla_errores)
     else return '220px';
 }
 
+document.getElementById('boton_reiniciar_subusuarios').addEventListener('click', ()=>{
+    $('#grupos').DataTable().$('tr.selected').removeClass('selected');
 
+    busqueda.grupo = 0;
+
+    busqueda.categorias = [];
+    busqueda.nombre = '';
+    document.getElementById('busqueda_general').value = '';
+
+    document.getElementById('input_buscar_categoria').value = '';
+    document.getElementById('abrir_filtro_categorias').children[0].setAttribute('src',  document.getElementById('abrir_filtro_categorias').children[0].getAttribute('src').replace('filtrado', 'clasificar b') );
+
+    [...document.getElementById('categorias').children].map(data =>{
+        data.classList.remove('d-none');
+        data.children[0].children[0].checked = false;
+    });
+
+    $('#subusuarios').DataTable().ajax.url(`subusuarios/consultar?o=${getParameterByName('o')}&criterio=${JSON.stringify(busqueda)}`);
+    $('#subusuarios').DataTable().ajax.reload();
+});
+
+$('#subusuarios').on('error.dt', function ( e, settings, techNote, message )
+{
+    close();
+});
 
 
 

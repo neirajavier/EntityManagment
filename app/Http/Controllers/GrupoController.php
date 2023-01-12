@@ -36,7 +36,7 @@ class GrupoController extends Controller
 
         $id_usuario = $this->consultarKey($request->o)->IdUsuario;
 
-        $grupos = DB::select('spGruposSubUsuariosConsultar ?,?', [$id_usuario, NULL]);
+        $grupos = DB::select('exec spGruposSubUsuariosConsultar ?,?', [$id_usuario, NULL]);
         $json_final = [];
         $boton_editar = asset('iconos/editar.png');
         $boton_eliminar = asset('iconos/eliminar.png');
@@ -136,7 +136,7 @@ class GrupoController extends Controller
         }
 
         //validar que el nombre del grupo no se repita
-        $repetido = DB::select('select IdGrupoSubUsuario, NombreGrupoSubUsuario from GrupoSubUsuario where IdUsuario=? and NombreGrupoSubUsuario=?', [$id_usuario, $grupo]);
+        $repetido = DB::select('select IdGrupoSubUsuario, NombreGrupoSubUsuario from GrupoSubUsuario where IdUsuario=? and not IdGrupoSubUsuario=? and NombreGrupoSubUsuario=?', [$id_usuario, $id, $grupo]);
         if( sizeof($repetido) > 0 ) return response()->json(['sms' => ['Grupo ya existe']]);
 
         DB::update('exec spGruposSubusuariosActualizar ?,?,?,?,?,?',[$id, $grupo,$descripcion, 'A', $id_usuario, $nombre_usuario]);

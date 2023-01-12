@@ -1,6 +1,6 @@
 @extends('layout.app')
 
-@section('title', 'Subusuarios')
+@section('title', 'SUBUSUARIOS')
 
 @section('css')
     <link rel="stylesheet" href="{{asset('css/estilos.css')}}">
@@ -20,7 +20,7 @@
                     <div class="pt-2 pb-2">
                         <div class="row">
                             <div class="col-sm-3 col-md-3 col-lg-1 col-3 text-center">
-                                <button id="collapse" data-toggle="collapse" href="#lista_card" class="btn btn-outline-secondary bg-white border-left-0 rounded-pill"><img src="{{asset('iconos/ocultar.png')}}"></button>
+                                <button id="collapse" data-toggle="collapse" href="#lista_card" class="btn border-0" title="Mostrar/Ocultar Grupos"><img class="imag-icon" src="{{asset('iconos/hamburguesa.png')}}"></button>
                             </div>
                             <div class="col-sm-9 col-md-9 col-lg-2 col-9">
                                 <h5 class=""><img class="imag-icon m-auto" src="{{asset('iconos/subusuarios.png')}}" alt="subusuarios"><b class="m-auto">Subusuarios</b>{{-- <span id="numero_total_subusuarios" class="badge badge-dark"></span> --}} {{-- <button id="crear_nuevo_subusuario" class="btn"><img class="mb-1 imag-icon" src="{{asset('iconos/agregar.png')}}" alt="agregar"></button> --}}</h5>
@@ -49,7 +49,7 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <p class="col-9 m-auto"><b class="mr-2">Subusuarios</b><span id="numero_total_subusuarios" class="badge badge-dark m-auto"></span></p><button id="crear_nuevo_subusuario" class="btn col-3 botones_tabla"><img class="imag-icon" src="{{asset('iconos/agregar.png')}}" alt="agregar"></button>
+                            <button id="boton_reiniciar_subusuarios" class="botones_tabla btn col-10 m-auto" style="text-align:left" title="Mostrar todos los subusuarios"><b class="mr-2">Subusuarios</b><span id="numero_total_subusuarios" class="badge badge-dark m-auto"></span></button><button id="crear_nuevo_subusuario" class="col-2 btn botones_tabla" title="Agregar Subusuario"><img class="imag-icon" src="{{asset('iconos/agregar.png')}}" alt="Agregar Subusuario"></button>
                         </div>
                         <div class="row">
                             <div class="col-12">
@@ -57,9 +57,9 @@
                                     <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Grupos<button id="agregar_grupos" data-toggle="modal" data-target="#grupoSubusuarioModal" class="btn botones_tabla" title="Agregar"><img class="imag-icon" src="{{asset('iconos/agregar.png')}}" alt="agregar"></button></th>
+                                            <th>Grupos<button id="agregar_grupos" data-toggle="modal" data-target="#grupoSubusuarioModal" class="btn botones_tabla" title="Agregar Grupos"><img class="imag-icon" src="{{asset('iconos/agregar.png')}}" alt="Agregar Grupo"></button></th>
                                             <th>Descripcion</th>
-                                            <th style="width:40%;" class="text-right"> <button id="colapsar_grupos" class="btn" ><img class="imag-icon" src="{{asset('iconos/doble flecha.png')}}" title="Eliminar" alt="Eliminar"></button>
+                                            <th style="width:40%;" class="text-right"> <button id="colapsar_grupos" class="btn" title="Contraer/Expandir Grupos"><img class="imag-icon" src="{{asset('iconos/doble flecha.png')}}" alt="Eliminar"></button>
                                                 {{-- <button id="agregar_grupos" data-toggle="modal" data-target="#grupoSubusuarioModal" class="btn" title="Agregar"><img class="imag-icon" src="{{asset('iconos/agregar.png')}}" alt="agregar"></button>
                                                 <button id="colapsar_grupos" class="btn" ><img class="imag-icon" src="{{asset('iconos/doble flecha g.png')}}" title="Eliminar" alt="Eliminar"></button> --}}
                                             </th>
@@ -100,7 +100,7 @@
                                             <th style="font-size:13px;">Nombre</th>
                                             <th style="font-size:13px;">Subusuario</th>
                                             <th style="font-size:13px;">Caducidad</th>
-                                            <th style="font-size:13px;">Categoría <button id="abrir_filtro_categorias" class="btn"><img class="mb-1" style="height:20px; width:20px;" src="{{asset('iconos/clasificar b.png')}}" alt="clasificar"></button></th>
+                                            <th style="font-size:13px;">Categoría <button id="abrir_filtro_categorias" class="btn" title="Filtrar Categorias"><img class="mb-1" style="height:20px; width:20px;" src="{{asset('iconos/clasificar b.png')}}" alt="Filtrar Categorias"></button></th>
                                             <th style=""></th>
                                         </tr>
                                     </thead>
@@ -466,7 +466,7 @@
                         </div>
                         <div id="ventana_recursos_subusuario" class="tab-pane fade" role="tabpanel" aria-selected="false" aria-labelledby="ventana_recursos_subusuario">
                             <div class="row">
-                                <b class="col-sm-9 col-8 mt-2" style="text-align:center;">DATOS DE ASIGNACIÓN</b><a class="btn nav-link col-2 col-sm-2" id="boton_guardar_subusuario" title="Guardar"><img class="imag-icon" src="{{asset('iconos/guardar r.png')}}" alt="Guardar"></a>
+                                <b class="col-sm-9 col-8 mt-2" style="text-align:center;">DATOS DE ASIGNACIÓN</b><a class="btn nav-link col-2 col-sm-2" id="boton_guardar_subusuario" title="Guardar Subusuario"><img class="imag-icon" src="{{asset('iconos/guardar r.png')}}" alt="Guardar"></a>
                                 <a class="btn nav-link col-sm-1 col-2 bg-dark" id="boton_abrir_ventana_detalles_subusuarios" onclick="abrir_ventana_detalles();" style="border-radius:25px 0px 0px 25px;" title="Regresar"><img class="imag-icon img-rotate" src="{{asset('iconos/derecha.png')}}" alt="siguiente"></a>
                             </div>
                             <div class="row mb-3">

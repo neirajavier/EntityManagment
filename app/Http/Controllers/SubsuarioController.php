@@ -43,10 +43,10 @@ class SubsuarioController extends Controller
     {
         $id_usuario = $this->consultarKey($request->o);
 
-        if($id_usuario == NULL)
+        /* if($id_usuario == NULL)
         {
-            return response()->json(['data' => []]);
-        }
+            return response()->json(['data' => ['asas']]);
+        } */
 
         $criterios = json_decode($request->criterio);
         $categorias_filtrar = [];
@@ -164,7 +164,7 @@ class SubsuarioController extends Controller
                 'nombrecompleto_subusuario' => 'bail|required|min:1|max:200',
                 'nombre_subusuario' => 'bail|required|min:1|max:50',
                 'clave_subusuario'  => 'bail|required|min:1|max:50',
-                'email_subusuario' => 'bail|required|min:1|max:120'
+                'email_subusuario' => 'bail|required|min:1|max:120|email'
             ]
         );
 
@@ -335,7 +335,7 @@ class SubsuarioController extends Controller
 
         foreach($alertas_pertenecen as $alerta)
         {
-            array_push($alertas_check, $alerta->idAlerta);
+            array_push($alertas_check, $alerta->IdAlerta);
         }
 
         foreach($grupo_puntos_pertenecen as $grupopunto)
@@ -440,7 +440,7 @@ class SubsuarioController extends Controller
                 'nombrecompleto_subusuario' => 'bail|required|min:1|max:200',
                 'nombre_subusuario' => 'bail|required|min:1|max:50',
                 'clave_subusuario'  => 'bail|required|min:1|max:50',
-                'email_subusuario' => 'bail|required|min:1|max:120'
+                'email_subusuario' => 'bail|required|min:1|max:120|email'
             ]
         );
 
