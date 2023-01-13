@@ -1414,6 +1414,8 @@ document.getElementById('guardar_grupo').addEventListener('click', async ()=>{
     data.append('nombre', nombre_grupo);
     data.append('descripcion', descripcion_grupo);
 
+    if(validar_formulario_grupo()) return;
+
     //guardar grupo
     if( id_grupo == '')
     {
@@ -1454,6 +1456,8 @@ document.getElementById('guardar_grupo').addEventListener('click', async ()=>{
                     pauseOnHover: false,
                     pauseOnFocusLoss: false
                 });
+
+                $('#grupoSubusuarioModal').modal('hide');
 
             }
             else
@@ -1559,6 +1563,8 @@ document.getElementById('guardar_grupo').addEventListener('click', async ()=>{
                     pauseOnFocusLoss: false
                 });
 
+                $('#grupoSubusuarioModal').modal('hide');
+
             }
             else
             {
@@ -1624,6 +1630,7 @@ document.getElementById('guardar_grupo').addEventListener('click', async ()=>{
     //limpiar campos
     document.getElementById('nombre_grupo').value = '';
     document.getElementById('descripcion_grupo').value = '';
+
 })
 
 //cuando se quiera agregar un nuevo grupo, se elimina el valor del campo oculto id_grupo para saber que es un registro nuevo
@@ -2243,6 +2250,7 @@ document.getElementById('input_buscar_lista_subusuarios_asignar').addEventListen
 document.getElementById('abrir_filtro_categorias').addEventListener('click', ()=>{
     //actualizar_categorias();
     $('#modal_filtrar_subusuarios_categoria').modal();
+    document.getElementById('input_buscar_categoria').focus();
 })
 
 document.getElementById('seleccionar_todos_filtros_categoria').addEventListener('click', ()=>{
@@ -2424,6 +2432,11 @@ $("#modal_filtrar_subusuarios_categoria").on('hidden.bs.modal', function () {
 
 
 });
+
+
+/* $('#modal_filtrar_subusuarios_categoria').on('shown.bs.modal', ()=>{
+
+}); */
 //fin al cerrar el modal filtrar por categorias
 
 /* $('#grupos').on('click', 'tr', function(e){
@@ -2868,6 +2881,8 @@ document.getElementById('boton_reiniciar_subusuarios').addEventListener('click',
         data.children[0].children[0].checked = false;
     });
 
+    document.getElementById('seleccionar_todos_filtros_categoria').checked = false;
+
     $('#subusuarios').DataTable().ajax.url(`subusuarios/consultar?o=${getParameterByName('o')}&criterio=${JSON.stringify(busqueda)}`);
     $('#subusuarios').DataTable().ajax.reload();
 });
@@ -2907,7 +2922,6 @@ function validar_formulario_subusuarios()
     if(document.getElementById('nombrecompleto_subusuario').value.trim() == '')
     {
         document.getElementById('nombrecompleto_subusuario').focus();
-        //document.getElementById('nombrecompleto_subusuario').classList.remove('is-valid');
         document.getElementById('nombrecompleto_subusuario').classList.add('is-invalid');
         bandera_error = true;
         focus.push('nombrecompleto_subusuario');
@@ -2915,13 +2929,11 @@ function validar_formulario_subusuarios()
     else
     {
         document.getElementById('nombrecompleto_subusuario').classList.remove('is-invalid');
-        //document.getElementById('nombrecompleto_subusuario').classList.add('is-valid');
     }
 
     if(document.getElementById('nombre_subusuario').value.trim() == '')
     {
         document.getElementById('nombre_subusuario').focus();
-        //document.getElementById('nombre_subusuario').classList.remove('is-valid');
         document.getElementById('nombre_subusuario').classList.add('is-invalid');
         bandera_error = true;
         focus.push('nombre_subusuario');
@@ -2929,13 +2941,11 @@ function validar_formulario_subusuarios()
     else
     {
         document.getElementById('nombre_subusuario').classList.remove('is-invalid');
-        //document.getElementById('nombre_subusuario').classList.add('is-valid');
     }
 
     if(document.getElementById('clave_subusuario').value.trim() == '')
     {
         document.getElementById('clave_subusuario').focus();
-        //document.getElementById('clave_subusuario').classList.remove('is-valid');
         document.getElementById('clave_subusuario').classList.add('is-invalid');
         bandera_error = true;
         focus.push('clave_subusuario');
@@ -2943,13 +2953,11 @@ function validar_formulario_subusuarios()
     else
     {
         document.getElementById('clave_subusuario').classList.remove('is-invalid');
-        //document.getElementById('clave_subusuario').classList.add('is-valid');
     }
 
     if( !/^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/.test(document.getElementById('email_subusuario').value))
     {
         document.getElementById('email_subusuario').focus();
-        //document.getElementById('email_subusuario').classList.remove('is-valid');
         document.getElementById('email_subusuario').classList.add('is-invalid');
         bandera_error = true;
         focus.push('email_subusuario');
@@ -2957,10 +2965,30 @@ function validar_formulario_subusuarios()
     else
     {
         document.getElementById('email_subusuario').classList.remove('is-invalid');
-        //document.getElementById('email_subusuario').classList.add('is-valid');
     }
     console.log(focus);
     if(focus.length>0) document.getElementById(focus[0]).focus();
+    return bandera_error;
+}
+
+function validar_formulario_grupo()
+{
+    let bandera_error = false;
+    let focus = [];
+
+    if(document.getElementById('nombre_grupo').value == "")
+    {
+        document.getElementById('nombre_grupo').classList.add('is-invalid');
+        focus.push('nombre_grupo');
+        bandera_error= true;
+    }
+    else
+    {
+        document.getElementById('nombre_grupo').classList.remove('is-invalid');
+    }
+
+    if(focus.length>0) document.getElementById(focus[0]).focus();
+
     return bandera_error;
 }
 

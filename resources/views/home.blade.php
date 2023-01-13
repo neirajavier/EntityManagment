@@ -132,16 +132,16 @@
                             <div class="col-10 text-center mt-2">
                                 <b id="titulo_modal_grupos" class="subrayado">NUEVO GRUPO</b>
                             </div>
-                            <div class="col-2"><button id="guardar_grupo" class="btn botones_tabla" data-dismiss="modal" aria-label="Close" title="Guardar"><img class="imag-icon" src="{{asset('iconos/guardar r.png')}}"></button></div>
+                            <div class="col-2"><button id="guardar_grupo" class="btn botones_tabla" title="Guardar"><img class="imag-icon" src="{{asset('iconos/guardar r.png')}}"></button></div>
                         </div>
 
                         <div style="background: white; border-radius:10px;" class="pl-3 pr-3">
                             <div class="row">
                                 <input type="hidden" id="id_grupo">
-
                                 <div class="col-12">
                                     <label for="nombre_grupo" class="estilos_label_input">Grupo</label>
                                     <input class="form-control" type="text" name="nombre_grupo" id="nombre_grupo">
+                                    <div class="invalid-feedback">Nombre es requerido.</div>
                                 </div>
                                 <br>
                                 <div class="col-12">
