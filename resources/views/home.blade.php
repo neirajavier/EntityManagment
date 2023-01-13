@@ -59,7 +59,7 @@
                                             <th>ID</th>
                                             <th>Grupos<button id="agregar_grupos" data-toggle="modal" data-target="#grupoSubusuarioModal" class="btn botones_tabla" title="Agregar Grupos"><img class="imag-icon" src="{{asset('iconos/agregar.png')}}" alt="Agregar Grupo"></button></th>
                                             <th>Descripcion</th>
-                                            <th style="width:40%;" class="text-right"> <button id="colapsar_grupos" class="btn" title="Contraer/Expandir Grupos"><img class="imag-icon" src="{{asset('iconos/doble flecha.png')}}" alt="Eliminar"></button>
+                                            <th style="width:40%;" class="text-right"> <button id="colapsar_grupos" class="btn botones_tabla" title="Contraer/Expandir Grupos"><img class="imag-icon" src="{{asset('iconos/doble flecha.png')}}" alt="Eliminar"></button>
                                                 {{-- <button id="agregar_grupos" data-toggle="modal" data-target="#grupoSubusuarioModal" class="btn" title="Agregar"><img class="imag-icon" src="{{asset('iconos/agregar.png')}}" alt="agregar"></button>
                                                 <button id="colapsar_grupos" class="btn" ><img class="imag-icon" src="{{asset('iconos/doble flecha g.png')}}" title="Eliminar" alt="Eliminar"></button> --}}
                                             </th>
@@ -132,7 +132,7 @@
                             <div class="col-10 text-center mt-2">
                                 <b id="titulo_modal_grupos" class="subrayado">NUEVO GRUPO</b>
                             </div>
-                            <div class="col-2"><button id="guardar_grupo" class="btn fa fa-floppy-o" data-dismiss="modal" aria-label="Close" title="Guardar"><img class="imag-icon" src="{{asset('iconos/guardar r.png')}}"></button></div>
+                            <div class="col-2"><button id="guardar_grupo" class="btn botones_tabla" data-dismiss="modal" aria-label="Close" title="Guardar"><img class="imag-icon" src="{{asset('iconos/guardar r.png')}}"></button></div>
                         </div>
 
                         <div style="background: white; border-radius:10px;" class="pl-3 pr-3">
@@ -369,40 +369,49 @@
                     <div class="tab-content">
                         <div id="ventana_detalles_subusuarios" class="tab-pane fade show active" role="tabpanel" aria-selected="true" aria-labelledby="ventana_detalles_subusuarios">
                             <div class="row">
-                                <b class="col-sm-11 col-10 mt-2" style="text-align:center;">DATOS DEL SUBUSUARIO</b>
-                                <a class="btn nav-link col-sm-1 col-2 bg-dark" id="boton_abrir_ventana_recursos_subusuario" style="border-radius:25px 0px 0px 25px;" title="Siguiente" onclick="abrir_ventana_recursos();"><img class="imag-icon" src="{{asset('iconos/derecha.png')}}" alt="siguiente"></a>
+                                <b class="col-sm-10 col-10 mt-2" style="text-align:center;">DATOS DEL SUBUSUARIO</b>
+                                <a class="btn nav-link botones_tabla" id="boton_abrir_ventana_recursos_subusuario" title="Siguiente" onclick="abrir_ventana_recursos();"><img class="imag-icon" src="{{asset('iconos/flecha derecha.png')}}" alt="siguiente"></a>
                             </div>
                             <div class="p-3">
                                 <div class="row">
                                     <div class="col-12">
-                                        <label for="nombrecompleto_subusuario" class="estilos_label_input">NOMBRE COMPLETO</label><input id="nombrecompleto_subusuario" maxlength="200" class="form-control" type="text">
+                                        <label for="nombrecompleto_subusuario" class="estilos_label_input">NOMBRE COMPLETO</label><input id="nombrecompleto_subusuario" maxlength="200" class="form-control" type="text"><div class="invalid-feedback">Nombre requerido.</div>
                                     </div>
                                     <div class="col-12">
-                                        <label for="nombre_subusuario" class="estilos_label_input">SUBUSUARIO</label><input id="nombre_subusuario" maxlength="50"  class="form-control" type="text">
+                                        <label for="nombre_subusuario" class="estilos_label_input">SUBUSUARIO</label><input id="nombre_subusuario" maxlength="50"  class="form-control" type="text"><div class="invalid-feedback">Subusuario requerido.</div>
                                     </div>
                                     <div class="col-12">
-                                        <label for="clave_subusuario" class="estilos_label_input">CLAVE</label><input id="clave_subusuario" maxlength="50"  class="form-control" type="text">
+                                        <label for="clave_subusuario" class="estilos_label_input">CLAVE</label><input id="clave_subusuario" maxlength="50"  class="form-control" type="text"><div class="invalid-feedback">Clave requerida.</div>
                                     </div>
+                                    {{-- <label class="col-md-12 estilos_label_input" for="clave_subusuario">Clave</label>
+                                    <div class="input-group input-group-md col-md-12">
+                                        <input id="clave_subusuario" type="password" class="form-control">
+                                        <div class="invalid-feedback">Clave requerida.</div>
+                                        <span class="input-group-append">
+                                        <button id="ver_password" title="Mostrar" type="button" style="vertical-align:inherit;" class="btn btn-danger btn-flat"><i class="fa fa-eye"></i></button>
+                                        </span>
+                                    </div> --}}
+
                                 </div>
                                 <div class="row">
                                     <div class="col-12">
                                         <label class="estilos_label_input">CON CADUCIDAD</label>
 
                                     </div>
-                                    <div class="col-3">
+                                    <div class="col-4 col-sm-3">
                                         <select id="agregar_fecha_caducidad" class="form-control">
                                             <option value="1">Si</option>
                                             <option value="0">No</option>
                                         </select>
                                     </div>
-                                    <div class="col-9">
+                                    <div class="col-sm-9 col-8">
                                         <input id="validohasta_subusuario" class="form-control" type="date">
                                     </div>
                                     <div class="col-12">
                                         <label for="categoria_subusuario" class="estilos_label_input">CATEGORIA</label><select id="categoria_subusuario" class="form-control"><option value="1">1</option><option value="2">2</option></select>
                                     </div>
                                     <div class="col-12">
-                                        <label for="email_subusuario" class="estilos_label_input">EMAIL</label><input id="email_subusuario" maxlength="120" class="form-control" type="email">
+                                        <label for="email_subusuario" class="estilos_label_input">EMAIL</label><input id="email_subusuario" maxlength="120" class="form-control" type="email"><div class="invalid-feedback">Ingrese email valido.</div>
                                     </div>
                                 </div>
                             </div>
@@ -466,8 +475,8 @@
                         </div>
                         <div id="ventana_recursos_subusuario" class="tab-pane fade" role="tabpanel" aria-selected="false" aria-labelledby="ventana_recursos_subusuario">
                             <div class="row">
-                                <b class="col-sm-9 col-8 mt-2" style="text-align:center;">DATOS DE ASIGNACIÓN</b><a class="btn nav-link col-2 col-sm-2" id="boton_guardar_subusuario" title="Guardar Subusuario"><img class="imag-icon" src="{{asset('iconos/guardar r.png')}}" alt="Guardar"></a>
-                                <a class="btn nav-link col-sm-1 col-2 bg-dark" id="boton_abrir_ventana_detalles_subusuarios" onclick="abrir_ventana_detalles();" style="border-radius:25px 0px 0px 25px;" title="Regresar"><img class="imag-icon img-rotate" src="{{asset('iconos/derecha.png')}}" alt="siguiente"></a>
+                                <b class="col-sm-9 col-9 mt-2" style="text-align:center;">DATOS DE ASIGNACIÓN</b><a class="btn nav-link botones_tabla" id="boton_guardar_subusuario" title="Guardar Subusuario"><img class="imag-icon" src="{{asset('iconos/guardar r.png')}}" alt="Guardar"></a>
+                                <a class="btn nav-link botones_tabla" id="boton_abrir_ventana_detalles_subusuarios" onclick="abrir_ventana_detalles();" title="Regresar"><img class="imag-icon img-rotate" src="{{asset('iconos/flecha derecha.png')}}" alt="siguiente"></a>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-1"></div>

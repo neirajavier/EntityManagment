@@ -67,7 +67,7 @@ $(document).ready( function () {
         {
             "lengthMenu": "Mostrar _MENU_ registros",
             "search": "Buscar:",
-            "zeroRecords": "No se encontraron resultados",
+            "zeroRecords": " ",
         },
         columnDefs: [
             {
@@ -123,8 +123,8 @@ $(document).ready( function () {
                 "previous": "Anterior"
             },
             "search": "Buscar:",
-            "zeroRecords": "No se encontraron resultados",
-            "emptyTable": "No se encontraron resultados",
+            "zeroRecords": " ",
+            "emptyTable": " ",
         },
         columnDefs: [
             {
@@ -230,6 +230,9 @@ $('#lista_card').on('hidden.bs.collapse', function ()
 //en el modal de crear subusuarios abrir la seccion de recursos
 function abrir_ventana_recursos()
 {
+    //validar formulario
+    if(validar_formulario_subusuarios()) return;
+
     document.getElementById('ventana_recursos_subusuario').classList.add('show', 'active');
     document.getElementById('ventana_detalles_subusuarios').classList.remove('show', 'active');
     document.getElementById('busqueda_agrega_recursos_subusuario').focus();
@@ -246,6 +249,13 @@ function abrir_ventana_detalles()
 //CREAR NUEVO SUBUSUARIO
 //al momento de presionar el boton para agregar nuevo subusuario y se abra el modal para ingresar los datos
 document.getElementById('crear_nuevo_subusuario').addEventListener('click', async ()=>{
+
+    //limpiar de errores antes de validarlos
+    document.getElementById('nombrecompleto_subusuario').classList.remove('is-invalid');
+    document.getElementById('nombre_subusuario').classList.remove('is-invalid');
+    document.getElementById('clave_subusuario').classList.remove('is-invalid');
+    document.getElementById('email_subusuario').classList.remove('is-invalid');
+    //fin de limpiar errores
 
     //ventana abierta por defecto la de detalles subusuario
     document.getElementById('ventana_recursos_subusuario').classList.remove('show', 'active');
@@ -285,12 +295,14 @@ document.getElementById('crear_nuevo_subusuario').addEventListener('click', asyn
     document.getElementById('validohasta_subusuario').value = new Date().toJSON().slice(0,10);
 
     document.body.style.cursor = 'wait';
+    document.getElementById('crear_nuevo_subusuario').setAttribute('disabled', 'disabled');
 
     await fetch(`subusuarios/create?o=${getParameterByName('o')}`)
     .then(res => res.json())
     .then(res => {
         //console.log(res);
         document.body.style.cursor = 'default';
+        document.getElementById('crear_nuevo_subusuario').removeAttribute('disabled');
         document.getElementById('busqueda_agrega_recursos_subusuario').value = "";
 
         //Quitar checks principales para marcar todos los recursos
@@ -492,9 +504,9 @@ document.getElementById('crear_nuevo_subusuario').addEventListener('click', asyn
 
     $('#modal-crear-subusuarios').modal({backdrop: 'static', keyboard: false});
 
-    setTimeout(() => {
-        document.getElementById('nombrecompleto_subusuario').focus();
-    }, 700);
+    /* setTimeout(() => {
+
+    }, 500); */
 
 })
 //FIN CREAR NUEVO SUBUSUARIO
@@ -504,6 +516,13 @@ async function editar_subusuario(id)
 {
     document.getElementById('ventana_recursos_subusuario').classList.remove('show', 'active');
     document.getElementById('ventana_detalles_subusuarios').classList.add('show', 'active');
+
+    //limpiar de errores antes de validarlos
+    document.getElementById('nombrecompleto_subusuario').classList.remove('is-invalid');
+    document.getElementById('nombre_subusuario').classList.remove('is-invalid');
+    document.getElementById('clave_subusuario').classList.remove('is-invalid');
+    document.getElementById('email_subusuario').classList.remove('is-invalid');
+    //fin de limpiar errores
 
     document.body.style.cursor = 'wait';
 
@@ -798,9 +817,13 @@ async function editar_subusuario(id)
 
     $('#modal-crear-subusuarios').modal();
 
-    setTimeout(() => {
+    /* setTimeout(() => {
         document.getElementById('nombrecompleto_subusuario').focus();
-    }, 700);
+        document.getElementById('ver_password').nextElementSibling.children[0].children[0].classList.remove('fa-eye-slash');
+        document.getElementById('ver_password').setAttribute('type', 'password');
+        document.getElementById('ver_password').nextElementSibling.children[0].children[0].classList.add('fa-eye');
+
+    }, 500); */
 }
 //FIN EDITAR SUBUSUARIO
 
@@ -1039,7 +1062,7 @@ document.getElementById('confirmar_eliminacion_subusuario').addEventListener('cl
                 height: '60px'
             },
             position: 'bottom-center',
-            autoClose: 3000,
+            autoClose: 10000,
             canClose: false,
             showProgress: false,
             pauseOnHover: false,
@@ -1155,6 +1178,7 @@ document.getElementById('boton_guardar_subusuario').addEventListener('click', ()
                     pauseOnFocusLoss: false
                 });
 
+                $('#modal-crear-subusuarios').modal('hide');
                 $('#subusuarios').DataTable().ajax.reload();
             }
             else
@@ -1177,7 +1201,7 @@ document.getElementById('boton_guardar_subusuario').addEventListener('click', ()
                         height: ajustar_altura(res.sms.length),
                     },
                     position: 'bottom-center',
-                    autoClose: 4000,
+                    autoClose: 10000,
                     canClose: false,
                     showProgress: false,
                     pauseOnHover: false,
@@ -1206,7 +1230,7 @@ document.getElementById('boton_guardar_subusuario').addEventListener('click', ()
                     height: '60px'
                 },
                 position: 'bottom-center',
-                autoClose: 3000,
+                autoClose: 10000,
                 canClose: false,
                 showProgress: false,
                 pauseOnHover: false,
@@ -1256,6 +1280,7 @@ document.getElementById('boton_guardar_subusuario').addEventListener('click', ()
                     pauseOnFocusLoss: false
                 });
 
+                $('#modal-crear-subusuarios').modal('hide');
                 $('#subusuarios').DataTable().ajax.reload();
             }
             else
@@ -1278,7 +1303,7 @@ document.getElementById('boton_guardar_subusuario').addEventListener('click', ()
                         height: ajustar_altura(res.sms.length),
                     },
                     position: 'bottom-center',
-                    autoClose: 4000,
+                    autoClose: 10000,
                     canClose: false,
                     showProgress: false,
                     pauseOnHover: false,
@@ -1307,7 +1332,7 @@ document.getElementById('boton_guardar_subusuario').addEventListener('click', ()
                     height: '60px'
                 },
                 position: 'bottom-center',
-                autoClose: 3000,
+                autoClose: 10000,
                 canClose: false,
                 showProgress: false,
                 pauseOnHover: false,
@@ -1318,7 +1343,7 @@ document.getElementById('boton_guardar_subusuario').addEventListener('click', ()
         })
     }
 
-    $('#modal-crear-subusuarios').modal('hide');
+    //$('#modal-crear-subusuarios').modal('hide');
 })
 //fin GUARDAR SUBUSUARIO
 
@@ -1447,11 +1472,11 @@ document.getElementById('guardar_grupo').addEventListener('click', async ()=>{
                     style: {
                         background: '#DB0632',
                         color: '#fff',
-                        width: '300px',
+                        width: '180px',
                         height: ajustar_altura(res.sms.length),
                     },
                     position: 'bottom-center',
-                    autoClose: 3000,
+                    autoClose: 10000,
                     canClose: false,
                     showProgress: false,
                     pauseOnHover: false,
@@ -1480,7 +1505,7 @@ document.getElementById('guardar_grupo').addEventListener('click', async ()=>{
                     height: '60px'
                 },
                 position: 'bottom-center',
-                autoClose: 3000,
+                autoClose: 10000,
                 canClose: false,
                 showProgress: false,
                 pauseOnHover: false,
@@ -1555,7 +1580,7 @@ document.getElementById('guardar_grupo').addEventListener('click', async ()=>{
                         height: ajustar_altura(res.sms.length),
                     },
                     position: 'bottom-center',
-                    autoClose: 3000,
+                    autoClose: 10000,
                     canClose: false,
                     showProgress: false,
                     pauseOnHover: false,
@@ -1584,7 +1609,7 @@ document.getElementById('guardar_grupo').addEventListener('click', async ()=>{
                     height: '60px'
                 },
                 position: 'bottom-center',
-                autoClose: 3000,
+                autoClose: 10000,
                 canClose: false,
                 showProgress: false,
                 pauseOnHover: false,
@@ -1721,7 +1746,7 @@ document.getElementById('confirmar_eliminacion_grupo').addEventListener('click',
                 height: '60px'
             },
             position: 'bottom-center',
-            autoClose: 3000,
+            autoClose: 10000,
             canClose: false,
             showProgress: false,
             pauseOnHover: false,
@@ -1820,7 +1845,7 @@ document.getElementById('boton_asignar_subusuarios_grupos').addEventListener('cl
         });
 
         if( [...document.getElementById('lista_subusuarios_asignar').children].length == conteo_grupos_marcados && conteo_grupos_marcados>0) document.getElementById('seleccionar_todos_subusuarios_asignar').checked = true;
-
+        else document.getElementById('seleccionar_todos_subusuarios_asignar').checked = false;
         $('#modal_asignar_subusuarios_grupo').modal();
 
     });
@@ -1878,6 +1903,7 @@ $('#subusuarios').on('draw.dt', function()
     document.getElementById('numero_total_subusuarios').textContent = $('#subusuarios').DataTable().data().length;
 
     verificar_checkeo_principal_subusuarios();
+    verificar_paginacion();
 
     $('.check_subusuarios').on('click', ()=>{
 
@@ -1896,6 +1922,7 @@ $('#subusuarios').on('draw.dt', function()
         else document.getElementById('checkbox_principal_subusuarios').checked = false;
 
     });
+
 });
 
 //no se usa por cargar las catetgorias al cargar la pagina
@@ -2337,7 +2364,7 @@ document.getElementById('asignar_subusuarios_grupos').addEventListener('click', 
                     height: '60px'
                 },
                 position: 'bottom-center',
-                autoClose: 3000,
+                autoClose: 10000,
                 canClose: false,
                 showProgress: false,
                 pauseOnHover: false,
@@ -2692,7 +2719,7 @@ async function guardado_rapido(event)
                     height: ajustar_altura(res.sms.length),
                 },
                 position: 'bottom-center',
-                autoClose: 3000,
+                autoClose: 10000,
                 canClose: false,
                 showProgress: false,
                 pauseOnHover: false,
@@ -2845,10 +2872,120 @@ document.getElementById('boton_reiniciar_subusuarios').addEventListener('click',
     $('#subusuarios').DataTable().ajax.reload();
 });
 
+//cuando hay errores de subusuario cerra la pagina actual
 $('#subusuarios').on('error.dt', function ( e, settings, techNote, message )
 {
     close();
 });
 
+//para mostrar o esconder la paginacion dependiendo de la cantidad de registros que aparezcan al agregar o eliminar subusuarios
+function verificar_paginacion()
+{
+    if(document.getElementById('subusuarios_paginate').children[1].children.length>1)
+    {
+        document.getElementById('subusuarios_paginate').classList.remove('d-none');
+    }
+    else
+    {
+        document.getElementById('subusuarios_paginate').classList.add('d-none');
+    }
+}
+
+//validar formulario de subusuarios, si devuelve true es porque ha encontrado un error
+function validar_formulario_subusuarios()
+{
+    let bandera_error = false; //se vuelve true cuando encuentra un error
+    let focus = [];    //verificar que ningun campo obligatorio quede vacio
+
+    //limpiar de errores antes de validarlos
+    document.getElementById('nombrecompleto_subusuario').classList.remove('is-invalid');
+    document.getElementById('nombre_subusuario').classList.remove('is-invalid');
+    document.getElementById('clave_subusuario').classList.remove('is-invalid');
+    document.getElementById('email_subusuario').classList.remove('is-invalid');
+    //fin de limpiar errores
+
+    if(document.getElementById('nombrecompleto_subusuario').value.trim() == '')
+    {
+        document.getElementById('nombrecompleto_subusuario').focus();
+        //document.getElementById('nombrecompleto_subusuario').classList.remove('is-valid');
+        document.getElementById('nombrecompleto_subusuario').classList.add('is-invalid');
+        bandera_error = true;
+        focus.push('nombrecompleto_subusuario');
+    }
+    else
+    {
+        document.getElementById('nombrecompleto_subusuario').classList.remove('is-invalid');
+        //document.getElementById('nombrecompleto_subusuario').classList.add('is-valid');
+    }
+
+    if(document.getElementById('nombre_subusuario').value.trim() == '')
+    {
+        document.getElementById('nombre_subusuario').focus();
+        //document.getElementById('nombre_subusuario').classList.remove('is-valid');
+        document.getElementById('nombre_subusuario').classList.add('is-invalid');
+        bandera_error = true;
+        focus.push('nombre_subusuario');
+    }
+    else
+    {
+        document.getElementById('nombre_subusuario').classList.remove('is-invalid');
+        //document.getElementById('nombre_subusuario').classList.add('is-valid');
+    }
+
+    if(document.getElementById('clave_subusuario').value.trim() == '')
+    {
+        document.getElementById('clave_subusuario').focus();
+        //document.getElementById('clave_subusuario').classList.remove('is-valid');
+        document.getElementById('clave_subusuario').classList.add('is-invalid');
+        bandera_error = true;
+        focus.push('clave_subusuario');
+    }
+    else
+    {
+        document.getElementById('clave_subusuario').classList.remove('is-invalid');
+        //document.getElementById('clave_subusuario').classList.add('is-valid');
+    }
+
+    if( !/^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/.test(document.getElementById('email_subusuario').value))
+    {
+        document.getElementById('email_subusuario').focus();
+        //document.getElementById('email_subusuario').classList.remove('is-valid');
+        document.getElementById('email_subusuario').classList.add('is-invalid');
+        bandera_error = true;
+        focus.push('email_subusuario');
+    }
+    else
+    {
+        document.getElementById('email_subusuario').classList.remove('is-invalid');
+        //document.getElementById('email_subusuario').classList.add('is-valid');
+    }
+    console.log(focus);
+    if(focus.length>0) document.getElementById(focus[0]).focus();
+    return bandera_error;
+}
+
+/* document.getElementById('ver_password').addEventListener('click', ()=>{
+    if(document.getElementById('ver_password').children[0].classList.contains('fa-eye'))
+    {
+        document.getElementById('ver_password').children[0].classList.remove('fa-eye');
+        document.getElementById('ver_password').children[0].classList.add('fa-eye-slash');
+        document.getElementById('clave_subusuario').setAttribute('type', 'text');
+        document.getElementById('ver_password').setAttribute('data-original-title', 'Ocultar');
+    }
+    else
+    {
+        document.getElementById('ver_password').children[0].classList.remove('fa-eye-slash');
+        document.getElementById('ver_password').children[0].classList.add('fa-eye');
+        document.getElementById('clave_subusuario').setAttribute('type', 'password');
+        document.getElementById('ver_password').setAttribute('data-original-title', 'Mostrar');
+    }
+}); */
 
 
+//detectar cuando modal se abre de agregar subusuarios
+$('#modal-crear-subusuarios').on('shown.bs.modal', ()=>{
+    document.getElementById('nombrecompleto_subusuario').focus();
+   /*  document.getElementById('clave_subusuario').setAttribute('type', 'password');
+    document.getElementById('ver_password').children[0].classList.remove('fa-eye-slash');
+    document.getElementById('ver_password').children[0].classList.add('fa-eye'); */
+});
