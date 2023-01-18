@@ -2,19 +2,56 @@
 
 namespace App\Http\Controllers;
 
-use ErrorException;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 
 class SubsuarioController extends Controller
 {
-    public function consultarKey($key)
+    public function obtener_cadena($codigo_pais)
     {
+        $codigo_pais = strtolower($codigo_pais);
+
+        if($codigo_pais == 'pe')
+        {
+            return 'sqlsrvperu';
+        }
+        elseif ($codigo_pais == 'co')
+        {
+            return 'sqlsrvcolombia';
+        }
+        elseif($codigo_pais == 'ch')
+        {
+            return 'sqlsrvchile';
+        }
+        elseif($codigo_pais == 'pa')
+        {
+            return 'sqlsrvpanama';
+        }
+        elseif($codigo_pais == 'mx')
+        {
+            return 'sqlsrvmexico';
+        }
+        elseif($codigo_pais == 'ec')
+        {
+            return 'sqlsrv';
+        }
+        else
+        {
+            return 'sqlsrv';
+        }
+    }
+
+    public function consultarKey($key,$codigo_pais)
+    {
+        $conexion = $this->obtener_cadena($codigo_pais);
+
         try
         {
-            $datos_usuario = DB::select('exec spUsuarioConsultarKey ?', [$key]);
+            $datos_usuario = DB::connection($conexion)->select('exec spUsuarioConsultarKey ?', [$key]);
             return $datos_usuario[0]->IdUsuario;
         }
         catch(Exception $e)
@@ -23,9 +60,10 @@ class SubsuarioController extends Controller
         }
     }
 
-    public function consultarKeyCampos($key)
+    public function consultarKeyCampos($key, $codigo_pais)
     {
-        $datos_usuario = DB::select('exec spUsuarioConsultarKey ?', [$key]);
+        $conexion = $this->obtener_cadena($codigo_pais);
+        $datos_usuario = DB::connection($conexion)->select('exec spUsuarioConsultarKey ?', [$key]);
         return $datos_usuario[0];
     }
     /**
@@ -35,13 +73,25 @@ class SubsuarioController extends Controller
      */
     public function index(Request $request)
     {
-        $categorias = DB::select('select IdCategoria, Descripcion from SubUsuarioCategoria');
+        //$datos_usuario = DB::select('exec spUsuarioConsultarKey ?', [$request->o]);
+        //Cache::put($request->o, $datos_usuario[0]->IdUsuario, 6000);
+        $cadena = $this->obtener_cadena($request->cp);
+        $categorias = DB::connection($cadena)->select('select IdCategoria, Descripcion from SubUsuarioCategoria');
         return view('home', compact('categorias'));
     }
 
     public function consultadata(Request $request)
     {
-        $id_usuario = $this->consultarKey($request->o);
+        /* if(Cache::has($request->o))
+        {
+            $id_usuario = cache($request->o);
+        }
+        else
+        {
+            $id_usuario = $this->consultarKey($request->o);
+        } */
+        $conexion = $this->obtener_cadena($request->cp);
+        $id_usuario = $this->consultarKey($request->o, $request->cp);
 
         /* if($id_usuario == NULL)
         {
@@ -60,10 +110,9 @@ class SubsuarioController extends Controller
             array_push($categorias_filtrar, $categoria);
         }
 
-
-        $subusuarios = DB::select('exec spSubUsuarioConsultarV3 ?,?,?', [$id_usuario, NULL, 0]);
-        $categorias = DB::select('select * from SubUsuarioCategoria');
-        $grupos_subusuarios = DB::select('exec spSubUsuarioGrupoSubUsuariosConsultar ?,?,?', [$grupo_filtrar,$id_usuario,0]);
+        $subusuarios = DB::connection($conexion)->select('exec spSubUsuarioConsultarV3 ?,?,?', [$id_usuario, NULL, 0]);
+        $categorias = DB::connection($conexion)->select('select IdCategoria, Descripcion from SubUsuarioCategoria');
+        $grupos_subusuarios = DB::connection($conexion)->select('exec spSubUsuarioGrupoSubUsuariosConsultar ?,?,?', [$grupo_filtrar,$id_usuario,0]);
 
         foreach($grupos_subusuarios as $grupo)
         {
@@ -120,24 +169,26 @@ class SubsuarioController extends Controller
      */
     public function create(Request $request)
     {
-        $id_usuario = $this->consultarKey($request->o);
+        $id_usuario = $this->consultarKey($request->o, $request->cp);
+        $conexion = $this->obtener_cadena($request->cp);
 
         if($id_usuario == NULL)
         {
             return [];
         }
 
-        $vehiculos = DB::select('exec spActivosUsuarioConsultarV2 ?', [$id_usuario]);
+        $vehiculos = DB::connection($conexion)->select('exec spActivosUsuarioConsultarV2 ?', [$id_usuario]);
         /* $puntos = DB::select('exec spPuntoConsultar ?, ?', [0, $id_usuario]); */
         /* $geocercas = DB::select('exec spGeocercaConsultar ?', [$id_usuario]); */
-        $alertas = DB::select('exec spD_AlertaConsultar ?,?', [$id_usuario,0]);
-        $modulos = DB::select('exec spModuloConsultar ?', [$id_usuario]);
-        $grupo_puntos = DB::select('exec spGrupoPuntoConsultar ?, ?', [$id_usuario, 0]);
-        $grupo_geocercas = DB::select('exec spGrupoGeocercaConsultar ?, ?', [$id_usuario, 0]);
+        $alertas = DB::connection($conexion)->select('exec spD_AlertaConsultar ?,?', [$id_usuario,0]);
+        $modulos = DB::connection($conexion)->select('exec spModuloConsultar ?', [$id_usuario]);
+        $grupo_puntos = DB::connection($conexion)->select('exec spGrupoPuntoConsultar ?, ?', [$id_usuario, 0]);
+        $grupo_geocercas = DB::connection($conexion)->select('exec spGrupoGeocercaConsultar ?, ?', [$id_usuario, 0]);
         /* $categorias = DB::select('exec spLlenarCombo ?', ['CATEGORIASUB']); */
-        $categorias = DB::select('select IdCategoria, Descripcion from SubUsuarioCategoria');
+        //$categorias = DB::select('select IdCategoria, Descripcion from SubUsuarioCategoria');
+        //$categorias = DB::table('SubUsuarioCategoria')->select('IdCategoria', 'Descripcion')->get();
 
-        return response()->json(['categorias' => $categorias, 'alertas' => $alertas, 'modulos' => $modulos, 'grupo_puntos' => $grupo_puntos, 'grupo_geocercas' => $grupo_geocercas, 'vehiculos' => $vehiculos]);
+        return response()->json(['alertas' => $alertas, 'modulos' => $modulos, 'grupo_puntos' => $grupo_puntos, 'grupo_geocercas' => $grupo_geocercas, 'vehiculos' => $vehiculos]);
     }
 
     /**
@@ -148,7 +199,8 @@ class SubsuarioController extends Controller
      */
     public function store(Request $request)
     {
-        $id_usuario = $this->consultarKey($request->o);
+        $id_usuario = $this->consultarKey($request->o, $request->cp);
+        $conexion = $this->obtener_cadena($request->cp);
 
         $vehiculos_asignados = json_decode($request->vehiculos_asignados);
         /* $puntos_referencia = json_decode($request->puntos_referencia_asignados);
@@ -174,22 +226,22 @@ class SubsuarioController extends Controller
         }
 
         //verificar que el subusuario no este repetido
-        $repetido = DB::select('select IdSubUsuario, SubUsuario from SubUsuario where IdUsuario = ? and SubUsuario = ?', [$id_usuario, $request->nombre_subusuario]);
+        $repetido = DB::connection($conexion)->select('select IdSubUsuario, SubUsuario from SubUsuario where SubUsuario = ?', [$request->nombre_subusuario]);
 
         if( sizeof($repetido) > 0 ) return response()->json(['sms' => ['Subusuario ya existe']]);
 
         try
         {
 
-            DB::beginTransaction();
+            DB::connection($conexion)->beginTransaction();
 
-            $result = DB::select('DECLARE @parIdSubUsuario int
+            $result = DB::connection($conexion)->select('DECLARE @parIdSubUsuario int
                 exec spSubUsuarioIngresarV2 ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?, @parIdSubUsuario output
                 select @parIdSubUsuario as idsubusuario',
                 [
                     $id_usuario,
-                    $request->nombrecompleto_subusuario,
                     $request->nombre_subusuario,
+                    $request->nombrecompleto_subusuario,
                     $request->clave_subusuario,
                     ($request->validohasta_subusuario !=  '') ? date('Ymd', strtotime($request->validohasta_subusuario)) : ' ',
                     $request->ver_recorridos,
@@ -217,7 +269,7 @@ class SubsuarioController extends Controller
 
             foreach($vehiculos_asignados as $vehiculo)
             {
-                DB::insert('exec spActivoSubUsuarioIngresar ?,?,?', [$vehiculo, $id_usuario, $result[0]->idsubusuario]);
+                DB::connection($conexion)->insert('exec spActivoSubUsuarioIngresar ?,?,?', [$vehiculo, $id_usuario, $result[0]->idsubusuario]);
             }
 
             /* foreach($geocercas_asignadas as $geocerca)
@@ -227,32 +279,33 @@ class SubsuarioController extends Controller
 
             foreach($alertas_asignadas as $alerta)
             {
-                DB::insert('exec spD_AlertaSubUsuarioIngresar ?,?,?', [$alerta, $id_usuario, $result[0]->idsubusuario]);
+                DB::connection($conexion)->insert('exec spD_AlertaSubUsuarioIngresar ?,?,?', [$alerta, $id_usuario, $result[0]->idsubusuario]);
             }
 
             foreach($modulos_asignados as $modulo)
             {
-                DB::insert('exec spModulosSubUsuarioIngresar ?,?,?', [$modulo, $id_usuario, $result[0]->idsubusuario]);
+                DB::connection($conexion)->insert('exec spModulosSubUsuarioIngresar ?,?,?', [$modulo, $id_usuario, $result[0]->idsubusuario]);
             }
 
             foreach($grupopuntos_asignados as $grupopunto)
             {
-                DB::insert('exec spGrupoPuntoSubUsuarioIngresar ?,?,?', [$grupopunto, $id_usuario, $result[0]->idsubusuario]); //parIdGrupoPunto, parIDUsuario, parIdSUBUSUARIO
+                DB::connection($conexion)->insert('exec spGrupoPuntoSubUsuarioIngresar ?,?,?', [$grupopunto, $id_usuario, $result[0]->idsubusuario]); //parIdGrupoPunto, parIDUsuario, parIdSUBUSUARIO
             }
 
             foreach($grupogeocercas_asignadas as $grupogeocerca)
             {
-                DB::insert('exec spGrupoGeocercaSubUsuarioIngresar ?,?,?', [$grupogeocerca, $id_usuario, $result[0]->idsubusuario]);
+                DB::connection($conexion)->insert('exec spGrupoGeocercaSubUsuarioIngresar ?,?,?', [$grupogeocerca, $id_usuario, $result[0]->idsubusuario]);
             }
 
-            DB::commit();
+            DB::connection($conexion)->commit();
 
             return response()->json(['sms' => 'ok']);
 
         }
-        catch(ErrorException $e)
+        catch(Exception $e)
         {
-            DB::rollback();
+            DB::connection($conexion)->rollBack();
+            Log::critical($e->getMessage(), ['code' => $e->getCode(), 'trace' => $e->getTrace()]);
             return response()->json(['sms' => $e]);
         }
 
@@ -266,14 +319,15 @@ class SubsuarioController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $id_usuario = $this->consultarKey($request->o);
-        $vehiculos = DB::select('exec spActivoSubUsuarioConsultar ?,?', [$id_usuario, $id]);
+        $id_usuario = $this->consultarKey($request->o,$request->cp);
+        $conexion = $this->obtener_cadena($request->cp);
+        $vehiculos = DB::connection($conexion)->select('exec spActivoSubUsuarioConsultar ?,?', [$id_usuario, $id]);
         /* $puntos = DB::select('exec spPuntoSubUsuarioConsultar ?,?', [$id_usuario, $id]); */
-        $modulos = DB::select('exec spModuloSubusuarioConsultar ?,?', [$id_usuario, $id]);
+        $modulos = DB::connection($conexion)->select('exec spModuloSubusuarioConsultar ?,?', [$id_usuario, $id]);
         /* $geocercas = DB::select('exec spGeocercaSubusuarioConsultar ?,?', [$id_usuario, $id]); */
-        $alertas = DB::select('exec spD_AlertaSubUsuarioConsultar ?,?', [$id_usuario, $id]);
-        $grupo_puntos = DB::select('exec spGrupoPuntoSubusuarioConsultar ?,?,?', [0, $id_usuario, $id]);
-        $grupo_geocercas = DB::select('exec spGrupoGeocercaSubusuarioConsultar ?,?', [$id_usuario, $id]);
+        $alertas = DB::connection($conexion)->select('exec spD_AlertaSubUsuarioConsultar ?,?', [$id_usuario, $id]);
+        $grupo_puntos = DB::connection($conexion)->select('exec spGrupoPuntoSubusuarioConsultar ?,?,?', [0, $id_usuario, $id]);
+        $grupo_geocercas = DB::connection($conexion)->select('exec spGrupoGeocercaSubusuarioConsultar ?,?', [$id_usuario, $id]);
 
         return response()->json(['vehiculos' => $vehiculos, 'modulos' => $modulos, 'alertas' => $alertas, 'grupo_geocercas' => $grupo_geocercas, 'grupo_puntos' => $grupo_puntos]);
     }
@@ -286,7 +340,8 @@ class SubsuarioController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $id_usuario = $this->consultarKey($request->o);
+        $id_usuario = $this->consultarKey($request->o,$request->cp);
+        $conexion = $this->obtener_cadena($request->cp);
         $vehiculos_check = [];
         /* $puntos_check = [];
         $geocercas_check = []; */
@@ -296,22 +351,22 @@ class SubsuarioController extends Controller
         $grupogeocercas_check = [];
 
         //todos los recursos del usuario
-        $vehiculos = DB::select('exec spActivosUsuarioConsultarV2 ?', [$id_usuario]);
+        $vehiculos = DB::connection($conexion)->select('exec spActivosUsuarioConsultarV2 ?', [$id_usuario]);
         /* $puntos = DB::select('exec spPuntoConsultar ?, ?', [0, $id_usuario]);
         $geocercas = DB::select('exec spGeocercaConsultar ?', [$id_usuario]); */
-        $alertas = DB::select('exec spD_AlertaConsultar ?,?', [$id_usuario,0]);
-        $modulos = DB::select('exec spModuloConsultar ?', [$id_usuario]);
-        $grupo_puntos = DB::select('exec spGrupoPuntoConsultar ?, ?', [$id_usuario, 0]);
-        $grupo_geocercas = DB::select('exec spGrupoGeocercaConsultar ?, ?', [$id_usuario, 0]);
+        $alertas = DB::connection($conexion)->select('exec spD_AlertaConsultar ?,?', [$id_usuario,0]);
+        $modulos = DB::connection($conexion)->select('exec spModuloConsultar ?', [$id_usuario]);
+        $grupo_puntos = DB::connection($conexion)->select('exec spGrupoPuntoConsultar ?, ?', [$id_usuario, 0]);
+        $grupo_geocercas = DB::connection($conexion)->select('exec spGrupoGeocercaConsultar ?, ?', [$id_usuario, 0]);
 
         //los recursos que tiene el subusuario, se consulta para saber cuales estan checkeados
-        $vehiculos_pertenecen = DB::select('exec spActivoSubUsuarioConsultar ?,?', [$id_usuario, $id]);
+        $vehiculos_pertenecen = DB::connection($conexion)->select('exec spActivoSubUsuarioConsultar ?,?', [$id_usuario, $id]);
         /* $puntos_pertenecen = DB::select('exec spPuntoSubUsuarioConsultar ?,?', [$id_usuario, $id]);
         $geocercas_pertenecen = DB::select('exec spGeocercaSubusuarioConsultar ?,?', [$id_usuario, $id]); */
-        $modulos_pertenecen = DB::select('exec spModuloSubusuarioConsultar ?,?', [$id_usuario, $id]);
-        $alertas_pertenecen = DB::select('exec spD_AlertaSubUsuarioConsultar ?,?', [$id_usuario, $id]);
-        $grupo_puntos_pertenecen = DB::select('exec spGrupoPuntoSubusuarioConsultar ?,?,?', [0, $id_usuario, $id]);
-        $grupo_geocercas_pertenecen = DB::select('exec spGrupoGeocercaSubusuarioConsultar ?,?', [$id_usuario, $id]);
+        $modulos_pertenecen = DB::connection($conexion)->select('exec spModuloSubusuarioConsultar ?,?', [$id_usuario, $id]);
+        $alertas_pertenecen = DB::connection($conexion)->select('exec spD_AlertaSubUsuarioConsultar ?,?', [$id_usuario, $id]);
+        $grupo_puntos_pertenecen = DB::connection($conexion)->select('exec spGrupoPuntoSubusuarioConsultar ?,?,?', [0, $id_usuario, $id]);
+        $grupo_geocercas_pertenecen = DB::connection($conexion)->select('exec spGrupoGeocercaSubusuarioConsultar ?,?', [$id_usuario, $id]);
 
         foreach($vehiculos_pertenecen as $vehiculo)
         {
@@ -348,15 +403,18 @@ class SubsuarioController extends Controller
             array_push($grupogeocercas_check, $grupogeocerca->IdGrupoGeocerca);
         }
 
-        $subusuario = DB::select('exec spSubUsuarioDatosConsultar ?,?', [$id_usuario, $id]);
-        $categorias = DB::select('select IdCategoria, Descripcion from SubUsuarioCategoria');
+        $subusuario = DB::connection($conexion)->select('exec spSubUsuarioDatosConsultar ?,?', [$id_usuario, $id]);
+        //$categorias = DB::select('select IdCategoria, Descripcion from SubUsuarioCategoria');
+        //$categorias = DB::table('SubUsuarioCategoria')->select('IdCategoria', 'Descripcion')->get();
 
-        return response()->json(['sms' => $subusuario, 'categorias' => $categorias, 'vehiculos' => $vehiculos, 'modulos' => $modulos, 'alertas' => $alertas, 'grupo_geocercas' => $grupo_geocercas, 'grupo_puntos' => $grupo_puntos, 'vehiculos_pertenecen' => $vehiculos_check, 'modulos_pertenecen' => $modulos_check, 'alertas_pertenecen' => $alertas_check, 'grupo_puntos_pertenecen' => $grupopuntos_check, 'grupo_geocercas_pertenecen' => $grupogeocercas_check]);
+        return response()->json(['sms' => $subusuario, 'vehiculos' => $vehiculos, 'modulos' => $modulos, 'alertas' => $alertas, 'grupo_geocercas' => $grupo_geocercas, 'grupo_puntos' => $grupo_puntos, 'vehiculos_pertenecen' => $vehiculos_check, 'modulos_pertenecen' => $modulos_check, 'alertas_pertenecen' => $alertas_check, 'grupo_puntos_pertenecen' => $grupopuntos_check, 'grupo_geocercas_pertenecen' => $grupogeocercas_check]);
     }
 
     public function revisar_grupos_subusuarios(Request $request)
     {
-        $id_usuario = $this->consultarKey($request->o);
+        $id_usuario = $this->consultarKey($request->o,$request->cp);
+        $conexion = $this->obtener_cadena($request->cp);
+
         $id_subusuarios = json_decode($request->id_subusuarios);
         $array_temp = [];
         $array_total_grupos = []; //todos los ids de los grupos para verificar cuales son los checkeados
@@ -366,13 +424,13 @@ class SubsuarioController extends Controller
         //$grupos_subusuarios_ejemplo = [1,[1,2]];
         //$id_subusuarios_ejemplo = [1,2,3,4];
 
-        $grupos = DB::select('spGruposSubUsuariosConsultar ?,?', [$id_usuario, NULL]);
+        $grupos = DB::connection($conexion)->select('spGruposSubUsuariosConsultar ?,?', [$id_usuario, NULL]);
 
         //recorrer id de subusuarios para obtener grupos a los que pertenecen
 
         for ($i=0; $i < count($id_subusuarios); $i++)
         {
-            $grupos_pertenecientes = DB::select('exec spSubUsuarioGrupoSubUsuariosConsultar ?,?,?', [ 0, $id_usuario, $id_subusuarios[$i] ] );
+            $grupos_pertenecientes = DB::connection($conexion)->select('exec spSubUsuarioGrupoSubUsuariosConsultar ?,?,?', [ 0, $id_usuario, $id_subusuarios[$i] ] );
 
             //si tiene 1 grupo o mas se añaden en arreglos
             if(count($grupos_pertenecientes)>0)
@@ -432,7 +490,8 @@ class SubsuarioController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $id_usuario = $this->consultarKey($request->o);
+        $id_usuario = $this->consultarKey($request->o, $request->cp);
+        $conexion = $this->obtener_cadena($request->cp);
 
         $validar = Validator::make(
             $request->all(),
@@ -450,7 +509,7 @@ class SubsuarioController extends Controller
         }
 
         //verificar que el subusuario no este repetido
-        $repetido = DB::select('select IdSubUsuario, SubUsuario from SubUsuario where IdUsuario = ? and not IdSubUsuario=? and SubUsuario = ?', [$id_usuario, $id, $request->nombre_subusuario]);
+        $repetido = DB::connection($conexion)->select('select IdSubUsuario, SubUsuario from SubUsuario where not IdSubUsuario=? and SubUsuario = ?', [$id, $request->nombre_subusuario]);
 
         if( sizeof($repetido) > 0 ) return response()->json(['sms' => ['Subusuario ya existe']]);
 
@@ -570,11 +629,11 @@ class SubsuarioController extends Controller
         }
         //Fin verificar los checks desmarcados para eliminar la asignacion del recurso en cada subusuario
 
-        DB::beginTransaction();
+        DB::connection($conexion)->beginTransaction();
 
         try
         {
-            DB::update('exec spSubUsuarioActualizar ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?',
+            DB::connection($conexion)->update('exec spSubUsuarioActualizar ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?',
             [
                 $id_usuario,
                 $id,
@@ -603,7 +662,7 @@ class SubsuarioController extends Controller
             //*Aqui se agregan solo los nuevos recursos marcados
             foreach($id_vehiculos_asignados as $vehiculo)
             {
-                DB::insert('exec spActivoSubUsuarioIngresar ?,?,?', [$vehiculo, $id_usuario, $id]);
+                DB::connection($conexion)->insert('exec spActivoSubUsuarioIngresar ?,?,?', [$vehiculo, $id_usuario, $id]);
             }
 
             /* foreach($id_puntos_asignados as $punto)
@@ -618,22 +677,22 @@ class SubsuarioController extends Controller
 
             foreach($id_modulos_asignados as $modulo)
             {
-                DB::insert('exec spModulosSubUsuarioIngresar ?,?,?', [$modulo, $id_usuario, $id]);
+                DB::connection($conexion)->insert('exec spModulosSubUsuarioIngresar ?,?,?', [$modulo, $id_usuario, $id]);
             }
 
             foreach($id_alertas_asignadas as $alerta)
             {
-                DB::insert('exec spD_AlertaSubUsuarioIngresar ?,?,?', [$alerta, $id_usuario, $id]);
+                DB::connection($conexion)->insert('exec spD_AlertaSubUsuarioIngresar ?,?,?', [$alerta, $id_usuario, $id]);
             }
 
             foreach($id_grupopuntos_asignados as $grupopunto)
             {
-                DB::insert('exec spGrupoPuntoSubUsuarioIngresar ?,?,?', [$grupopunto, $id_usuario, $id]);
+                DB::connection($conexion)->insert('exec spGrupoPuntoSubUsuarioIngresar ?,?,?', [$grupopunto, $id_usuario, $id]);
             }
 
             foreach($id_grupogeocercas_asignadas as $grupogeocerca)
             {
-                DB::insert('exec spGrupoGeocercaSubUsuarioIngresar ?,?,?', [$grupogeocerca, $id_usuario, $id]);
+                DB::connection($conexion)->insert('exec spGrupoGeocercaSubUsuarioIngresar ?,?,?', [$grupogeocerca, $id_usuario, $id]);
             }
             //Fin asignar recursos
 
@@ -642,7 +701,7 @@ class SubsuarioController extends Controller
             //*Aqui se eliminan los recursos que se desmarcaron
             foreach($id_vehiculos_para_desmarcar as $vehiculo)
             {
-                DB::delete('exec spActivoSubUsuarioEliminar ?,?,?', [$id_usuario, $id, $vehiculo]);
+                DB::connection($conexion)->delete('exec spActivoSubUsuarioEliminar ?,?,?', [$id_usuario, $id, $vehiculo]);
             }
 
             /* foreach($id_puntos_para_desmarcar as $punto)
@@ -657,32 +716,33 @@ class SubsuarioController extends Controller
 
             foreach($id_modulos_para_desmarcar as $modulo)
             {
-                DB::delete('exec spModuloSubUsuarioEliminar ?,?,?', [$id_usuario, $id, $modulo]);
+                DB::connection($conexion)->delete('exec spModuloSubUsuarioEliminar ?,?,?', [$id_usuario, $id, $modulo]);
             }
 
             foreach($id_alertas_para_desmarcar as $alerta)
             {
-                DB::delete('exec spD_AlertaSubUsuarioEliminar ?,?,?', [$id_usuario, $id, $alerta]);
+                DB::connection($conexion)->delete('exec spD_AlertaSubUsuarioEliminar ?,?,?', [$id_usuario, $id, $alerta]);
             }
 
             foreach($id_grupopuntos_para_desmarcar as $grupopunto)
             {
-                DB::delete('exec spGrupoPuntoSubUsuarioEliminar ?,?,?', [$grupopunto, $id_usuario, $id]);
+                DB::connection($conexion)->delete('exec spGrupoPuntoSubUsuarioEliminar ?,?,?', [$grupopunto, $id_usuario, $id]);
             }
 
             foreach($id_grupogeocercas_para_desmarcar as $grupogeocerca)
             {
-                DB::delete('exec spGrupoGeocercaSubUsuarioEliminar ?,?,?', [$id_usuario, $id, $grupogeocerca]);
+                DB::connection($conexion)->delete('exec spGrupoGeocercaSubUsuarioEliminar ?,?,?', [$id_usuario, $id, $grupogeocerca]);
             }
 
             //Fin eliminar recursos
 
-            DB::commit();
+            DB::connection($conexion)->commit();
             return response()->json(['sms' => 'ok']);
         }
-        catch(ErrorException $e)
+        catch(Exception $e)
         {
-            DB::rollBack();
+            DB::connection($conexion)->rollBack();
+            Log::critical($e->getMessage(), ['code' => $e->getCode(), 'trace' => $e->getTrace()]);
             return response()->json(['sms' => $e]);
         }
 
@@ -709,7 +769,9 @@ class SubsuarioController extends Controller
 
     public function asignar_subusuarios_grupos(Request $request)
     {
-        $campos = $this->consultarKeyCampos($request->o);
+        $campos = $this->consultarKeyCampos($request->o, $request->cp);
+        $conexion = $this->obtener_cadena($request->cp);
+
         $id_usuario = $campos->IdUsuario;
         $nombre_usuario = $campos->Usuario;
         $id_subusuarios = json_decode($request->ids_subusuarios);
@@ -717,7 +779,7 @@ class SubsuarioController extends Controller
         $checks_anteriores = json_decode($request->checks_anteriores);
         $checks_totales_marcados = []; // esta variable se usa para comparar y ver cuales checks se deben desmarcar
 
-        DB::beginTransaction();
+        DB::connection($conexion)->beginTransaction();
 
         try
         {
@@ -727,7 +789,7 @@ class SubsuarioController extends Controller
                 {
                     array_push($checks_totales_marcados, $idgrupo);
                     if( in_array($idgrupo, $checks_anteriores) ) continue;
-                    DB::insert('exec spSubUsuarioGrupoSubUsuariosIngresar ?,?,?,?', [$idgrupo, $id_usuario, $idsubusuario, $nombre_usuario]);
+                    DB::connection($conexion)->insert('exec spSubUsuarioGrupoSubUsuariosIngresar ?,?,?,?', [$idgrupo, $id_usuario, $idsubusuario, $nombre_usuario]);
                 }
             }
 
@@ -736,17 +798,18 @@ class SubsuarioController extends Controller
                 foreach($checks_anteriores as $idgrupo)
                 {
                     if( in_array($idgrupo,$checks_totales_marcados) ) continue;
-                    DB::update('exec spSubUsuarioGrupoSubUsuariosEliminar ?,?,?', [$idgrupo, $id_usuario, $idsubusuario]);
+                    DB::connection($conexion)->update('exec spSubUsuarioGrupoSubUsuariosEliminar ?,?,?', [$idgrupo, $id_usuario, $idsubusuario]);
                 }
 
             }
 
-            DB::commit();
+            DB::connection($conexion)->commit();
             return response()->json(['sms' => 'ok']);
         }
-        catch(ErrorException $e)
+        catch(Exception $e)
         {
-            DB::rollBack();
+            DB::connection($conexion)->rollBack();
+            Log::critical($e->getMessage(), ['code' => $e->getCode(), 'trace' => $e->getTrace()]);
             return response()->json(['sms' => $e]);
         }
 
@@ -757,7 +820,9 @@ class SubsuarioController extends Controller
 
     public function edicion_tabla(Request $request)
     {
-        $id_usuario = $this->consultarKey($request->o);
+        $id_usuario = $this->consultarKey($request->o, $request->cp);
+        $conexion = $this->obtener_cadena($request->cp);
+
         $id_subusuario = $request->id;
         $nombre = $request->nombre;
         $subusuario_enviado = $request->subusuario;
@@ -782,7 +847,7 @@ class SubsuarioController extends Controller
             );
 
             //verificar que el subusuario no este repetido
-            $repetido = DB::select('select IdSubUsuario, SubUsuario from SubUsuario where IdUsuario = ? and not IdSubUsuario=? and SubUsuario = ?', [$id_usuario, $id_subusuario, $subusuario_enviado]);
+            $repetido = DB::connection($conexion)->select('select IdSubUsuario, SubUsuario from SubUsuario where not IdSubUsuario=? and SubUsuario = ?', [$id_subusuario, $subusuario_enviado]);
 
             if( sizeof($repetido) > 0 ) return response()->json(['sms' => ['Subusuario ya existe']]);
 
@@ -795,11 +860,11 @@ class SubsuarioController extends Controller
 
         try
         {
-            DB::beginTransaction();
+            DB::connection($conexion)->beginTransaction();
 
-            $subusuario = DB::select('exec spSubUsuarioDatosConsultar ?,?', [$id_usuario, $id_subusuario])[0];
+            $subusuario = DB::connection($conexion)->select('exec spSubUsuarioDatosConsultar ?,?', [$id_usuario, $id_subusuario])[0];
 
-            DB::update('exec spSubUsuarioActualizar ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?',
+            DB::connection($conexion)->update('exec spSubUsuarioActualizar ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?',
                 [
                     $id_usuario,
                     $id_subusuario,
@@ -824,12 +889,13 @@ class SubsuarioController extends Controller
                     $subusuario->ReasignarDespachos
                 ]);
 
-                DB::commit();
+                DB::connection($conexion)->commit();
                 return response()->json(['sms' => 'ok']);
         }
-        catch(ErrorException $e)
+        catch(Exception $e)
         {
-            DB::rollBack();
+            DB::connection($conexion)->rollBack();
+            Log::critical($e->getMessage(), ['code' => $e->getCode(), 'trace' => $e->getTrace()]);
             return response()->json(['sms' => $e]);
         }
     }
@@ -842,8 +908,9 @@ class SubsuarioController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $id_usuario = $this->consultarKey($request->o);
-        $total_eliminados = DB::update('exec spSubUsuarioEliminar ?, ?', [$id_usuario, $id]);
+        $id_usuario = $this->consultarKey($request->o, $request->cp);
+        $conexion = $this->obtener_cadena($request->cp);
+        $total_eliminados = DB::connection($conexion)->update('exec spSubUsuarioEliminar ?, ?', [$id_usuario, $id]);
         return response()->json(['sms' => 'ok']);
     }
 }

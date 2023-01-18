@@ -91,6 +91,71 @@ return [
             'prefix_indexes' => true,
         ],
 
+        'sqlsrvperu' => [
+            'driver' => 'sqlsrv',
+            'url' => env('DATABASE_URL'),
+            'host' => env('DB1_HOST', 'bdprincipal-pe'),
+            'port' => env('DB1_PORT', '47000'),
+            'database' => env('DB1_DATABASE', 'GEOSYS'),
+            'username' => env('DB1_USERNAME', 'geousr'),
+            'password' => env('DB1_PASSWORD', 'PoChiNPE'),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+        ],
+
+        'sqlsrvcolombia' => [
+            'driver' => 'sqlsrv',
+            'url' => env('DATABASE_URL'),
+            'host' => env('DB2_HOST', 'bdprincipal-co'),
+            'port' => env('DB2_PORT', '47000'),
+            'database' => env('DB2_DATABASE', 'GEOSYS'),
+            'username' => env('DB2_USERNAME', 'geousr'),
+            'password' => env('DB2_PASSWORD', 'PoChiNPE'),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+        ],
+
+        'sqlsrvmexico' => [
+            'driver' => 'sqlsrv',
+            'url' => env('DATABASE_URL'),
+            'host' => env('DB3_HOST', 'bdprincipal-mx'),
+            'port' => env('DB3_PORT', '47000'),
+            'database' => env('DB3_DATABASE', 'GEOSYS'),
+            'username' => env('DB3_USERNAME', 'geousr'),
+            'password' => env('DB3_PASSWORD', 'PoChiNPE'),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+        ],
+
+        'sqlsrvpanama' => [
+            'driver' => 'sqlsrv',
+            'url' => env('DATABASE_URL'),
+            'host' => env('DB4_HOST', 'bdprincipal-pa'),
+            'port' => env('DB4_PORT', '47000'),
+            'database' => env('DB4_DATABASE', 'GEOSYS'),
+            'username' => env('DB4_USERNAME', 'geousr'),
+            'password' => env('DB4_PASSWORD', 'PoChiNPE'),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+        ],
+
+        'sqlsrvchile' => [
+            'driver' => 'sqlsrv',
+            'url' => env('DATABASE_URL'),
+            'host' => env('DB5_HOST', 'bdprincipal-ch'),
+            'port' => env('DB5_PORT', '47000'),
+            'database' => env('DB5_DATABASE', 'GEOSYS'),
+            'username' => env('DB5_USERNAME', 'geousr'),
+            'password' => env('DB5_PASSWORD', 'PoChiNPE'),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+        ],
+
     ],
 
     /*

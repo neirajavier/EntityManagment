@@ -76,9 +76,9 @@
                 </div>
             </div>
             <div class="col-sm-9 col-md-8 col-xl-9 col-12 pt-1 fondo_card" id="spinner">
-                <div id="datos" class="card fondo_card" {{-- style="height:83vh;" --}}>
+                <div id="datos" class="card fondo_card mb-1" {{-- style="height:83vh;" --}}>
                     <button id="boton_asignar_subusuarios_grupos" class="btn col-lg-1 col-2 botones_tabla d-none"><img class="imag-icon" src="{{asset('iconos/asignar grupo.png')}}" alt="asignar subusuarios"></button>
-                    <div class="card-body collapse show" id="datos_completos_usuarios">
+                    <div style="padding-top:0px; padding-button:0px;" class="card-body collapse show" id="datos_completos_usuarios">
                         {{-- <ul class="nav nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link active seleccionada" id="home-tab" data-toggle="tab" href="#datos-subusuario" role="tab" aria-controls="home" aria-selected="true"><h5><b>SUBUSUARIOS</b></h5></a>
@@ -175,7 +175,7 @@
                             <div class="col-12 m-auto text-center pt-3 pb-3">
                                 <b id="titulo_modal_eliminar_grupo" class="titulo_modales_eliminar">¿Quieres eliminar este grupo?</b>
                             </div>
-                                <button id="confirmar_eliminacion_grupo" class="col-4 btn btn-danger btn-sm">Si</button>
+                                <button id="confirmar_eliminacion_grupo" class="col-4 btn btn-danger btn-sm d-block m-auto">Aceptar</button>
                         </div>
                         <br>
 
@@ -270,7 +270,7 @@
                             <div class="col-12 m-auto text-center pt-3 pb-3">
                                 <b id="titulo_modal_eliminar_subusuario" class="titulo_modales_eliminar">¿Quieres eliminar este subusuario?</b>
                             </div>
-                                <button id="confirmar_eliminacion_subusuario" class="col-4 btn btn-danger btn-sm">Si</button>
+                                <button id="confirmar_eliminacion_subusuario" class="col-4 btn btn-danger btn-sm d-block m-auto">Aceptar</button>
                         </div>
                         <br>
 
@@ -372,7 +372,7 @@
                                 <b class="col-sm-10 col-10 mt-2" style="text-align:center;">DATOS DEL SUBUSUARIO</b>
                                 <a class="btn nav-link botones_tabla" id="boton_abrir_ventana_recursos_subusuario" title="Siguiente" onclick="abrir_ventana_recursos();"><img class="imag-icon" src="{{asset('iconos/flecha derecha.png')}}" alt="siguiente"></a>
                             </div>
-                            <div class="p-3">
+                            <div class="px-3">
                                 <div class="row">
                                     <div class="col-12">
                                         <label for="nombrecompleto_subusuario" class="estilos_label_input">NOMBRE COMPLETO</label><input id="nombrecompleto_subusuario" maxlength="200" class="form-control" type="text"><div class="invalid-feedback">Nombre requerido.</div>
@@ -396,7 +396,6 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <label class="estilos_label_input">CON CADUCIDAD</label>
-
                                     </div>
                                     <div class="col-4 col-sm-3">
                                         <select id="agregar_fecha_caducidad" class="form-control">
@@ -408,7 +407,12 @@
                                         <input id="validohasta_subusuario" class="form-control" type="date">
                                     </div>
                                     <div class="col-12">
-                                        <label for="categoria_subusuario" class="estilos_label_input">CATEGORIA</label><select id="categoria_subusuario" class="form-control"><option value="1">1</option><option value="2">2</option></select>
+                                        <label for="categoria_subusuario" class="estilos_label_input">CATEGORIA</label>
+                                        <select id="categoria_subusuario" class="form-control">
+                                            @foreach ($categorias as $categoria)
+                                                <option value="{{$categoria->IdCategoria}}">{{$categoria->Descripcion}}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                     <div class="col-12">
                                         <label for="email_subusuario" class="estilos_label_input">EMAIL</label><input id="email_subusuario" maxlength="120" class="form-control" type="email"><div class="invalid-feedback">Ingrese email valido.</div>
@@ -416,13 +420,12 @@
                                 </div>
                             </div>
 
-                            <div class="p-3">
-                                <div class="row">
+                            <div class="px-3">
+                                <div class="row py-1">
                                     <div class="col-12">
                                         <b class="subrayado">Funcionalidades</b>
                                     </div>
                                 </div>
-                                <br>
                                 <div class="row">
                                     <div class="col-6">
                                         <input type="checkbox" id="ver_kilometrajes"> <label for="ver_kilometrajes" class="estilos_label_input">VER KILOMETRAJES</label>

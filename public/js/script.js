@@ -36,7 +36,7 @@ document.getElementById('busqueda_general').addEventListener('input', (e)=>{
 
     busqueda.nombre = e.target.value;
 
-    $('#subusuarios').DataTable().ajax.url(`subusuarios/consultar?o=${getParameterByName('o')}&criterio=${JSON.stringify(busqueda)}`);
+    $('#subusuarios').DataTable().ajax.url(`subusuarios/consultar?o=${getParameterByName('o')}&cp=${getParameterByName('cp')}&criterio=${JSON.stringify(busqueda)}`);
     $('#subusuarios').DataTable().ajax.reload();
 
     //recorrer toda la tabla para verificar si estan seleccionados todos los checks de subusuarios, si no estan todos entonces se desmarca la opcion
@@ -86,7 +86,7 @@ $(document).ready( function () {
                 searchable: false,
             },
         ],
-        ajax: `grupos/consultar?o=${getParameterByName('o')}`
+        ajax: `grupos/consultar?o=${getParameterByName('o')}&cp=${getParameterByName('cp')}`
 
     });
 
@@ -133,7 +133,7 @@ $(document).ready( function () {
                 searchable: false,
             },
         ],
-        ajax: `subusuarios/consultar?o=${getParameterByName('o')}&criterio=${JSON.stringify(busqueda)}`
+        ajax: `subusuarios/consultar?o=${getParameterByName('o')}&cp=${getParameterByName('cp')}&criterio=${JSON.stringify(busqueda)}`
 
     });
 
@@ -294,15 +294,21 @@ document.getElementById('crear_nuevo_subusuario').addEventListener('click', asyn
 
     document.getElementById('validohasta_subusuario').value = new Date().toJSON().slice(0,10);
 
-    document.body.style.cursor = 'wait';
-    document.getElementById('crear_nuevo_subusuario').setAttribute('disabled', 'disabled');
+    //document.body.style.cursor = 'wait';
+    //document.getElementById('crear_nuevo_subusuario').setAttribute('disabled', 'disabled');
 
-    await fetch(`subusuarios/create?o=${getParameterByName('o')}`)
+    $('#modal-crear-subusuarios').modal({backdrop: 'static', keyboard: false});
+
+    //bloquear boton siguiente mientras se precargan los otros recursos
+    document.getElementById('boton_abrir_ventana_recursos_subusuario').classList.add('disabled');
+    //fin bloquear boton siguiente mientras se precargan los otros recursos
+
+    await fetch(`subusuarios/create?o=${getParameterByName('o')}&cp=${getParameterByName('cp')}`)
     .then(res => res.json())
     .then(res => {
         //console.log(res);
-        document.body.style.cursor = 'default';
-        document.getElementById('crear_nuevo_subusuario').removeAttribute('disabled');
+        //document.body.style.cursor = 'default';
+        //document.getElementById('crear_nuevo_subusuario').removeAttribute('disabled');
         document.getElementById('busqueda_agrega_recursos_subusuario').value = "";
 
         //Quitar checks principales para marcar todos los recursos
@@ -326,7 +332,7 @@ document.getElementById('crear_nuevo_subusuario').addEventListener('click', asyn
         //Fin minimizar todos los recursos
 
         //eliminar las categorias que estaban antes
-        [...document.getElementById('categoria_subusuario').children].map( data => data.remove());
+        //[...document.getElementById('categoria_subusuario').children].map( data => data.remove());
 
         [...document.getElementById('lista_vehiculos_agregar').children].map( data => data.remove());
         /* [...document.getElementById('lista_puntos_agregar').children].map( data => data.remove());
@@ -337,13 +343,13 @@ document.getElementById('crear_nuevo_subusuario').addEventListener('click', asyn
         [...document.getElementById('lista_grupo_geocercas_agregar').children].map( data => data.remove());
 
         //agregar categorias al combo
-        for(const categoria of res.categorias)
+        /* for(const categoria of res.categorias)
         {
             let option = document.createElement('option');
             option.textContent = categoria.Descripcion;
             option.value = categoria.IdCategoria;
             document.getElementById('categoria_subusuario').append(option);
-        }
+        } */
         //fin agregar categorias al combo
 
         for(const vehiculo of res.vehiculos)
@@ -501,9 +507,27 @@ document.getElementById('crear_nuevo_subusuario').addEventListener('click', asyn
         }
 
     })
+    .catch(error => {
+        new Notification({
+            text: 'Ocurrio un error al consultar el Subusuario',
+            style: {
+                background: '#DB0632',
+                color: '#fff',
+                width: '250px',
+                height: '70px'
+            },
+            position: 'bottom-center',
+            autoClose: 10000,
+            canClose: false,
+            showProgress: false,
+            pauseOnHover: false,
+            pauseOnFocusLoss: false,
+            pauseOnHover: false,
+            pauseOnFocusLoss: false
+        });
+    });
 
-    $('#modal-crear-subusuarios').modal({backdrop: 'static', keyboard: false});
-
+    document.getElementById('boton_abrir_ventana_recursos_subusuario').classList.remove('disabled');
     /* setTimeout(() => {
 
     }, 500); */
@@ -533,7 +557,7 @@ async function editar_subusuario(id)
     let bandera_check_todos_seleccionados_grupogeocercas = 1;
     let bandera_check_todos_seleccionados_alertas = 1;
 
-    await fetch(`subusuarios/${id}/editar?o=${getParameterByName('o')}`)
+    await fetch(`subusuarios/${id}/editar?o=${getParameterByName('o')}&cp=${getParameterByName('cp')}`)
     .then(res => res.json())
     .then(res => {
         //console.log(res);
@@ -564,7 +588,7 @@ async function editar_subusuario(id)
         //Fin minimizar todos los recursos
 
 
-        [...document.getElementById('categoria_subusuario').children].map( data => data.remove());
+        //[...document.getElementById('categoria_subusuario').children].map( data => data.remove());
         [...document.getElementById('lista_vehiculos_agregar').children].map( data => data.remove());
         /* [...document.getElementById('lista_puntos_agregar').children].map( data => data.remove());
         [...document.getElementById('lista_geocercas_agregar').children].map( data => data.remove()); */
@@ -576,13 +600,13 @@ async function editar_subusuario(id)
         document.getElementById('id_subusuario_editar').value = res.sms[0].IdSubUsuario;
 
         //agregar categorias al combo
-        for(const categoria of res.categorias)
+        /* for(const categoria of res.categorias)
         {
             let option = document.createElement('option');
             option.textContent = categoria.Descripcion;
             option.value = categoria.IdCategoria;
             document.getElementById('categoria_subusuario').append(option);
-        }
+        } */
         //fin agregar categorias al combo
 
         //si la fecha la trae en nulo entonces ocultar fecha
@@ -842,7 +866,7 @@ async function ver_detalle_subusuario(id)
 {
     document.body.style.cursor = 'wait';
 
-    await fetch(`subusuarios/${id}/mostrar?o=${getParameterByName('o')}`)
+    await fetch(`subusuarios/${id}/mostrar?o=${getParameterByName('o')}&cp=${getParameterByName('cp')}`)
     .then(res => res.json())
     .then(res => {
         //console.log(res);
@@ -1001,7 +1025,7 @@ document.getElementById('confirmar_eliminacion_subusuario').addEventListener('cl
 
     document.body.style.cursor = 'wait';
 
-    await fetch(`subusuarios/${document.getElementById('id_subusuario_eliminar').value} ?o=${getParameterByName('o')}`,{
+    await fetch(`subusuarios/${document.getElementById('id_subusuario_eliminar').value} ?o=${getParameterByName('o')}&cp=${getParameterByName('cp')}`,{
         headers: {'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').getAttribute('content')},
         method: 'delete'
     })
@@ -1142,7 +1166,7 @@ document.getElementById('boton_guardar_subusuario').addEventListener('click', ()
 
     if( document.getElementById('id_subusuario_editar').value == "" ) //guardar
     {
-        fetch(`subusuarios?o=${getParameterByName('o')}`, {
+        fetch(`subusuarios?o=${getParameterByName('o')}&cp=${getParameterByName('cp')}`, {
         method: 'post',
         headers: {'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').getAttribute('content')},
         body: data
@@ -1243,7 +1267,7 @@ document.getElementById('boton_guardar_subusuario').addEventListener('click', ()
     }
     else //editar
     {
-        fetch(`subusuarios/${id_subusuario}/actualizar?o=${getParameterByName('o')}`, {
+        fetch(`subusuarios/${id_subusuario}/actualizar?o=${getParameterByName('o')}&cp=${getParameterByName('cp')}`, {
         method: 'post',
         headers: {'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').getAttribute('content')},
         body: data
@@ -1419,7 +1443,7 @@ document.getElementById('guardar_grupo').addEventListener('click', async ()=>{
     //guardar grupo
     if( id_grupo == '')
     {
-        await fetch(`grupo?o=${getParameterByName('o')}`, {
+        await fetch(`grupo?o=${getParameterByName('o')}&cp=${getParameterByName('cp')}`, {
         headers: {'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').getAttribute('content')},
         method: 'post',
         body: data,
@@ -1522,7 +1546,7 @@ document.getElementById('guardar_grupo').addEventListener('click', async ()=>{
     }
     else //editar grupo
     {
-        await fetch(`grupos/${id_grupo}?o=${getParameterByName('o')}`, {
+        await fetch(`grupos/${id_grupo}?o=${getParameterByName('o')}&cp=${getParameterByName('cp')}`, {
         headers:
         {
             'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').getAttribute('content'),
@@ -1653,16 +1677,16 @@ async function editar_grupo(id)
 
     document.body.style.cursor = 'wait';
 
-    await fetch(`grupos/${id}/editar?o=${getParameterByName('o')}`)
+    await fetch(`grupos/${id}/editar?o=${getParameterByName('o')}&cp=${getParameterByName('cp')}`)
     .then(res => res.json())
     .then(res =>{
-        console.log(res);
+        //console.log(res);
         document.body.style.cursor = 'default';
 
         document.getElementById('id_grupo').value = res.sms[0].IdGrupoSubUsuario;
         document.getElementById('nombre_grupo').value = res.sms[0].Grupo;
         document.getElementById('descripcion_grupo').value = res.sms[0].Descripcion;
-        console.log(res.sms[0].IdCategoria)
+        //console.log(res.sms[0].IdCategoria)
     });
 
     $('#grupoSubusuarioModal').modal();
@@ -1726,7 +1750,7 @@ document.getElementById('confirmar_eliminacion_grupo').addEventListener('click',
             busqueda.grupo = 0;
 
             $('#grupos').DataTable().ajax.reload();
-            $('#subusuarios').DataTable().ajax.url(`subusuarios/consultar?o=${getParameterByName('o')}&criterio=${JSON.stringify(busqueda)}`);
+            $('#subusuarios').DataTable().ajax.url(`subusuarios/consultar?o=${getParameterByName('o')}&cp=${getParameterByName('cp')}&criterio=${JSON.stringify(busqueda)}`);
             $('#subusuarios').DataTable().ajax.reload();
             $('#modal_eliminar_grupo').modal('hide');
 
@@ -1785,7 +1809,7 @@ document.getElementById('boton_asignar_subusuarios_grupos').addEventListener('cl
 
     data.append('id_subusuarios', JSON.stringify(subusuarios_checkeados));
 
-    await fetch(`subusuarios/revisar_grupos_subusuarios?o=${getParameterByName('o')}`,
+    await fetch(`subusuarios/revisar_grupos_subusuarios?o=${getParameterByName('o')}&cp=${getParameterByName('cp')}`,
     {
         method: 'post',
         body: data,
@@ -2196,11 +2220,11 @@ document.getElementById('busqueda_agrega_recursos_subusuario').addEventListener(
 
     //fin verificacion
 
-    console.log('vehiculos_encontrados: ', vehiculos_encontrados);
-    console.log('alertas_encontradas: ', alertas_encontradas);
-    console.log('modulos_encontrados: ', modulos_encontrados);
-    console.log('grupopuntos_encontrados: ', grupopuntos_encontrados);
-    console.log('grupogeocercas_encontradas: ', grupogeocercas_encontradas);
+    //console.log('vehiculos_encontrados: ', vehiculos_encontrados);
+    //console.log('alertas_encontradas: ', alertas_encontradas);
+    //console.log('modulos_encontrados: ', modulos_encontrados);
+    //console.log('grupopuntos_encontrados: ', grupopuntos_encontrados);
+    //console.log('grupogeocercas_encontradas: ', grupogeocercas_encontradas);
 
 })
 
@@ -2310,7 +2334,7 @@ document.getElementById('asignar_subusuarios_grupos').addEventListener('click', 
     data.append('ids_subusuarios',JSON.stringify(ids_subusuarios));
     data.append('checks_anteriores',JSON.stringify(checks_grupos_asignados));
 
-    fetch(`subusuarios/asignar_grupos_subusuarios?o=${getParameterByName('o')}`, {
+    fetch(`subusuarios/asignar_grupos_subusuarios?o=${getParameterByName('o')}&cp=${getParameterByName('cp')}`, {
         method: 'post',
         body: data,
         headers: {'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').getAttribute('content')}
@@ -2403,7 +2427,7 @@ $("#modal_filtrar_subusuarios_categoria").on('hidden.bs.modal', function () {
             busqueda.categorias.push(Number(data.children[0].children[0].getAttribute('idcategoria')));
         }
     })
-    $('#subusuarios').DataTable().ajax.url(`subusuarios/consultar?o=${getParameterByName('o')}&criterio=${JSON.stringify(busqueda)}`);
+    $('#subusuarios').DataTable().ajax.url(`subusuarios/consultar?o=${getParameterByName('o')}&cp=${getParameterByName('cp')}&criterio=${JSON.stringify(busqueda)}`);
     $('#subusuarios').DataTable().ajax.reload();
 
     if(busqueda.categorias.length>0)
@@ -2472,7 +2496,7 @@ $('#grupos').on( 'click', 'tbody tr', function (e)
         busqueda.grupo = $('#grupos').DataTable().rows({selected:true}).data()[0][0];
     }
 
-    $('#subusuarios').DataTable().ajax.url(`subusuarios/consultar?o=${getParameterByName('o')}&criterio=${JSON.stringify(busqueda)}`);
+    $('#subusuarios').DataTable().ajax.url(`subusuarios/consultar?o=${getParameterByName('o')}&cp=${getParameterByName('cp')}&criterio=${JSON.stringify(busqueda)}`);
     $('#subusuarios').DataTable().ajax.reload();
 
     document.getElementById('boton_asignar_subusuarios_grupos').classList.add('d-none');
@@ -2497,16 +2521,16 @@ document.getElementById('agregar_fecha_caducidad').addEventListener('change', (e
 //Detecta cambio de las dimensiones de la pantalla
 //*Con la finalidad de ajustar la paginacion de los subusuarios
 addEventListener('resize', ()=>{
-    console.log('resize');
+    //console.log('resize');
     if(screen.width>800)
     {
-        if( screen.height > 1000 ) $('#subusuarios').DataTable().page.len( 8 ).draw();
-        else $('#subusuarios').DataTable().page.len( 6 ).draw();
+        if( screen.height > 700 ) $('#subusuarios').DataTable().page.len( 10 ).draw();
+        else $('#subusuarios').DataTable().page.len( 7 ).draw();
     }
     else
     {
-        if( screen.height > 1000 ) $('#subusuarios').DataTable().page.len( 6 ).draw();
-        else $('#subusuarios').DataTable().page.len( 3 ).draw();
+        if( screen.height > 700 ) $('#subusuarios').DataTable().page.len( 7 ).draw();
+        else $('#subusuarios').DataTable().page.len( 4 ).draw();
     }
 
 });
@@ -2540,13 +2564,13 @@ function detectar_paginacion()
 {
     if(screen.width>800)
     {
-        if( screen.height > 1000 ) return 8;
-        else return 6;
+        if( screen.height > 700 ) return 10;
+        else return 7;
     }
     else
     {
-        if( screen.height > 1000 ) return 6;
-        else return 3;
+        if( screen.height > 700 ) return 7;
+        else return 4;
     }
 
 }
@@ -2673,7 +2697,7 @@ async function guardado_rapido(event)
     data.append('subusuario',nombre_subusuario_tabla);
     data.append('campo_actualizar',campo_actualizar_tabla);
 
-    await fetch(`subusuarios/edicion_tabla?o=${getParameterByName('o')}`, {
+    await fetch(`subusuarios/edicion_tabla?o=${getParameterByName('o')}&cp=${getParameterByName('cp')}`, {
         method: 'post',
         body: data,
         headers: {'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').getAttribute('content')},
@@ -2883,7 +2907,7 @@ document.getElementById('boton_reiniciar_subusuarios').addEventListener('click',
 
     document.getElementById('seleccionar_todos_filtros_categoria').checked = false;
 
-    $('#subusuarios').DataTable().ajax.url(`subusuarios/consultar?o=${getParameterByName('o')}&criterio=${JSON.stringify(busqueda)}`);
+    $('#subusuarios').DataTable().ajax.url(`subusuarios/consultar?o=${getParameterByName('o')}&cp=${getParameterByName('cp')}&criterio=${JSON.stringify(busqueda)}`);
     $('#subusuarios').DataTable().ajax.reload();
 });
 
@@ -2966,7 +2990,7 @@ function validar_formulario_subusuarios()
     {
         document.getElementById('email_subusuario').classList.remove('is-invalid');
     }
-    console.log(focus);
+    //console.log(focus);
     if(focus.length>0) document.getElementById(focus[0]).focus();
     return bandera_error;
 }
@@ -3017,3 +3041,9 @@ $('#modal-crear-subusuarios').on('shown.bs.modal', ()=>{
     document.getElementById('ver_password').children[0].classList.remove('fa-eye-slash');
     document.getElementById('ver_password').children[0].classList.add('fa-eye'); */
 });
+
+//evitar que existan espacios en blanco en subusuario
+document.getElementById('nombre_subusuario').addEventListener('input', (e) => {
+    document.getElementById('nombre_subusuario').value = e.target.value.trim();
+});
+//fin evitar que existan espacios en blanco en subusuario

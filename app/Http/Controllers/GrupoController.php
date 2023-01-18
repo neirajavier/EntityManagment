@@ -9,11 +9,47 @@ use Exception;
 
 class GrupoController extends Controller
 {
-    public function consultarKey($key)
+
+    public function obtener_cadena($codigo_pais)
     {
+        $codigo_pais = strtolower($codigo_pais);
+
+        if($codigo_pais == 'pe')
+        {
+            return 'sqlsrvperu';
+        }
+        elseif ($codigo_pais == 'co')
+        {
+            return 'sqlsrvcolombia';
+        }
+        elseif($codigo_pais == 'ch')
+        {
+            return 'sqlsrvchile';
+        }
+        elseif($codigo_pais == 'pa')
+        {
+            return 'sqlsrvpanama';
+        }
+        elseif($codigo_pais == 'mx')
+        {
+            return 'sqlsrvmexico';
+        }
+        elseif($codigo_pais == 'ec')
+        {
+            return 'sqlsrv';
+        }
+        else
+        {
+            return 'sqlsrv';
+        }
+    }
+
+    public function consultarKey($key,$codigo_pais)
+    {
+        $conexion = $this->obtener_cadena($codigo_pais);
         try
         {
-            $datos_usuario = DB::select('exec spUsuarioConsultarKey ?', [$key]);
+            $datos_usuario = DB::connection($conexion)->select('exec spUsuarioConsultarKey ?', [$key]);
             return $datos_usuario[0];
         }
         catch(Exception $e)
@@ -29,14 +65,15 @@ class GrupoController extends Controller
      */
     public function index(Request $request)
     {
-        if($this->consultarKey($request->o) == NULL)
+        if($this->consultarKey($request->o,$request->cp) == NULL)
         {
             return response()->json(['data' => []]);
         }
 
-        $id_usuario = $this->consultarKey($request->o)->IdUsuario;
+        $id_usuario = $this->consultarKey($request->o,$request->cp)->IdUsuario;
+        $conexion = $this->obtener_cadena($request->cp);
 
-        $grupos = DB::select('exec spGruposSubUsuariosConsultar ?,?', [$id_usuario, NULL]);
+        $grupos = DB::connection($conexion)->select('exec spGruposSubUsuariosConsultar ?,?', [$id_usuario, NULL]);
         $json_final = [];
         $boton_editar = asset('iconos/editar.png');
         $boton_eliminar = asset('iconos/eliminar.png');
@@ -66,8 +103,10 @@ class GrupoController extends Controller
      */
     public function store(Request $request)
     {
-        $id_usuario = $this->consultarKey($request->o)->IdUsuario;
-        $nombre_usuario = $this->consultarKey($request->o)->Usuario;
+        $id_usuario = $this->consultarKey($request->o,$request->cp)->IdUsuario;
+        $conexion = $this->obtener_cadena($request->cp);
+
+        $nombre_usuario = $this->consultarKey($request->o,$request->cp)->Usuario;
         $grupo = $request->nombre;
         $descripcion = $request->descripcion;
 
@@ -85,11 +124,11 @@ class GrupoController extends Controller
         }
 
         //validar que el nombre del grupo no se repita
-        $repetido = DB::select('select IdGrupoSubUsuario, NombreGrupoSubUsuario from GrupoSubUsuario where IdUsuario=? and NombreGrupoSubUsuario=?', [$id_usuario, $grupo]);
+        $repetido = DB::connection($conexion)->select('select IdGrupoSubUsuario, NombreGrupoSubUsuario from GrupoSubUsuario where IdUsuario=? and NombreGrupoSubUsuario=?', [$id_usuario, $grupo]);
         if( sizeof($repetido) > 0 ) return response()->json(['sms' => ['Grupo ya existe']]);
 
 
-        DB::insert('exec spGruposSubusuariosIngresar ?,?,?,?',[$grupo, $descripcion, $id_usuario, $nombre_usuario]);
+        DB::connection($conexion)->insert('exec spGruposSubusuariosIngresar ?,?,?,?',[$grupo, $descripcion, $id_usuario, $nombre_usuario]);
 
         return response()->json(['sms' => 'ok']);
     }
@@ -102,8 +141,9 @@ class GrupoController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $id_usuario = $this->consultarKey($request->o)->IdUsuario;
-        $grupos = DB::select('spGruposSubUsuariosConsultar ?,?', [$id_usuario, $id]);
+        $id_usuario = $this->consultarKey($request->o,$request->cp)->IdUsuario;
+        $conexion = $this->obtener_cadena($request->cp);
+        $grupos = DB::connection($conexion)->select('spGruposSubUsuariosConsultar ?,?', [$id_usuario, $id]);
 
         return response()->json(['sms' => $grupos]);
     }
@@ -117,8 +157,9 @@ class GrupoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $id_usuario = $this->consultarKey($request->o)->IdUsuario;
-        $nombre_usuario = $this->consultarKey($request->o)->Usuario;
+        $id_usuario = $this->consultarKey($request->o,$request->cp)->IdUsuario;
+        $conexion = $this->obtener_cadena($request->cp);
+        $nombre_usuario = $this->consultarKey($request->o,$request->cp)->Usuario;
         $grupo = $request->nombre;
         $descripcion = $request->descripcion;
 
@@ -136,10 +177,10 @@ class GrupoController extends Controller
         }
 
         //validar que el nombre del grupo no se repita
-        $repetido = DB::select('select IdGrupoSubUsuario, NombreGrupoSubUsuario from GrupoSubUsuario where IdUsuario=? and not IdGrupoSubUsuario=? and NombreGrupoSubUsuario=?', [$id_usuario, $id, $grupo]);
+        $repetido = DB::connection($conexion)->select('select IdGrupoSubUsuario, NombreGrupoSubUsuario from GrupoSubUsuario where IdUsuario=? and not IdGrupoSubUsuario=? and NombreGrupoSubUsuario=?', [$id_usuario, $id, $grupo]);
         if( sizeof($repetido) > 0 ) return response()->json(['sms' => ['Grupo ya existe']]);
 
-        DB::update('exec spGruposSubusuariosActualizar ?,?,?,?,?,?',[$id, $grupo,$descripcion, 'A', $id_usuario, $nombre_usuario]);
+        DB::connection($conexion)->update('exec spGruposSubusuariosActualizar ?,?,?,?,?,?',[$id, $grupo,$descripcion, 'A', $id_usuario, $nombre_usuario]);
 
         return response()->json(['sms' => 'ok']);
     }
@@ -150,9 +191,10 @@ class GrupoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        DB::update('exec spGruposSubUsuariosEliminar ?', [$id]);
+        $conexion = $this->obtener_cadena($request->cp);
+        DB::connection($conexion)->update('exec spGruposSubUsuariosEliminar ?', [$id]);
         return response()->json(['sms' => 'ok']);
     }
 }

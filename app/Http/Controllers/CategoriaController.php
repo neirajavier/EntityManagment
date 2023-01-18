@@ -7,14 +7,50 @@ use Illuminate\Support\Facades\DB;
 
 class CategoriaController extends Controller
 {
+
+    public function obtener_cadena($codigo_pais)
+    {
+        $codigo_pais = strtolower($codigo_pais);
+
+        if($codigo_pais == 'pe')
+        {
+            return 'sqlsrvperu';
+        }
+        elseif ($codigo_pais == 'co')
+        {
+            return 'sqlsrvcolombia';
+        }
+        elseif($codigo_pais == 'ch')
+        {
+            return 'sqlsrvchile';
+        }
+        elseif($codigo_pais == 'pa')
+        {
+            return 'sqlsrvpanama';
+        }
+        elseif($codigo_pais == 'mx')
+        {
+            return 'sqlsrvmexico';
+        }
+        elseif($codigo_pais == 'ec')
+        {
+            return 'sqlsrv';
+        }
+        else
+        {
+            return 'sqlsrv';
+        }
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categorias = DB::select('select * from SubUsuarioCategoria');
+        $conexion = $this->obtener_cadena($request->cp);
+        $categorias = DB::connection($conexion)->select('select IdCategoria, Descripcion from SubUsuarioCategoria');
         return response()->json(['categorias' => $categorias]);
     }
 
