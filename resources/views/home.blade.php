@@ -4,6 +4,35 @@
 
 @section('css')
     <link rel="stylesheet" href="{{asset('css/estilos.css')}}">
+    <style>
+        #subusuarios_first
+        {
+            background-image: url('{{asset("iconos/primero.png")}}');
+            background-repeat: no-repeat;
+            display: inline;
+        }
+
+        #subusuarios_previous
+        {
+            background-image: url('{{asset("iconos/anterior.png")}}');
+            background-repeat: no-repeat;
+            display: inline;
+        }
+
+        #subusuarios_next
+        {
+            background-image: url('{{asset("iconos/siguiente.png")}}');
+            background-repeat: no-repeat;
+            display: inline;
+        }
+
+        #subusuarios_last
+        {
+            background-image: url('{{asset("iconos/ultimo.png")}}');
+            background-repeat: no-repeat;
+            display: inline;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -17,23 +46,25 @@
         <div class="row pb-1">
             <div class="col-12">
                 <div class="card fondo_card">
-                    <div class="pt-2 pb-2">
+                    <div class="pt-1 pb-1">
                         <div class="row">
-                            <div class="col-sm-3 col-md-3 col-lg-1 col-3 text-center">
-                                <button id="collapse" data-toggle="collapse" href="#lista_card" class="btn border-0" title="Mostrar/Ocultar Grupos"><img class="imag-icon" src="{{asset('iconos/hamburguesa.png')}}"></button>
-                            </div>
-                            <div class="col-sm-9 col-md-9 col-lg-2 col-9">
-                                <h5 class=""><img class="imag-icon m-auto" src="{{asset('iconos/subusuarios.png')}}" alt="subusuarios"><b class="m-auto">Subusuarios</b>{{-- <span id="numero_total_subusuarios" class="badge badge-dark"></span> --}} {{-- <button id="crear_nuevo_subusuario" class="btn"><img class="mb-1 imag-icon" src="{{asset('iconos/agregar.png')}}" alt="agregar"></button> --}}</h5>
+                            {{-- <div class="col-sm-3 col-md-3 col-lg-1 col-3 text-center">
+                                <button id="collapse" data-toggle="collapse" href="#lista_card" class="btn border-0 botones_tabla" title="Mostrar/Ocultar Grupos"><img class="imag-icon" src="{{asset('iconos/hamburguesa.png')}}"></button>
+                            </div> --}}
+                            <div class="col-sm-9 col-md-9 col-lg-2 col-9 m-auto botones_tabla" id="collapse" data-toggle="collapse" href="#lista_card">
+                                <h5 class="text-center"><img class="m-auto" style="height:30px; width:30px;" src="{{asset('iconos/subusuarios.png')}}" alt="subusuarios"><b class="">Subusuarios</b>{{-- <span id="numero_total_subusuarios" class="badge badge-dark"></span> --}} {{-- <button id="crear_nuevo_subusuario" class="btn"><img class="mb-1 imag-icon" src="{{asset('iconos/agregar.png')}}" alt="agregar"></button> --}}</h5>
                             </div>
                             <div class="col-sm-12 col-md-12 col-lg-9 col-12">
-                                <div class="row">
+                                {{-- <div class="row">
                                     <div class="input-group col-12 col-md-12">
-                                        {{-- <span class="input-group-append">
-                                            <button class="border-right-0 border" type="button">
-                                                <i class="fa fa-search"></i>
-                                            </button>
-                                        </span> --}}
                                         <input class="form-control border mx-4" type="search" placeholder="Buscar Subusuarios ..." id="busqueda_general">
+                                    </div>
+                                </div> --}}
+                                <div class="row">
+                                    <!-- Actual search box -->
+                                    <div class="has-search ml-4 col-sm-11">
+                                        <span class="fa fa-search form-control-feedback"></span>
+                                        <input type="text" class="form-control" placeholder="Buscar Subusuarios ..." id="busqueda_general">
                                     </div>
                                 </div>
                             </div>
@@ -49,19 +80,20 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <button id="boton_reiniciar_subusuarios" class="botones_tabla btn col-10 m-auto" style="text-align:left" title="Mostrar todos los subusuarios"><b class="mr-2">Subusuarios</b><span id="numero_total_subusuarios" class="badge badge-dark m-auto"></span></button><button id="crear_nuevo_subusuario" class="col-2 btn botones_tabla" title="Agregar Subusuario"><img class="imag-icon" src="{{asset('iconos/agregar.png')}}" alt="Agregar Subusuario"></button>
+                            <button id="boton_reiniciar_subusuarios" class="botones_tabla btn col-10 m-auto" style="text-align:left" title="Mostrar todos los subusuarios"><b class="mr-2">Subusuarios</b><span id="numero_total_subusuarios" class="badge badge-dark m-auto"></span></button><button id="crear_nuevo_subusuario" class="col-2 btn botones_tabla" title="Agregar Subusuario"><img class="imag-icon" src="{{asset('iconos/agregar2.png')}}" alt="Agregar Subusuario"></button>
                         </div>
+                        <hr style="background-color:black;">
                         <div class="row">
                             <div class="col-12">
                                 <table id="grupos" width="100%">
                                     <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Grupos<button id="agregar_grupos" data-toggle="modal" data-target="#grupoSubusuarioModal" class="btn botones_tabla" title="Agregar Grupos"><img class="imag-icon" src="{{asset('iconos/agregar.png')}}" alt="Agregar Grupo"></button></th>
+                                            <th>Grupos<button id="agregar_grupos" data-toggle="modal" data-target="#grupoSubusuarioModal" class="btn botones_tabla" title="Agregar Grupos"><img class="imag-icon" src="{{asset('iconos/agregar2.png')}}" alt="Agregar Grupo"></button></th>
                                             <th>Descripcion</th>
-                                            <th style="width:40%;" class="text-right"> <button id="colapsar_grupos" class="btn botones_tabla" title="Contraer/Expandir Grupos"><img class="imag-icon" src="{{asset('iconos/doble flecha.png')}}" alt="Eliminar"></button>
+                                            <th style="width:40%;" class="text-right"> <button id="colapsar_grupos" class="btn botones_tabla" title="Contraer/Expandir Grupos"><img class="imag-icon" src="{{asset('iconos/doble flecha2.png')}}" alt="Eliminar"></button>
                                                 {{-- <button id="agregar_grupos" data-toggle="modal" data-target="#grupoSubusuarioModal" class="btn" title="Agregar"><img class="imag-icon" src="{{asset('iconos/agregar.png')}}" alt="agregar"></button>
-                                                <button id="colapsar_grupos" class="btn" ><img class="imag-icon" src="{{asset('iconos/doble flecha g.png')}}" title="Eliminar" alt="Eliminar"></button> --}}
+                                                <button id="colapsar_grupos" class="btn" ><img class="imag-icon" src="{{asset('iconos/doble flecha2 g.png')}}" title="Eliminar" alt="Eliminar"></button> --}}
                                             </th>
                                             <th>GrupoCompleto</th>
                                         </tr>
@@ -77,7 +109,7 @@
             </div>
             <div class="col-sm-9 col-md-8 col-xl-9 col-12 pt-1 fondo_card" id="spinner">
                 <div id="datos" class="card fondo_card mb-1" {{-- style="height:83vh;" --}}>
-                    <button id="boton_asignar_subusuarios_grupos" class="btn col-lg-1 col-2 botones_tabla d-none"><img class="imag-icon" src="{{asset('iconos/asignar grupo.png')}}" alt="asignar subusuarios"></button>
+                    <button id="boton_asignar_subusuarios_grupos" class="btn col-lg-1 col-2 botones_tabla d-none"><img style="height:20px; width:20px;" src="{{asset('iconos/asignar grupo.png')}}" alt="asignar subusuarios"></button>
                     <div style="padding-top:0px; padding-button:0px;" class="card-body collapse show" id="datos_completos_usuarios">
                         {{-- <ul class="nav nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item">
@@ -85,14 +117,15 @@
                             </li>
                         </ul> --}}
 
-                        <div class="tab-content" id="myTabContent">
-                            <ul class="nav nav-tabs pb-1" id="myTab" role="tablist">
+                        <div class="tab-content bg-white" id="myTabContent">
+                            {{-- <ul class="nav nav-tabs pb-1" id="myTab" role="tablist">
                                 <li class="nav-item">
                                     <a class="nav-link active seleccionada" id="home-tab" data-toggle="tab" href="#d" role="tab" aria-controls="home" aria-selected="true"><h2 style="font-size: 12px;"><b>SUBUSUARIOS</b></h2></a>
                                 </li>
-                            </ul>
-                            <div id="vehiculos-asignados" role="tabpanel" class=" p-1 bg-white table-responsive">
-                                <table id="subusuarios" width="100%" class="p-auto">
+                            </ul> --}}
+                            <hr class="linea">
+                            <div id="vehiculos-asignados" role="tabpanel" class="px-1 bg-white table-responsive">
+                                <table id="subusuarios" width="100%" class="p-auto row-border">
                                     <thead class="fondo_cabecera" style="color:white;">
                                         <tr>
                                             <th><input class="mycheck check_subusuarios d-block m-auto" type="checkbox" id="checkbox_principal_subusuarios"></th>
@@ -132,7 +165,7 @@
                             <div class="col-10 text-center mt-2">
                                 <b id="titulo_modal_grupos" class="subrayado">NUEVO GRUPO</b>
                             </div>
-                            <div class="col-2"><button id="guardar_grupo" class="btn botones_tabla" title="Guardar"><img class="imag-icon" src="{{asset('iconos/guardar r.png')}}"></button></div>
+                            <div class="col-2"><button id="guardar_grupo" class="btn botones_tabla" title="Guardar"><img style="heigth:22px; width:22px;" src="{{asset('iconos/guardar r.png')}}"></button></div>
                         </div>
 
                         <div style="background: white; border-radius:10px;" class="pl-3 pr-3">
@@ -198,10 +231,11 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div id="no_existen_grupos" class="row d-none">No existen grupos para este usuario</div>
                     <div class="row">
                         <input id="input_buscar_lista_subusuarios_asignar" type="text" class="col-10 form-control m-auto" placeholder="Buscar por grupo">
                     </div>
-                    <div class="row mt-1">
+                    <div class="row mt-1" id="nodo_seleccionar_todos_grupos">
                         <div class="offset-1 col-1"><input type="checkbox" id="seleccionar_todos_subusuarios_asignar"></div><label class="col-9" for="seleccionar_todos_subusuarios_asignar"> SELECCIONAR TODOS</label>
                     </div>
                     {{-- Todos elementos de los grupos subusuarios --}}
@@ -338,6 +372,13 @@
                                   </li>
                                   <li>
                                     <details>
+                                      <summary><b>Gupo Vehiculos</b></summary>
+                                      <ul id="lista_grupo_vehiculos_mostrar">
+                                      </ul>
+                                    </details>
+                                  </li>
+                                  <li>
+                                    <details>
                                       <summary><b>Grupo Geocercas</b></summary>
                                       <ul id="lista_grupo_geocercas_mostrar">
                                       </ul>
@@ -357,7 +398,7 @@
 
     {{-- modal crear subusuario --}}
     <div class="modal" id="modal-crear-subusuarios" tabindex="-1" aria-labelledby="modal-crear-subusuarios" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -370,7 +411,7 @@
                         <div id="ventana_detalles_subusuarios" class="tab-pane fade show active" role="tabpanel" aria-selected="true" aria-labelledby="ventana_detalles_subusuarios">
                             <div class="row">
                                 <b class="col-sm-10 col-10 mt-2" style="text-align:center;">DATOS DEL SUBUSUARIO</b>
-                                <a class="btn nav-link botones_tabla" id="boton_abrir_ventana_recursos_subusuario" title="Siguiente" onclick="abrir_ventana_recursos();"><img class="imag-icon" src="{{asset('iconos/flecha derecha.png')}}" alt="siguiente"></a>
+                                <a class="btn nav-link botones_tabla" id="boton_abrir_ventana_recursos_subusuario" title="Siguiente" onclick="abrir_ventana_recursos();"><img style="height:22px; width:22px;" src="{{asset('iconos/flecha derecha.png')}}" alt="siguiente"></a>
                             </div>
                             <div class="px-3">
                                 <div class="row">
@@ -478,8 +519,8 @@
                         </div>
                         <div id="ventana_recursos_subusuario" class="tab-pane fade" role="tabpanel" aria-selected="false" aria-labelledby="ventana_recursos_subusuario">
                             <div class="row">
-                                <b class="col-sm-9 col-9 mt-2" style="text-align:center;">DATOS DE ASIGNACIÓN</b><a class="btn nav-link botones_tabla" id="boton_guardar_subusuario" title="Guardar Subusuario"><img class="imag-icon" src="{{asset('iconos/guardar r.png')}}" alt="Guardar"></a>
-                                <a class="btn nav-link botones_tabla" id="boton_abrir_ventana_detalles_subusuarios" onclick="abrir_ventana_detalles();" title="Regresar"><img class="imag-icon img-rotate" src="{{asset('iconos/flecha derecha.png')}}" alt="siguiente"></a>
+                                <b class="col-sm-9 col-9 mt-2" style="text-align:center;">DATOS DE ASIGNACIÓN</b><a class="btn nav-link botones_tabla" id="boton_guardar_subusuario" title="Guardar Subusuario"><img style="height:22px; width:22px;" src="{{asset('iconos/guardar r.png')}}" alt="Guardar"></a>
+                                <a class="btn nav-link botones_tabla" id="boton_abrir_ventana_detalles_subusuarios" onclick="abrir_ventana_detalles();" title="Regresar"><img style="height:22px; width:22px;" class="img-rotate" src="{{asset('iconos/flecha derecha.png')}}" alt="siguiente"></a>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-1"></div>
@@ -526,6 +567,12 @@
                                             <details>
                                               <summary><input class="ml-2" id="checkbox_principal_asignar_grupo_puntos" claseCheck="checkbox_asignar_grupo_puntos" type="checkbox" onclick="asignar_masivo(event);"> <b>Gupo Puntos</b> </summary>
                                               <ul id="lista_grupo_puntos_agregar"></ul>
+                                            </details>
+                                          </li>
+                                          <li>
+                                            <details>
+                                              <summary><input class="ml-2" id="checkbox_principal_asignar_grupo_vehiculos" claseCheck="checkbox_asignar_grupo_vehiculos" type="checkbox" onclick="asignar_masivo(event);"> <b>Gupo Vehiculos</b> </summary>
+                                              <ul id="lista_grupo_vehiculos_agregar"></ul>
                                             </details>
                                           </li>
                                           <li>

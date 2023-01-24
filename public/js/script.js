@@ -5,6 +5,7 @@ var geocercas_asignadas_usuario = []; */
 var alertas_asignadas_usuario = [];
 var modulos_asignados_usuario = [];
 var grupopuntos_asignados_usuario = [];
+var grupovehiculos_asignados_usuario = [];
 var grupogeocercas_asignados_usuario = [];
 //fin variables globales para editar los recursos del subusuario
 
@@ -93,8 +94,9 @@ $(document).ready( function () {
     $('#subusuarios').DataTable({
         paging: true,
         pageLength: detectar_paginacion(),
-        info: false,
+        info: true,
         ordering: false,
+        pagingType: 'full_numbers',
         /* responsive: true, */
         /* fixedColumns:   {
     heightMatch: 'semiauto'
@@ -117,14 +119,16 @@ $(document).ready( function () {
         {
             "lengthMenu": "",
             "paginate": {
-                "first": "Primero",
-                "last": "Último",
-                "next": "Siguiente",
-                "previous": "Anterior"
+                "first": "",
+                "last": "",
+                "next": "",
+                "previous": ""
             },
             "search": "Buscar:",
             "zeroRecords": " ",
             "emptyTable": " ",
+            "info": "Mostrando _START_ a _END_ de (_TOTAL_) elementos",
+            "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
         },
         columnDefs: [
             {
@@ -294,7 +298,6 @@ document.getElementById('crear_nuevo_subusuario').addEventListener('click', asyn
 
     document.getElementById('validohasta_subusuario').value = new Date().toJSON().slice(0,10);
 
-    //document.body.style.cursor = 'wait';
     //document.getElementById('crear_nuevo_subusuario').setAttribute('disabled', 'disabled');
 
     $('#modal-crear-subusuarios').modal({backdrop: 'static', keyboard: false});
@@ -318,6 +321,7 @@ document.getElementById('crear_nuevo_subusuario').addEventListener('click', asyn
         document.getElementById('checkbox_principal_asignar_alerta').checked = false;
         document.getElementById('checkbox_principal_asignar_modulo').checked = false;
         document.getElementById('checkbox_principal_asignar_grupo_puntos').checked = false;
+        document.getElementById('checkbox_principal_asignar_grupo_vehiculos').checked = false;
         document.getElementById('checkbox_principal_asignar_grupo_geocercas').checked = false;
         //Fin quitar checks principales para marcar todos los recursos
 
@@ -328,6 +332,7 @@ document.getElementById('crear_nuevo_subusuario').addEventListener('click', asyn
         document.getElementById('lista_alertas_agregar').parentElement.removeAttribute('open');
         document.getElementById('lista_modulos_agregar').parentElement.removeAttribute('open');
         document.getElementById('lista_grupo_puntos_agregar').parentElement.removeAttribute('open');
+        document.getElementById('lista_grupo_vehiculos_agregar').parentElement.removeAttribute('open');
         document.getElementById('lista_grupo_geocercas_agregar').parentElement.removeAttribute('open');
         //Fin minimizar todos los recursos
 
@@ -340,6 +345,7 @@ document.getElementById('crear_nuevo_subusuario').addEventListener('click', asyn
         [...document.getElementById('lista_alertas_agregar').children].map( data => data.remove());
         [...document.getElementById('lista_modulos_agregar').children].map( data => data.remove());
         [...document.getElementById('lista_grupo_puntos_agregar').children].map( data => data.remove());
+        [...document.getElementById('lista_grupo_vehiculos_agregar').children].map( data => data.remove());
         [...document.getElementById('lista_grupo_geocercas_agregar').children].map( data => data.remove());
 
         //agregar categorias al combo
@@ -481,6 +487,31 @@ document.getElementById('crear_nuevo_subusuario').addEventListener('click', asyn
             document.getElementById('lista_grupo_puntos_agregar').append(li);
         }
 
+        for(const grupo_vehiculo of res.grupo_vehiculos)
+        {
+            let li = document.createElement('li');
+            let input = document.createElement('input');
+            let label = document.createElement('label');
+            input.setAttribute('idgrupovehiculo', grupo_vehiculo.IdGrupo);
+            input.classList.add('checkbox_asignar_grupo_vehiculos', 'mr-2');
+            input.type = 'checkbox';
+
+            if(grupo_vehiculo.Grupo.length>30)
+            {
+                label.textContent = grupo_vehiculo.Grupo.substring(0,30);
+                label.title = grupo_vehiculo.Grupo;
+            }
+            else
+            {
+                label.textContent = grupo_vehiculo.Grupo;
+            }
+
+            label.style.fontSize = '12px';
+            li.append(input);
+            li.append(label);
+            document.getElementById('lista_grupo_vehiculos_agregar').append(li);
+        }
+
         for(const grupo_geocerca of res.grupo_geocercas)
         {
             let li = document.createElement('li');
@@ -555,12 +586,13 @@ async function editar_subusuario(id)
     let bandera_check_todos_seleccionados_modulos = 1;
     let bandera_check_todos_seleccionados_grupopuntos = 1;
     let bandera_check_todos_seleccionados_grupogeocercas = 1;
+    let bandera_check_todos_seleccionados_grupovehiculos = 1;
     let bandera_check_todos_seleccionados_alertas = 1;
 
     await fetch(`subusuarios/${id}/editar?o=${getParameterByName('o')}&cp=${getParameterByName('cp')}`)
     .then(res => res.json())
     .then(res => {
-        //console.log(res);
+        console.log(res);
         document.body.style.cursor = 'default';
 
         //Quitar checks principales para marcar todos los recursos
@@ -570,6 +602,7 @@ async function editar_subusuario(id)
         document.getElementById('checkbox_principal_asignar_alerta').checked = false;
         document.getElementById('checkbox_principal_asignar_modulo').checked = false;
         document.getElementById('checkbox_principal_asignar_grupo_puntos').checked = false;
+        document.getElementById('checkbox_principal_asignar_grupo_vehiculos').checked = false;
         document.getElementById('checkbox_principal_asignar_grupo_geocercas').checked = false;
         //Fin quitar checks principales para marcar todos los recursos
 
@@ -584,6 +617,7 @@ async function editar_subusuario(id)
         document.getElementById('lista_alertas_agregar').parentElement.removeAttribute('open');
         document.getElementById('lista_modulos_agregar').parentElement.removeAttribute('open');
         document.getElementById('lista_grupo_puntos_agregar').parentElement.removeAttribute('open');
+        document.getElementById('lista_grupo_vehiculos_agregar').parentElement.removeAttribute('open');
         document.getElementById('lista_grupo_geocercas_agregar').parentElement.removeAttribute('open');
         //Fin minimizar todos los recursos
 
@@ -595,6 +629,7 @@ async function editar_subusuario(id)
         [...document.getElementById('lista_alertas_agregar').children].map( data => data.remove());
         [...document.getElementById('lista_modulos_agregar').children].map( data => data.remove());
         [...document.getElementById('lista_grupo_puntos_agregar').children].map( data => data.remove());
+        [...document.getElementById('lista_grupo_vehiculos_agregar').children].map( data => data.remove());
         [...document.getElementById('lista_grupo_geocercas_agregar').children].map( data => data.remove());
 
         document.getElementById('id_subusuario_editar').value = res.sms[0].IdSubUsuario;
@@ -650,6 +685,7 @@ async function editar_subusuario(id)
         alertas_asignadas_usuario = [];
         modulos_asignados_usuario = [];
         grupopuntos_asignados_usuario = [];
+        grupovehiculos_asignados_usuario = [];
         grupogeocercas_asignados_usuario = [];
         //fin vaciar las variables globales de asignaciones
 
@@ -660,6 +696,7 @@ async function editar_subusuario(id)
         alertas_asignadas_usuario = res.alertas_pertenecen;
         modulos_asignados_usuario = res.modulos_pertenecen;
         grupopuntos_asignados_usuario = res.grupo_puntos_pertenecen;
+        grupovehiculos_asignados_usuario = res.grupo_vehiculos_pertenecen;
         grupogeocercas_asignados_usuario = res.grupo_geocercas_pertenecen;
         //fin agregar asignaciones a las variables globales
 
@@ -777,6 +814,33 @@ async function editar_subusuario(id)
             document.getElementById('lista_modulos_agregar').append(li);
         }
 
+        for(const grupo_vehiculo of res.grupo_vehiculos)
+        {
+            let li = document.createElement('li');
+            let input = document.createElement('input');
+            let label = document.createElement('label');
+            if(res.grupo_vehiculos_pertenecen.includes(grupo_vehiculo.IdGrupo)) input.checked = true;
+            else bandera_check_todos_seleccionados_grupovehiculos = 0;
+            input.setAttribute('idgrupovehiculo', grupo_vehiculo.IdGrupo);
+            input.classList.add('checkbox_asignar_grupo_vehiculo', 'mr-2');
+            input.type = 'checkbox';
+
+            if(grupo_vehiculo.Grupo.length>30)
+            {
+                label.textContent = grupo_vehiculo.Grupo.substring(0,30) + '...';
+                label.title = grupo_vehiculo.Grupo;
+            }
+            else
+            {
+                label.textContent = grupo_vehiculo.Grupo;
+            }
+
+            label.style.fontSize = '12px';
+            li.append(input);
+            li.append(label);
+            document.getElementById('lista_grupo_vehiculos_agregar').append(li);
+        }
+
         for(const grupo_punto of res.grupo_puntos)
         {
             let li = document.createElement('li');
@@ -835,19 +899,12 @@ async function editar_subusuario(id)
         if( bandera_check_todos_seleccionados_alertas &&  res.alertas.length>0) document.getElementById('checkbox_principal_asignar_alerta').checked = true;
         if( bandera_check_todos_seleccionados_modulos &&  res.modulos.length>0) document.getElementById('checkbox_principal_asignar_modulo').checked = true;
         if( bandera_check_todos_seleccionados_grupopuntos &&  res.grupo_puntos.length>0) document.getElementById('checkbox_principal_asignar_grupo_puntos').checked = true;
+        if( bandera_check_todos_seleccionados_grupovehiculos &&  res.grupo_vehiculos.length>0) document.getElementById('checkbox_principal_asignar_grupo_vehiculos').checked = true;
         if( bandera_check_todos_seleccionados_grupogeocercas &&  res.grupo_geocercas.length>0) document.getElementById('checkbox_principal_asignar_grupo_geocercas').checked = true;
 
     });
 
     $('#modal-crear-subusuarios').modal();
-
-    /* setTimeout(() => {
-        document.getElementById('nombrecompleto_subusuario').focus();
-        document.getElementById('ver_password').nextElementSibling.children[0].children[0].classList.remove('fa-eye-slash');
-        document.getElementById('ver_password').setAttribute('type', 'password');
-        document.getElementById('ver_password').nextElementSibling.children[0].children[0].classList.add('fa-eye');
-
-    }, 500); */
 }
 //FIN EDITAR SUBUSUARIO
 
@@ -879,6 +936,7 @@ async function ver_detalle_subusuario(id)
         [...document.getElementById('lista_alertas_mostrar').children].map( data => data.remove());
         [...document.getElementById('lista_modulos_mostrar').children].map( data => data.remove());
         [...document.getElementById('lista_grupo_puntos_mostrar').children].map( data => data.remove());
+        [...document.getElementById('lista_grupo_vehiculos_mostrar').children].map( data => data.remove());
         [...document.getElementById('lista_grupo_geocercas_mostrar').children].map( data => data.remove());
 
         document.getElementById('arbol_principal_mostrar_subusuario').setAttribute('open', '');
@@ -890,6 +948,7 @@ async function ver_detalle_subusuario(id)
         document.getElementById('lista_alertas_mostrar').parentElement.removeAttribute('open');
         document.getElementById('lista_modulos_mostrar').parentElement.removeAttribute('open');
         document.getElementById('lista_grupo_puntos_mostrar').parentElement.removeAttribute('open');
+        document.getElementById('lista_grupo_vehiculos_mostrar').parentElement.removeAttribute('open');
         document.getElementById('lista_grupo_geocercas_mostrar').parentElement.removeAttribute('open');
         //Fin minimizar todos los recursos
 
@@ -992,6 +1051,26 @@ async function ver_detalle_subusuario(id)
             label.style.fontSize = '12px';
             li.append(label);
             document.getElementById('lista_grupo_puntos_mostrar').append(li);
+        }
+
+        for(const grupo_vehiculo of res.grupo_vehiculos)
+        {
+            let li = document.createElement('li');
+            let label = document.createElement('label');
+
+            if(grupo_vehiculo.Grupo.length>30)
+            {
+                label.textContent = grupo_vehiculo.Grupo.substring(0,30) + '...';
+                label.title = grupo_vehiculo.Grupo;
+            }
+            else
+            {
+                label.textContent = grupo_vehiculo.Grupo;
+            }
+
+            label.style.fontSize = '12px';
+            li.append(label);
+            document.getElementById('lista_grupo_vehiculos_mostrar').append(li);
         }
 
         for(const grupo_geocerca of res.grupo_geocercas)
@@ -1111,6 +1190,7 @@ document.getElementById('boton_guardar_subusuario').addEventListener('click', ()
     let alertas_asignadas = [];
     let modulos_asignados = [];
     let grupopuntos_asignados = [];
+    let grupovehiculos_asignados = [];
     let grupogeocercas_asignadas = [];
 
     document.getElementById('boton_asignar_subusuarios_grupos').classList.add('d-none');
@@ -1121,6 +1201,7 @@ document.getElementById('boton_guardar_subusuario').addEventListener('click', ()
     [...document.getElementById('lista_alertas_agregar').children].map(data => (data.children[0].checked) ? alertas_asignadas.push(data.children[0].getAttribute('idalerta')) : '');
     [...document.getElementById('lista_modulos_agregar').children].map(data => (data.children[0].checked) ? modulos_asignados.push(data.children[0].getAttribute('idmodulo')) : '');
     [...document.getElementById('lista_grupo_puntos_agregar').children].map(data => (data.children[0].checked) ? grupopuntos_asignados.push(data.children[0].getAttribute('idgrupopunto')) : '');
+    [...document.getElementById('lista_grupo_vehiculos_agregar').children].map(data => (data.children[0].checked) ? grupovehiculos_asignados.push(data.children[0].getAttribute('idgrupovehiculo')) : '');
     [...document.getElementById('lista_grupo_geocercas_agregar').children].map(data => (data.children[0].checked) ? grupogeocercas_asignadas.push(data.children[0].getAttribute('idgrupogeocerca')) : '');
 
     //recursos para asignar y guardar subusuario
@@ -1130,6 +1211,7 @@ document.getElementById('boton_guardar_subusuario').addEventListener('click', ()
     data.append('alertas_asignadas', JSON.stringify(alertas_asignadas));
     data.append('modulos_asignados', JSON.stringify(modulos_asignados));
     data.append('grupopuntos_asignados', JSON.stringify(grupopuntos_asignados));
+    data.append('grupovehiculos_asignados', JSON.stringify(grupovehiculos_asignados));
     data.append('grupogeocercas_asignadas', JSON.stringify(grupogeocercas_asignadas));
     //fin recursos para asignar y guardar subusuario
 
@@ -1140,6 +1222,7 @@ document.getElementById('boton_guardar_subusuario').addEventListener('click', ()
     data.append('alertas_anteriores', JSON.stringify(alertas_asignadas_usuario));
     data.append('modulos_anteriores', JSON.stringify(modulos_asignados_usuario));
     data.append('grupopuntos_anteriores', JSON.stringify(grupopuntos_asignados_usuario));
+    data.append('grupovehiculos_anteriores', JSON.stringify(grupovehiculos_asignados_usuario));
     data.append('grupogeocercas_anteriores', JSON.stringify(grupogeocercas_asignados_usuario));
     //fin recursos anteriormente asignados
 
@@ -1175,15 +1258,6 @@ document.getElementById('boton_guardar_subusuario').addEventListener('click', ()
         .then(res => {
             if(res.sms == 'ok')
             {
-                /* $.toast({
-                    heading: 'Guardado',
-                    text: 'Subusuario guardado con exito',
-                    position: 'bottom-center',
-                    icon: 'success',
-                    hideAfter: 1000,
-                    loader: false
-                }); */
-
                 new Notification({
                     text: 'Subusuario guardado con exito',
                     style: {
@@ -1664,6 +1738,8 @@ document.getElementById('agregar_grupos').addEventListener('click', ()=>{
     document.getElementById('nombre_grupo').value = '';
     document.getElementById('descripcion_grupo').value = '';
 
+    document.getElementById('nombre_grupo').classList.remove('is-invalid');
+
     setTimeout(() => {
         document.getElementById('nombre_grupo').focus();
     }, 700);
@@ -1676,6 +1752,7 @@ async function editar_grupo(id)
     document.getElementById('titulo_modal_grupos').textContent = 'EDITAR GRUPO';
 
     document.body.style.cursor = 'wait';
+    document.getElementById('nombre_grupo').classList.remove('is-invalid');
 
     await fetch(`grupos/${id}/editar?o=${getParameterByName('o')}&cp=${getParameterByName('cp')}`)
     .then(res => res.json())
@@ -1708,7 +1785,7 @@ document.getElementById('confirmar_eliminacion_grupo').addEventListener('click',
 
     document.body.style.cursor = 'wait';
 
-    await fetch(`grupos/${document.getElementById('id_grupo_eliminar').value}`,{
+    await fetch(`grupos/${document.getElementById('id_grupo_eliminar').value}?cp=${getParameterByName('cp')}`,{
         headers: {'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').getAttribute('content')},
         method: 'delete'
     })
@@ -1819,6 +1896,22 @@ document.getElementById('boton_asignar_subusuarios_grupos').addEventListener('cl
     .then(res => res.json())
     .then(res => {
 
+        //si no hay grupos entonces ocultar input y seleccionar todos
+        if(res.grupos.length>0)
+        {
+            document.getElementById('no_existen_grupos').classList.add('d-none');
+            document.getElementById('input_buscar_lista_subusuarios_asignar').classList.remove('d-none');
+            document.getElementById('nodo_seleccionar_todos_grupos').classList.remove('d-none');
+            document.getElementById('asignar_subusuarios_grupos').classList.remove('d-none');
+        }
+        else
+        {
+            document.getElementById('no_existen_grupos').classList.remove('d-none');
+            document.getElementById('input_buscar_lista_subusuarios_asignar').classList.add('d-none');
+            document.getElementById('nodo_seleccionar_todos_grupos').classList.add('d-none');
+            document.getElementById('asignar_subusuarios_grupos').classList.add('d-none');
+        }
+        //fin de ocultar input y seleccionar todos
         document.body.style.cursor = 'default';
 
         //guardando opciones previamente checkeadas en variable global
@@ -1826,24 +1919,6 @@ document.getElementById('boton_asignar_subusuarios_grupos').addEventListener('cl
         checks_grupos_asignados = res.checks;
 
         [...document.getElementById('lista_subusuarios_asignar').children].map(data => data.remove());
-
-        /* for (let i = 0; i < res.grupos.length; i++)
-        {
-            let div = document.createElement('div');
-            let input = document.createElement('input');
-            let label = document.createElement('label');
-
-            div.classList.add('offset-1','col-11');
-            input.setAttribute('type', 'checkbox');
-            input.classList.add('subusuarios_asignar', 'mr-1');
-            input.id = $('#grupos').DataTable().data()[i][0];
-            label.textContent = $('#grupos').DataTable().data()[i][1];
-            if(res.checks.includes($('#grupos').DataTable().data()[i][0])) input.checked = true;
-            div.append(input);
-            div.append(label);
-
-            document.getElementById('lista_subusuarios_asignar').append(div);
-        } */
 
         for (const grupo of res.grupos)
         {
@@ -2027,6 +2102,8 @@ document.getElementById('busqueda_agrega_recursos_subusuario').addEventListener(
     let total_modulos_marcados = 0;
     let total_grupopuntos = 0;
     let total_grupopuntos_marcados = 0;
+    let total_grupovehiculos = 0;
+    let total_grupovehiculos_marcados = 0;
     let total_grupogeocercas = 0;
     let total_grupogeocercas_marcados = 0;
 
@@ -2035,6 +2112,7 @@ document.getElementById('busqueda_agrega_recursos_subusuario').addEventListener(
     let alertas_encontradas = false;
     let modulos_encontrados = false;
     let grupopuntos_encontrados = false;
+    let grupovehiculos_encontrados = false;
     let grupogeocercas_encontradas = false;
 
     //filtrando en la tabla de vehiculos
@@ -2127,6 +2205,22 @@ document.getElementById('busqueda_agrega_recursos_subusuario').addEventListener(
             data.classList.remove('d-block');
         }
     });
+    //filtrando en la tabla de grupo_vehiculos
+    [...document.getElementById('lista_grupo_vehiculos_agregar').children].map(data => {
+        if(String(data.textContent).toLowerCase().includes(e.target.value.toLowerCase()))
+        {
+            grupovehiculos_encontrados = true;
+            data.classList.add('d-block');
+            data.classList.remove('d-none');
+            total_grupovehiculos++;
+            if(data.children[0].checked) total_grupovehiculos_marcados++;
+        }
+        else
+        {
+            data.classList.add('d-none');
+            data.classList.remove('d-block');
+        }
+    });
     //filtrando en la tabla de grupo_geocercas
     [...document.getElementById('lista_grupo_geocercas_agregar').children].map(data => {
         if(String(data.textContent).toLowerCase().includes(e.target.value.toLowerCase()))
@@ -2192,6 +2286,15 @@ document.getElementById('busqueda_agrega_recursos_subusuario').addEventListener(
         document.getElementById('checkbox_principal_asignar_grupo_puntos').checked = false;
     }
 
+    if(total_grupovehiculos == total_grupovehiculos_marcados && total_grupovehiculos_marcados>0)
+    {
+        document.getElementById('checkbox_principal_asignar_grupo_vehiculos').checked = true;
+    }
+    else
+    {
+        document.getElementById('checkbox_principal_asignar_grupo_vehiculos').checked = false;
+    }
+
     if(total_grupogeocercas == total_grupogeocercas_marcados && total_grupogeocercas_marcados>0)
     {
         document.getElementById('checkbox_principal_asignar_grupo_geocercas').checked = true;
@@ -2214,6 +2317,9 @@ document.getElementById('busqueda_agrega_recursos_subusuario').addEventListener(
 
     if(grupopuntos_encontrados  && e.target.value !='') document.getElementById('lista_grupo_puntos_agregar').parentElement.setAttribute('open', '');
     else document.getElementById('lista_grupo_puntos_agregar').parentElement.removeAttribute('open');
+
+    if(grupovehiculos_encontrados  && e.target.value !='') document.getElementById('lista_grupo_vehiculos_agregar').parentElement.setAttribute('open', '');
+    else document.getElementById('lista_grupo_vehiculos_agregar').parentElement.removeAttribute('open');
 
     if(grupogeocercas_encontradas  && e.target.value !='') document.getElementById('lista_grupo_geocercas_agregar').parentElement.setAttribute('open', '');
     else document.getElementById('lista_grupo_geocercas_agregar').parentElement.removeAttribute('open');
@@ -2692,6 +2798,8 @@ async function guardado_rapido(event)
         }
     } */
 
+    document.body.style.cursor = 'wait';
+
     data.append('id',id_tabla_subusuario_anterior_actualizar);
     data.append('nombre',nombre_completo_subusuario_tabla);
     data.append('subusuario',nombre_subusuario_tabla);
@@ -2704,6 +2812,8 @@ async function guardado_rapido(event)
     })
     .then( res => res.json())
     .then(res => {
+
+        document.body.style.cursor = 'default';
 
         if(res.sms == 'ok')
         {
@@ -2860,6 +2970,23 @@ document.getElementById('lista_grupo_puntos_agregar').addEventListener('click', 
 
 });
 
+document.getElementById('lista_grupo_vehiculos_agregar').addEventListener('click', (e)=>{
+
+    let marcados = 0;
+    let total_inputs = 0;
+    if(e.target.nodeName == 'INPUT')
+    {
+        [...document.getElementById('lista_grupo_vehiculos_agregar').children].map(data => {
+            if(data.children[0].checked && !data.classList.contains('d-none')) marcados++;
+            if(!data.classList.contains('d-none')) total_inputs++;
+        });
+    }
+
+    if( (total_inputs == marcados) && marcados>0 ) document.getElementById('checkbox_principal_asignar_grupo_vehiculos').checked = true;
+    else document.getElementById('checkbox_principal_asignar_grupo_vehiculos').checked = false;
+
+});
+
 document.getElementById('lista_grupo_geocercas_agregar').addEventListener('click', (e)=>{
 
     let marcados = 0;
@@ -2888,6 +3015,7 @@ function ajustar_altura(talla_errores)
     else return '220px';
 }
 
+//al presionar el boton principal de subusuarios se reinicia todos los parametros de busqueda
 document.getElementById('boton_reiniciar_subusuarios').addEventListener('click', ()=>{
     $('#grupos').DataTable().$('tr.selected').removeClass('selected');
 
@@ -2920,14 +3048,26 @@ $('#subusuarios').on('error.dt', function ( e, settings, techNote, message )
 //para mostrar o esconder la paginacion dependiendo de la cantidad de registros que aparezcan al agregar o eliminar subusuarios
 function verificar_paginacion()
 {
-    if(document.getElementById('subusuarios_paginate').children[1].children.length>1)
+    if( [...document.querySelectorAll('#subusuarios_paginate span')[0].children].length > 1 )
     {
         document.getElementById('subusuarios_paginate').classList.remove('d-none');
+        document.getElementById('subusuarios_info').classList.remove('d-none');
     }
     else
     {
         document.getElementById('subusuarios_paginate').classList.add('d-none');
+        document.getElementById('subusuarios_info').classList.add('d-none');
     }
+    /* if(document.getElementById('subusuarios_paginate').children[1].children.length>1)
+    {
+        document.getElementById('subusuarios_paginate').classList.remove('d-none');
+        document.getElementById('subusuarios_info').classList.remove('d-none');
+    }
+    else
+    {
+        document.getElementById('subusuarios_paginate').classList.add('d-none');
+        document.getElementById('subusuarios_info').classList.add('d-none');
+    } */
 }
 
 //validar formulario de subusuarios, si devuelve true es porque ha encontrado un error
@@ -3037,9 +3177,6 @@ function validar_formulario_grupo()
 //detectar cuando modal se abre de agregar subusuarios
 $('#modal-crear-subusuarios').on('shown.bs.modal', ()=>{
     document.getElementById('nombrecompleto_subusuario').focus();
-   /*  document.getElementById('clave_subusuario').setAttribute('type', 'password');
-    document.getElementById('ver_password').children[0].classList.remove('fa-eye-slash');
-    document.getElementById('ver_password').children[0].classList.add('fa-eye'); */
 });
 
 //evitar que existan espacios en blanco en subusuario

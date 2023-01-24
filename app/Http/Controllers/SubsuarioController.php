@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Cache;
+/* use Illuminate\Support\Facades\Cache; */
 
 class SubsuarioController extends Controller
 {
@@ -126,9 +126,9 @@ class SubsuarioController extends Controller
         }
 
         $jsonfinal = [];
-        $icono_editar = asset('iconos/editar.png');
-        $icono_eliminar = asset('iconos/eliminar.png');
-        $icono_detalle = asset('iconos/ver mas.png');
+        $icono_editar = asset('iconos/editar2.png');
+        $icono_eliminar = asset('iconos/eliminar2.png');
+        $icono_detalle = asset('iconos/ver mas2.png');
 
         foreach ($subusuarios as $subusuario)
         {
@@ -154,7 +154,7 @@ class SubsuarioController extends Controller
                 $array_asociativo_categorias[$subusuario->IdCategoria], //aqui se pone la categoria
                 '<div style="text-align:left;"><button class="btn btn-outline botones_tabla" onclick="editar_subusuario('.$subusuario->IdSubUsuario.')" title="Editar Subusuario"><img class="imag-icon" src="'.$icono_editar.'"></button>
                 <button class="btn btn-outline botones_tabla" onclick="eliminar_subusuario('.$subusuario->IdSubUsuario.','."'".$subusuario->SubUsuario."'".')" title="Eliminar Subusuario"><img class="imag-icon" src="'.$icono_eliminar.'"></button>
-                <button class="btn btn-outline botones_tabla" onclick="ver_detalle_subusuario('.$subusuario->IdSubUsuario.')" title="Ver Detalles"><img class="imag-icon" src="'.$icono_detalle.'"></button></div>',
+                <button class="btn btn-outline botones_tabla" onclick="ver_detalle_subusuario('.$subusuario->IdSubUsuario.')" title="Ver Detalles"><img style="height:20px; width:20px;" src="'.$icono_detalle.'"></button></div>',
             ]
         );
         }
@@ -178,17 +178,17 @@ class SubsuarioController extends Controller
         }
 
         $vehiculos = DB::connection($conexion)->select('exec spActivosUsuarioConsultarV2 ?', [$id_usuario]);
-        /* $puntos = DB::select('exec spPuntoConsultar ?, ?', [0, $id_usuario]); */
+
         /* $geocercas = DB::select('exec spGeocercaConsultar ?', [$id_usuario]); */
         $alertas = DB::connection($conexion)->select('exec spD_AlertaConsultar ?,?', [$id_usuario,0]);
         $modulos = DB::connection($conexion)->select('exec spModuloConsultar ?', [$id_usuario]);
         $grupo_puntos = DB::connection($conexion)->select('exec spGrupoPuntoConsultar ?, ?', [$id_usuario, 0]);
+        $grupos_vehiculos = DB::connection($conexion)->select('exec spGrupoConsultar ?', [$id_usuario]);
         $grupo_geocercas = DB::connection($conexion)->select('exec spGrupoGeocercaConsultar ?, ?', [$id_usuario, 0]);
-        /* $categorias = DB::select('exec spLlenarCombo ?', ['CATEGORIASUB']); */
-        //$categorias = DB::select('select IdCategoria, Descripcion from SubUsuarioCategoria');
-        //$categorias = DB::table('SubUsuarioCategoria')->select('IdCategoria', 'Descripcion')->get();
+        /* $categorias = DB::connection($conexion)->select('exec spLlenarCombo ?', ['CATEGORIASUB']); */
+        //$categorias = DB::connection($conexion)->table('SubUsuarioCategoria')->select('IdCategoria', 'Descripcion')->get();
 
-        return response()->json(['alertas' => $alertas, 'modulos' => $modulos, 'grupo_puntos' => $grupo_puntos, 'grupo_geocercas' => $grupo_geocercas, 'vehiculos' => $vehiculos]);
+        return response()->json(['alertas' => $alertas, 'modulos' => $modulos, 'grupo_puntos' => $grupo_puntos, 'grupo_geocercas' => $grupo_geocercas, 'vehiculos' => $vehiculos, 'grupo_vehiculos' => $grupos_vehiculos]);
     }
 
     /**
@@ -205,6 +205,8 @@ class SubsuarioController extends Controller
         $vehiculos_asignados = json_decode($request->vehiculos_asignados);
         /* $puntos_referencia = json_decode($request->puntos_referencia_asignados);
         $geocercas_asignadas = json_decode($request->geocercas_asignadas); */
+
+        $grupovehiculos_asignados = json_decode($request->grupovehiculos_asignados);
         $alertas_asignadas = json_decode($request->alertas_asignadas);
         $modulos_asignados = json_decode($request->modulos_asignados);
         $grupopuntos_asignados = json_decode($request->grupopuntos_asignados);
@@ -287,6 +289,11 @@ class SubsuarioController extends Controller
                 DB::connection($conexion)->insert('exec spModulosSubUsuarioIngresar ?,?,?', [$modulo, $id_usuario, $result[0]->idsubusuario]);
             }
 
+            foreach($grupovehiculos_asignados as $grupovehiculo)
+            {
+                DB::connection($conexion)->insert('exec spGrupoSubUsuariosIngresarV2 ?,?,?,?', [$id_usuario, $result[0]->idsubusuario, $grupovehiculo,$id_usuario]);
+            }
+
             foreach($grupopuntos_asignados as $grupopunto)
             {
                 DB::connection($conexion)->insert('exec spGrupoPuntoSubUsuarioIngresar ?,?,?', [$grupopunto, $id_usuario, $result[0]->idsubusuario]); //parIdGrupoPunto, parIDUsuario, parIdSUBUSUARIO
@@ -305,7 +312,7 @@ class SubsuarioController extends Controller
         catch(Exception $e)
         {
             DB::connection($conexion)->rollBack();
-            Log::critical($e->getMessage(), ['code' => $e->getCode(), 'trace' => $e->getTrace()]);
+            Log::critical($e->getMessage(), ['conexion' => $conexion, 'code' => $e->getCode(), 'trace' => $e->getTrace()]);
             return response()->json(['sms' => $e]);
         }
 
@@ -325,11 +332,13 @@ class SubsuarioController extends Controller
         /* $puntos = DB::select('exec spPuntoSubUsuarioConsultar ?,?', [$id_usuario, $id]); */
         $modulos = DB::connection($conexion)->select('exec spModuloSubusuarioConsultar ?,?', [$id_usuario, $id]);
         /* $geocercas = DB::select('exec spGeocercaSubusuarioConsultar ?,?', [$id_usuario, $id]); */
+        /* $grupo_vehiculos = DB::connection($conexion)->select('exec spGrupoSubUsuariosConsultarV2 ?,?,?', [$id_usuario, $id,0]); */
+        $grupo_vehiculos = DB::connection($conexion)->table('SubUsuarioGrupo')->join('Grupo', 'SubUsuarioGrupo.idGrupo', '=', 'Grupo.IdGrupo')->select('Grupo.Grupo')->where('SubUsuarioGrupo.idUsuario',$id_usuario)->where('SubUsuarioGrupo.IdSubUsuario',$id)->get();
         $alertas = DB::connection($conexion)->select('exec spD_AlertaSubUsuarioConsultar ?,?', [$id_usuario, $id]);
         $grupo_puntos = DB::connection($conexion)->select('exec spGrupoPuntoSubusuarioConsultar ?,?,?', [0, $id_usuario, $id]);
         $grupo_geocercas = DB::connection($conexion)->select('exec spGrupoGeocercaSubusuarioConsultar ?,?', [$id_usuario, $id]);
 
-        return response()->json(['vehiculos' => $vehiculos, 'modulos' => $modulos, 'alertas' => $alertas, 'grupo_geocercas' => $grupo_geocercas, 'grupo_puntos' => $grupo_puntos]);
+        return response()->json(['vehiculos' => $vehiculos, 'modulos' => $modulos, 'alertas' => $alertas, 'grupo_geocercas' => $grupo_geocercas, 'grupo_puntos' => $grupo_puntos, 'grupo_vehiculos' => $grupo_vehiculos]);
     }
 
     /**
@@ -347,6 +356,7 @@ class SubsuarioController extends Controller
         $geocercas_check = []; */
         $modulos_check = [];
         $alertas_check = [];
+        $grupovehiculos_check = [];
         $grupopuntos_check = [];
         $grupogeocercas_check = [];
 
@@ -354,9 +364,12 @@ class SubsuarioController extends Controller
         $vehiculos = DB::connection($conexion)->select('exec spActivosUsuarioConsultarV2 ?', [$id_usuario]);
         /* $puntos = DB::select('exec spPuntoConsultar ?, ?', [0, $id_usuario]);
         $geocercas = DB::select('exec spGeocercaConsultar ?', [$id_usuario]); */
+
+        /* $grupo_vehiculos = DB::connection($conexion)->select('exec spGrupoConsultar ?', [$id_usuario]); */
         $alertas = DB::connection($conexion)->select('exec spD_AlertaConsultar ?,?', [$id_usuario,0]);
         $modulos = DB::connection($conexion)->select('exec spModuloConsultar ?', [$id_usuario]);
         $grupo_puntos = DB::connection($conexion)->select('exec spGrupoPuntoConsultar ?, ?', [$id_usuario, 0]);
+        $grupo_vehiculos = DB::connection($conexion)->select('exec spGrupoConsultar ?', [$id_usuario]);
         $grupo_geocercas = DB::connection($conexion)->select('exec spGrupoGeocercaConsultar ?, ?', [$id_usuario, 0]);
 
         //los recursos que tiene el subusuario, se consulta para saber cuales estan checkeados
@@ -366,6 +379,7 @@ class SubsuarioController extends Controller
         $modulos_pertenecen = DB::connection($conexion)->select('exec spModuloSubusuarioConsultar ?,?', [$id_usuario, $id]);
         $alertas_pertenecen = DB::connection($conexion)->select('exec spD_AlertaSubUsuarioConsultar ?,?', [$id_usuario, $id]);
         $grupo_puntos_pertenecen = DB::connection($conexion)->select('exec spGrupoPuntoSubusuarioConsultar ?,?,?', [0, $id_usuario, $id]);
+        $grupo_vehiculos_pertenecen = DB::connection($conexion)->table('SubUsuarioGrupo')->join('Grupo', 'SubUsuarioGrupo.idGrupo', '=', 'Grupo.IdGrupo')->select('Grupo.Grupo', 'Grupo.IdGrupo as IdGrupo')->where('SubUsuarioGrupo.idUsuario',$id_usuario)->where('SubUsuarioGrupo.IdSubUsuario',$id)->get();
         $grupo_geocercas_pertenecen = DB::connection($conexion)->select('exec spGrupoGeocercaSubusuarioConsultar ?,?', [$id_usuario, $id]);
 
         foreach($vehiculos_pertenecen as $vehiculo)
@@ -393,6 +407,11 @@ class SubsuarioController extends Controller
             array_push($alertas_check, $alerta->IdAlerta);
         }
 
+        foreach($grupo_vehiculos_pertenecen as $grupovehiculo)
+        {
+            array_push($grupovehiculos_check, $grupovehiculo->IdGrupo);
+        }
+
         foreach($grupo_puntos_pertenecen as $grupopunto)
         {
             array_push($grupopuntos_check, $grupopunto->IdGrupoPunto);
@@ -404,10 +423,9 @@ class SubsuarioController extends Controller
         }
 
         $subusuario = DB::connection($conexion)->select('exec spSubUsuarioDatosConsultar ?,?', [$id_usuario, $id]);
-        //$categorias = DB::select('select IdCategoria, Descripcion from SubUsuarioCategoria');
         //$categorias = DB::table('SubUsuarioCategoria')->select('IdCategoria', 'Descripcion')->get();
 
-        return response()->json(['sms' => $subusuario, 'vehiculos' => $vehiculos, 'modulos' => $modulos, 'alertas' => $alertas, 'grupo_geocercas' => $grupo_geocercas, 'grupo_puntos' => $grupo_puntos, 'vehiculos_pertenecen' => $vehiculos_check, 'modulos_pertenecen' => $modulos_check, 'alertas_pertenecen' => $alertas_check, 'grupo_puntos_pertenecen' => $grupopuntos_check, 'grupo_geocercas_pertenecen' => $grupogeocercas_check]);
+        return response()->json(['sms' => $subusuario, 'vehiculos' => $vehiculos, 'modulos' => $modulos, 'alertas' => $alertas, 'grupo_geocercas' => $grupo_geocercas, 'grupo_puntos' => $grupo_puntos, 'grupo_vehiculos' => $grupo_vehiculos , 'vehiculos_pertenecen' => $vehiculos_check, 'modulos_pertenecen' => $modulos_check, 'alertas_pertenecen' => $alertas_check, 'grupo_puntos_pertenecen' => $grupopuntos_check, 'grupo_geocercas_pertenecen' => $grupogeocercas_check, 'grupo_vehiculos_pertenecen' => $grupovehiculos_check]);
     }
 
     public function revisar_grupos_subusuarios(Request $request)
@@ -424,7 +442,7 @@ class SubsuarioController extends Controller
         //$grupos_subusuarios_ejemplo = [1,[1,2]];
         //$id_subusuarios_ejemplo = [1,2,3,4];
 
-        $grupos = DB::connection($conexion)->select('spGruposSubUsuariosConsultar ?,?', [$id_usuario, NULL]);
+        $grupos = DB::connection($conexion)->select('exec spGruposSubUsuariosConsultar ?,?', [$id_usuario, NULL]);
 
         //recorrer id de subusuarios para obtener grupos a los que pertenecen
 
@@ -520,6 +538,7 @@ class SubsuarioController extends Controller
         $alertas_anteriores = json_decode($request->alertas_anteriores);
         $modulos_anteriores = json_decode($request->modulos_anteriores);
         $grupopuntos_anteriores = json_decode($request->grupopuntos_anteriores);
+        $grupovehiculos_anteriores = json_decode($request->grupovehiculos_anteriores);
         $grupogeocercas_anteriores = json_decode($request->grupogeocercas_anteriores);
         //Fin IDS recursos checkeados anteriormente
 
@@ -530,6 +549,7 @@ class SubsuarioController extends Controller
         $alertas_asignadas = json_decode($request->alertas_asignadas);
         $modulos_asignados = json_decode($request->modulos_asignados);
         $grupopuntos_asignados = json_decode($request->grupopuntos_asignados);
+        $grupovehiculos_asignados = json_decode($request->grupovehiculos_asignados);
         $grupogeocercas_asignadas = json_decode($request->grupogeocercas_asignadas);
         //fin IDS recursos para asignar
 
@@ -540,6 +560,7 @@ class SubsuarioController extends Controller
         $id_alertas_asignadas = [];
         $id_modulos_asignados = [];
         $id_grupopuntos_asignados = [];
+        $id_grupovehiculos_asignados = [];
         $id_grupogeocercas_asignadas = [];
         //Fin IDS arreglos de ids para guardar los recursos que se van a asignar
 
@@ -550,6 +571,7 @@ class SubsuarioController extends Controller
         $id_alertas_para_desmarcar = [];
         $id_modulos_para_desmarcar = [];
         $id_grupopuntos_para_desmarcar = [];
+        $id_grupovehiculos_para_desmarcar = [];
         $id_grupogeocercas_para_desmarcar = [];
         //Fin arreglos para eliminar los recursos que estaban marcados y se desmarcaron
 
@@ -585,11 +607,17 @@ class SubsuarioController extends Controller
             if( !in_array( $grupopunto, $grupopuntos_anteriores ) ) array_push($id_grupopuntos_asignados, $grupopunto);
         }
 
+        foreach($grupovehiculos_asignados as $grupovehiculo)
+        {
+            if( !in_array( $grupovehiculo, $grupovehiculos_anteriores ) ) array_push($id_grupovehiculos_asignados, $grupovehiculo);
+        }
+
         foreach($grupogeocercas_asignadas as $grupogeocerca)
         {
             if( !in_array( $grupogeocerca, $grupogeocercas_anteriores ) ) array_push($id_grupogeocercas_asignadas, $grupogeocerca);
         }
         //fin asignar recursos checkeados
+
 
 
         //Verificar los checks desmarcados para eliminar la asignacion del recurso en cada subusuario
@@ -621,6 +649,11 @@ class SubsuarioController extends Controller
         foreach($grupopuntos_anteriores as $grupopunto)
         {
             if( !in_array($grupopunto, $grupopuntos_asignados)) array_push($id_grupopuntos_para_desmarcar, $grupopunto);
+        }
+
+        foreach($grupovehiculos_anteriores as $grupovehiculo)
+        {
+            if( !in_array($grupovehiculo, $grupovehiculos_asignados)) array_push($id_grupovehiculos_para_desmarcar, $grupovehiculo);
         }
 
         foreach($grupogeocercas_anteriores as $grupogeocerca)
@@ -690,6 +723,11 @@ class SubsuarioController extends Controller
                 DB::connection($conexion)->insert('exec spGrupoPuntoSubUsuarioIngresar ?,?,?', [$grupopunto, $id_usuario, $id]);
             }
 
+            foreach($id_grupovehiculos_asignados as $grupovehiculo)
+            {
+                DB::connection($conexion)->insert('exec spGrupoSubUsuariosIngresarV2 ?,?,?,?', [$id_usuario, $id, $grupovehiculo, $id_usuario]);
+            }
+
             foreach($id_grupogeocercas_asignadas as $grupogeocerca)
             {
                 DB::connection($conexion)->insert('exec spGrupoGeocercaSubUsuarioIngresar ?,?,?', [$grupogeocerca, $id_usuario, $id]);
@@ -729,6 +767,11 @@ class SubsuarioController extends Controller
                 DB::connection($conexion)->delete('exec spGrupoPuntoSubUsuarioEliminar ?,?,?', [$grupopunto, $id_usuario, $id]);
             }
 
+            foreach($id_grupovehiculos_para_desmarcar as $grupovehiculo)
+            {
+                DB::connection($conexion)->delete('exec spGrupoSubUsuarioEliminar ?,?,?', [$id_usuario, $id, $grupovehiculo]);
+            }
+
             foreach($id_grupogeocercas_para_desmarcar as $grupogeocerca)
             {
                 DB::connection($conexion)->delete('exec spGrupoGeocercaSubUsuarioEliminar ?,?,?', [$id_usuario, $id, $grupogeocerca]);
@@ -742,7 +785,7 @@ class SubsuarioController extends Controller
         catch(Exception $e)
         {
             DB::connection($conexion)->rollBack();
-            Log::critical($e->getMessage(), ['code' => $e->getCode(), 'trace' => $e->getTrace()]);
+            Log::critical($e->getMessage(), ['conexion' => $conexion,'code' => $e->getCode(), 'trace' => $e->getTrace()]);
             return response()->json(['sms' => $e]);
         }
 
@@ -809,7 +852,7 @@ class SubsuarioController extends Controller
         catch(Exception $e)
         {
             DB::connection($conexion)->rollBack();
-            Log::critical($e->getMessage(), ['code' => $e->getCode(), 'trace' => $e->getTrace()]);
+            Log::critical($e->getMessage(), ['conexion' => $conexion,'code' => $e->getCode(), 'trace' => $e->getTrace()]);
             return response()->json(['sms' => $e]);
         }
 
@@ -895,7 +938,7 @@ class SubsuarioController extends Controller
         catch(Exception $e)
         {
             DB::connection($conexion)->rollBack();
-            Log::critical($e->getMessage(), ['code' => $e->getCode(), 'trace' => $e->getTrace()]);
+            Log::critical($e->getMessage(), ['conexion' => $conexion, 'code' => $e->getCode(), 'trace' => $e->getTrace()]);
             return response()->json(['sms' => $e]);
         }
     }

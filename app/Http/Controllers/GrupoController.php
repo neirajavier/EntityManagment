@@ -75,8 +75,8 @@ class GrupoController extends Controller
 
         $grupos = DB::connection($conexion)->select('exec spGruposSubUsuariosConsultar ?,?', [$id_usuario, NULL]);
         $json_final = [];
-        $boton_editar = asset('iconos/editar.png');
-        $boton_eliminar = asset('iconos/eliminar.png');
+        $boton_editar = asset('iconos/editar2.png');
+        $boton_eliminar = asset('iconos/eliminar2.png');
 
         foreach ($grupos as $grupo)
         {
@@ -143,7 +143,7 @@ class GrupoController extends Controller
     {
         $id_usuario = $this->consultarKey($request->o,$request->cp)->IdUsuario;
         $conexion = $this->obtener_cadena($request->cp);
-        $grupos = DB::connection($conexion)->select('spGruposSubUsuariosConsultar ?,?', [$id_usuario, $id]);
+        $grupos = DB::connection($conexion)->select('exec spGruposSubUsuariosConsultar ?,?', [$id_usuario, $id]);
 
         return response()->json(['sms' => $grupos]);
     }

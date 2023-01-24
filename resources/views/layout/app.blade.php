@@ -11,7 +11,7 @@
     <script src="{{asset('js/bootstrap.bundle.min.js')}}"></script>
     <link rel="stylesheet" href="{{asset('css/bootstrap-float-label.min.css')}}"/>
     <link rel="stylesheet" href="{{asset('css/jquery.dataTables.min.css')}}">
-    <script src="//cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="{{asset('js/jquery.dataTables.min.js')}}"></script>
     <link rel="stylesheet" href="{{asset('css/select.dataTables.min.css')}}">
     <script src="{{asset('js/dataTables.select.min.js')}}"></script>
     <script src="{{asset('js/dataTables.buttons.min.js')}}"></script>
@@ -23,7 +23,7 @@
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.js"></script> --}}
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    {{-- <link rel="stylesheet" href="{{asset('font-awesome-4.7.0/css/font-awesome.min.css')}}"> --}}
+    <link rel="stylesheet" href="{{asset('font-awesome-4.7.0/css/font-awesome.min.css')}}">
     @yield('css')
 </head>
 <body>
