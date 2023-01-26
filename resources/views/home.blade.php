@@ -5,28 +5,28 @@
 @section('css')
     <link rel="stylesheet" href="{{asset('css/estilos.css')}}">
     <style>
-        #subusuarios_first
+        #subusuarios_first, #alertas_subusuario_first, #modulos_subusuario_first, #grupopuntos_subusuario_first, #grupogeocercas_subusuario_first, #grupovehiculos_subusuario_first, #alertas_subusuario_mostrar_first, #modulos_subusuario_mostrar_first, #vehiculos_subusuario_mostrar_first, #grupogeocercas_subusuario_mostrar_first, #grupopuntos_subusuario_mostrar_first, #grupovehiculos_subusuario_mostrar_first
         {
             background-image: url('{{asset("iconos/primero.png")}}');
             background-repeat: no-repeat;
             display: inline;
         }
 
-        #subusuarios_previous
+        #subusuarios_previous, #alertas_subusuario_previous, #modulos_subusuario_previous, #grupopuntos_subusuario_previous, #grupogeocercas_subusuario_previous, #grupovehiculos_subusuario_previous, #alertas_subusuario_mostrar_previous, #modulos_subusuario_mostrar_previous, #vehiculos_subusuario_mostrar_previous, #grupogeocercas_subusuario_mostrar_previous, #grupopuntos_subusuario_mostrar_previous, #grupovehiculos_subusuario_mostrar_previous
         {
             background-image: url('{{asset("iconos/anterior.png")}}');
             background-repeat: no-repeat;
             display: inline;
         }
 
-        #subusuarios_next
+        #subusuarios_next, #alertas_subusuario_next, #modulos_subusuario_next, #grupopuntos_subusuario_next, #grupogeocercas_subusuario_next, #grupovehiculos_subusuario_next, #alertas_subusuario_mostrar_next,  #modulos_subusuario_mostrar_next, #vehiculos_subusuario_mostrar_next, #grupogeocercas_subusuario_mostrar_next, #grupopuntos_subusuario_mostrar_next, #grupovehiculos_subusuario_mostrar_next
         {
             background-image: url('{{asset("iconos/siguiente.png")}}');
             background-repeat: no-repeat;
             display: inline;
         }
 
-        #subusuarios_last
+        #subusuarios_last, #alertas_subusuario_last, #modulos_subusuario_last, #grupopuntos_subusuario_last, #grupogeocercas_subusuario_last, #grupovehiculos_subusuario_last, #alertas_subusuario_mostrar_last,  #modulos_subusuario_mostrar_last, #vehiculos_subusuario_mostrar_last, #grupogeocercas_subusuario_mostrar_last, #grupopuntos_subusuario_mostrar_last, #grupovehiculos_subusuario_mostrar_last
         {
             background-image: url('{{asset("iconos/ultimo.png")}}');
             background-repeat: no-repeat;
@@ -55,13 +55,7 @@
                                 <h5 class="text-center"><img class="m-auto" style="height:30px; width:30px;" src="{{asset('iconos/subusuarios.png')}}" alt="subusuarios"><b class="">Subusuarios</b>{{-- <span id="numero_total_subusuarios" class="badge badge-dark"></span> --}} {{-- <button id="crear_nuevo_subusuario" class="btn"><img class="mb-1 imag-icon" src="{{asset('iconos/agregar.png')}}" alt="agregar"></button> --}}</h5>
                             </div>
                             <div class="col-sm-12 col-md-12 col-lg-9 col-12">
-                                {{-- <div class="row">
-                                    <div class="input-group col-12 col-md-12">
-                                        <input class="form-control border mx-4" type="search" placeholder="Buscar Subusuarios ..." id="busqueda_general">
-                                    </div>
-                                </div> --}}
                                 <div class="row">
-                                    <!-- Actual search box -->
                                     <div class="has-search ml-4 col-sm-11">
                                         <span class="fa fa-search form-control-feedback"></span>
                                         <input type="text" class="form-control" placeholder="Buscar Subusuarios ..." id="busqueda_general">
@@ -126,7 +120,7 @@
                             <hr class="linea">
                             <div id="vehiculos-asignados" role="tabpanel" class="px-1 bg-white table-responsive">
                                 <table id="subusuarios" width="100%" class="p-auto row-border">
-                                    <thead class="fondo_cabecera" style="color:white;">
+                                    <thead class="fondo_cabecera">
                                         <tr>
                                             <th><input class="mycheck check_subusuarios d-block m-auto" type="checkbox" id="checkbox_principal_subusuarios"></th>
                                             <th style="font-size:13px;">Código</th>
@@ -318,7 +312,7 @@
 
     {{-- Modal mostrar detalles del subusuario --}}
     <div class="modal" id="modal_mostrar_detalles_subusuario" tabindex="-1" aria-labelledby="mostrarDetallesModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -327,7 +321,83 @@
                 </div>
                 <div class="modal-body">
                     <div>
-                        <ul class="tree">
+                        <div class="row">
+                            <div class="col-sm-4 col-12">
+                              <div class="list-group" id="list-tab2" role="tablist">
+                                <a style="font-size:15px;" class="list-group-item list-group-item-action active" id="lista_recursos_alertas_mostrar" data-toggle="list" href="#lista-alertas-mostrar" role="tab" aria-controls="alertas-mostrar">Alertas <span id="numero_alertas_subusuario_mostrar" class="badge badge-secondary badge-pill"></span></a>
+                                <a style="font-size:15px;" class="list-group-item list-group-item-action" id="lista_recursos_modulos_mostrar" data-toggle="list" href="#lista-modulos-mostrar" role="tab" aria-controls="modulos-mostrar">Modulos <span id="numero_modulos_subusuario_mostrar" class="badge badge-secondary badge-pill"></span></a>
+                                <a style="font-size:15px;" class="list-group-item list-group-item-action" id="lista_recursos_vehiculos_mostrar" data-toggle="list" href="#lista-vehiculos-mostrar" role="tab" aria-controls="vehiculos-mostrar">Vehiculos <span id="numero_vehiculos_subusuario_mostrar" class="badge badge-secondary badge-pill"></span></a>
+                                <a style="font-size:15px;" class="list-group-item list-group-item-action" id="lista_recursos_grupogeocercas_mostrar" data-toggle="list" href="#lista-grupogeocercas-mostrar" role="tab" aria-controls="grupogeocercas-mostrar">Grupo de Geocercas <span id="numero_grupogeocercas_subusuario_mostrar" class="badge badge-secondary badge-pill"></span></a>
+                                <a style="font-size:15px;" class="list-group-item list-group-item-action" id="lista_recursos_grupopuntos_mostrar" data-toggle="list" href="#lista-grupopuntos-mostrar" role="tab" aria-controls="grupopuntos-mostrar">Grupo de Puntos <span id="numero_grupopuntos_subusuario_mostrar" class="badge badge-secondary badge-pill"></span></a>
+                                <a style="font-size:15px;" class="list-group-item list-group-item-action" id="lista_recursos_grupovehiculos_mostrar" data-toggle="list" href="#lista-grupovehiculos-mostrar" role="tab" aria-controls="grupovehiculos-mostrar">Grupo de Vehiculos <span id="numero_grupovehiculos_subusuario_mostrar" class="badge badge-secondary badge-pill"></span></a>
+                              </div>
+                            </div>
+                            <div class="col-sm-8 col-12">
+                              <div class="tab-content" id="nav-tabContent2">
+                                <div class="tab-pane fade show active" id="lista-alertas-mostrar" role="tabpanel" aria-labelledby="lista_recursos_alertas_mostrar">
+                                    <table id="alertas_subusuario_mostrar" class="row-border" style="width:100%">
+                                        <thead class="fondo_cabecera">
+                                            <tr>
+                                                <th>Alerta</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="fondo_tbody"></tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane fade" id="lista-modulos-mostrar" role="tabpanel" aria-labelledby="lista_recursos_modulos_mostrar">
+                                    <table id="modulos_subusuario_mostrar" class="row-border" style="width:100%">
+                                        <thead class="fondo_cabecera">
+                                            <tr>
+                                                <th>Modulos</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="fondo_tbody"></tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane fade" id="lista-vehiculos-mostrar" role="tabpanel" aria-labelledby="lista_recursos_vehiculos_mostrar">
+                                    <table id="vehiculos_subusuario_mostrar" class="row-border" style="width:100%">
+                                        <thead class="fondo_cabecera">
+                                            <tr>
+                                                <th>Vehiculos</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="fondo_tbody"></tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane fade" id="lista-grupopuntos-mostrar" role="tabpanel" aria-labelledby="lista-grupopuntos-mostrar">
+                                    <table id="grupopuntos_subusuario_mostrar" class="row-border" style="width:100%">
+                                        <thead class="fondo_cabecera">
+                                            <tr>
+                                                <th>Grupo de Puntos</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="fondo_tbody"></tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane fade" id="lista-grupogeocercas-mostrar" role="tabpanel" aria-labelledby="lista-grupogeocercas-mostrar">
+                                    <table id="grupogeocercas_subusuario_mostrar" class="row-border" style="width:100%">
+                                        <thead class="fondo_cabecera">
+                                            <tr>
+                                                <th>Grupo de Geocercas</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="fondo_tbody"></tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane fade" id="lista-grupovehiculos-mostrar" role="tabpanel" aria-labelledby="lista-grupovehiculos-mostrar">
+                                    <table id="grupovehiculos_subusuario_mostrar" class="row-border" style="width:100%">
+                                        <thead class="fondo_cabecera">
+                                            <tr>
+                                                <th>Grupo de Vehiculos</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="fondo_tbody"></tbody>
+                                    </table>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                        {{-- <ul class="tree">
                             <li>
                               <details open id="arbol_principal_mostrar_subusuario">
                                 <summary><b>Detalles</b></summary>
@@ -338,18 +408,6 @@
                                       <ul id="lista_vehiculos_mostrar"></ul>
                                     </details>
                                   </li>
-                                  {{-- <li>
-                                    <details>
-                                      <summary><b>Puntos de Referencia</b></summary>
-                                      <ul id="lista_puntos_mostrar"></ul>
-                                    </details>
-                                  </li> --}}
-                                  {{-- <li>
-                                    <details>
-                                      <summary><b>Geocercas</b></summary>
-                                      <ul  id="lista_geocercas_mostrar"></ul>
-                                    </details>
-                                  </li> --}}
                                   <li>
                                     <details>
                                       <summary><b>Alertas Asignadas</b></summary>
@@ -387,7 +445,7 @@
                                 </ul>
                               </details>
                             </li>
-                        </ul>
+                        </ul> --}}
                     </div>
                 </div>
             </div>
@@ -519,16 +577,101 @@
                         </div>
                         <div id="ventana_recursos_subusuario" class="tab-pane fade" role="tabpanel" aria-selected="false" aria-labelledby="ventana_recursos_subusuario">
                             <div class="row">
-                                <b class="col-sm-9 col-9 mt-2" style="text-align:center;">DATOS DE ASIGNACIÓN</b><a class="btn nav-link botones_tabla" id="boton_guardar_subusuario" title="Guardar Subusuario"><img style="height:22px; width:22px;" src="{{asset('iconos/guardar r.png')}}" alt="Guardar"></a>
-                                <a class="btn nav-link botones_tabla" id="boton_abrir_ventana_detalles_subusuarios" onclick="abrir_ventana_detalles();" title="Regresar"><img style="height:22px; width:22px;" class="img-rotate" src="{{asset('iconos/flecha derecha.png')}}" alt="siguiente"></a>
+                                <b class="col-sm-9 col-9 mt-2" style="text-align:center;">DATOS DE ASIGNACIÓN</b>
                             </div>
                             <div class="row mb-3">
-                                <div class="col-1"></div>
-                                <input class="col-8 form-control" type="search" id="busqueda_agrega_recursos_subusuario" placeholder="Buscar por ...">
-                                <div class="col-3"></div>
+                                <input class="ml-3 col-sm-9 col-8 form-control" type="search" id="busqueda_agrega_recursos_subusuario" placeholder="Buscar por ..."><a class="btn nav-link botones_tabla col-1" id="boton_guardar_subusuario" title="Guardar Subusuario"><img style="height:22px; width:22px;" src="{{asset('iconos/guardar r.png')}}" alt="Guardar"></a><a class="btn nav-link botones_tabla col-1" id="boton_abrir_ventana_detalles_subusuarios" onclick="abrir_ventana_detalles();" title="Regresar"><img style="height:22px; width:22px;" class="img-rotate" src="{{asset('iconos/flecha derecha.png')}}" alt="siguiente"></a>
                             </div>
                             <div>
-                                <ul class="tree">
+                                <div class="row">
+                                    <div class="col-sm-4 col-12">
+                                      <div class="list-group" id="list-tab" role="tablist">
+                                        <a style="font-size:15px;" class="list-group-item list-group-item-action active" id="lista_recursos_alertas" data-toggle="list" href="#lista-alertas" role="tab" aria-controls="alertas">Alertas <span id="numero_alertas_subusuario" class="badge badge-secondary badge-pill"></span></a>
+                                        <a style="font-size:15px;" class="list-group-item list-group-item-action" id="lista_recursos_modulos" data-toggle="list" href="#lista-modulos" role="tab" aria-controls="modulos">Modulos <span id="numero_modulos_subusuario" class="badge badge-secondary badge-pill"></span></a>
+                                        <a style="font-size:15px;" class="list-group-item list-group-item-action" id="lista_recursos_vehiculos" data-toggle="list" href="#lista-vehiculos" role="tab" aria-controls="vehiculos">Vehiculos <span id="numero_vehiculos_subusuario" class="badge badge-secondary badge-pill"></span></a>
+                                        <a style="font-size:15px;" class="list-group-item list-group-item-action" id="lista_recursos_grupogeocercas" data-toggle="list" href="#lista-grupogeocercas" role="tab" aria-controls="grupogeocercas">Grupo de Geocercas <span id="numero_grupogeocercas_subusuario" class="badge badge-secondary badge-pill"></span></a>
+                                        <a style="font-size:15px;" class="list-group-item list-group-item-action" id="lista_recursos_grupopuntos" data-toggle="list" href="#lista-grupopuntos" role="tab" aria-controls="grupopuntos">Grupo de Puntos <span id="numero_grupopuntos_subusuario" class="badge badge-secondary badge-pill"></span></a>
+                                        <a style="font-size:15px;" class="list-group-item list-group-item-action" id="lista_recursos_grupovehiculos" data-toggle="list" href="#lista-grupovehiculos" role="tab" aria-controls="grupovehiculos">Grupo de Vehiculos <span id="numero_grupovehiculos_subusuario" class="badge badge-secondary badge-pill"></span></a>
+                                      </div>
+                                    </div>
+                                    <div class="col-sm-8 col-12">
+                                      <div class="tab-content" id="nav-tabContent">
+                                        <div class="tab-pane fade show active" id="lista-alertas" role="tabpanel" aria-labelledby="lista_recursos_alertas">
+                                            <table id="alertas_subusuario" class="row-border" style="width:100%">
+                                                <thead class="fondo_cabecera">
+                                                    <tr style="width: 1%;">
+                                                        <th><input class="d-block m-auto" type="checkbox" id="checkbox_principal_asignar_alerta"></th>
+                                                        <th>ID</th>
+                                                        <th>Alerta</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="fondo_tbody"></tbody>
+                                            </table>
+                                        </div>
+                                        <div class="tab-pane fade" id="lista-modulos" role="tabpanel" aria-labelledby="lista_recursos_modulos">
+                                            <table id="modulos_subusuario" class="row-border" style="width:100%">
+                                                <thead class="fondo_cabecera">
+                                                    <tr>
+                                                        <th style="width: 1%;"><input class="d-block m-auto" type="checkbox" id="checkbox_principal_asignar_modulo"></th>
+                                                        <th>ID</th>
+                                                        <th>Modulos</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="fondo_tbody"></tbody>
+                                            </table>
+                                        </div>
+                                        <div class="tab-pane fade" id="lista-vehiculos" role="tabpanel" aria-labelledby="lista_recursos_vehiculos">
+                                            <table id="vehiculos_subusuario" class="row-border" style="width:100%">
+                                                <thead class="fondo_cabecera">
+                                                    <tr>
+                                                        <th style="width: 1%;"><input class="d-block m-auto" type="checkbox" id="checkbox_principal_asignar_vehiculo"></th>
+                                                        <th>ID</th>
+                                                        <th>Vehiculos</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="fondo_tbody"></tbody>
+                                            </table>
+                                        </div>
+                                        <div class="tab-pane fade" id="lista-grupopuntos" role="tabpanel" aria-labelledby="lista-grupopuntos">
+                                            <table id="grupopuntos_subusuario" class="row-border" style="width:100%">
+                                                <thead class="fondo_cabecera">
+                                                    <tr>
+                                                        <th style="width: 1%;"><input class="d-block m-auto" type="checkbox" id="checkbox_principal_asignar_grupo_puntos"></th>
+                                                        <th>ID</th>
+                                                        <th>Grupo de Puntos</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="fondo_tbody"></tbody>
+                                            </table>
+                                        </div>
+                                        <div class="tab-pane fade" id="lista-grupogeocercas" role="tabpanel" aria-labelledby="lista-grupogeocercas">
+                                            <table id="grupogeocercas_subusuario" class="row-border" style="width:100%">
+                                                <thead class="fondo_cabecera">
+                                                    <tr>
+                                                        <th style="width: 1%;"><input class="d-block m-auto" type="checkbox" id="checkbox_principal_asignar_grupo_geocercas"></th>
+                                                        <th>ID</th>
+                                                        <th>Grupo de Geocercas</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="fondo_tbody"></tbody>
+                                            </table>
+                                        </div>
+                                        <div class="tab-pane fade" id="lista-grupovehiculos" role="tabpanel" aria-labelledby="lista-grupovehiculos">
+                                            <table id="grupovehiculos_subusuario" class="row-border" style="width:100%">
+                                                <thead class="fondo_cabecera">
+                                                    <tr>
+                                                        <th style="width: 1%;"><input class="d-block m-auto" type="checkbox" id="checkbox_principal_asignar_grupo_vehiculos"></th>
+                                                        <th>ID</th>
+                                                        <th>Grupo de Vehiculos</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="fondo_tbody"></tbody>
+                                            </table>
+                                        </div>
+                                      </div>
+                                    </div>
+                                </div>
+                                {{-- <ul class="tree">
                                     <li>
                                       <details open id="arbol_principal_guardar_subusuario">
                                         <summary><b>Detalles</b></summary>
@@ -539,7 +682,7 @@
                                               <ul id="lista_vehiculos_agregar"></ul>
                                             </details>
                                           </li>
-                                          {{-- <li>
+                                          <li>
                                             <details>
                                               <summary> <input class="ml-2" id="checkbox_principal_asignar_punto" claseCheck="checkbox_asignar_punto" type="checkbox" onclick="asignar_masivo(event);">  <b>Puntos de Referencia</b> </summary>
                                               <ul id="lista_puntos_agregar"></ul>
@@ -550,7 +693,7 @@
                                               <summary><input class="ml-2" id="checkbox_principal_asignar_geocerca" claseCheck="checkbox_asignar_geocerca" type="checkbox" onclick="asignar_masivo(event);"> <b>Geocercas</b> </summary>
                                               <ul  id="lista_geocercas_agregar"></ul>
                                             </details>
-                                          </li> --}}
+                                          </li>
                                           <li>
                                             <details>
                                               <summary><input class="ml-2" id="checkbox_principal_asignar_alerta" claseCheck="checkbox_asignar_alerta" type="checkbox" onclick="asignar_masivo(event);"> <b>Alertas Asignadas</b> </summary>
@@ -584,7 +727,7 @@
                                         </ul>
                                       </details>
                                     </li>
-                                </ul>
+                                </ul> --}}
                             </div>
                         </div>
                     </div>

@@ -133,6 +133,7 @@ table tbody tr td
 .fondo_cabecera
 {
     background: #a9a8a8;
+    color:white;
 }
 
 .fondo_tbody
@@ -327,11 +328,17 @@ table td {
     word-break:break-all;
 }
 
-.linea {
+.linea
+{
     height: 5px;
     background-color:#f52617;
-  }
+}
 
+#list-tab a.active,#list-tab2 a.active
+{
+    color:white;
+    background-color:#f52617;
+}
 
 /* Styles for wrapping the search box */
 
@@ -372,7 +379,7 @@ table td {
     border-bottom: hidden;
 }
 
-#subusuarios_wrapper
+#subusuarios_wrapper, #alertas_subusuario_wrapper, #modulos_subusuario_wrapper, #vehiculos_subusuario_wrapper,#grupogeocercas_subusuario_wrapper, #grupopuntos_subusuario_wrapper, #grupovehiculos_subusuario_wrapper,     #alertas_subusuario_mostrar_wrapper, #modulos_subusuario_mostrar_wrapper, #vehiculos_subusuario_mostrar_wrapper,#grupogeocercas_subusuario_mostrar_wrapper, #grupopuntos_subusuario_mostrar_wrapper, #grupovehiculos_subusuario_mostrar_wrapper
 {
     background: #f2f1f0;
 }

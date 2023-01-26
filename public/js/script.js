@@ -237,6 +237,8 @@ function abrir_ventana_recursos()
     //validar formulario
     if(validar_formulario_subusuarios()) return;
 
+    document.getElementById('modal-crear-subusuarios').children[0].classList.add('modal-lg');
+
     document.getElementById('ventana_recursos_subusuario').classList.add('show', 'active');
     document.getElementById('ventana_detalles_subusuarios').classList.remove('show', 'active');
     document.getElementById('busqueda_agrega_recursos_subusuario').focus();
@@ -245,6 +247,7 @@ function abrir_ventana_recursos()
 //en el modal de crear subusuarios abrir la seccion de detalle
 function abrir_ventana_detalles()
 {
+    document.getElementById('modal-crear-subusuarios').children[0].classList.remove('modal-lg');
     document.getElementById('ventana_recursos_subusuario').classList.remove('show', 'active');
     document.getElementById('ventana_detalles_subusuarios').classList.add('show', 'active');
     document.getElementById('nombrecompleto_subusuario').focus();
@@ -254,6 +257,7 @@ function abrir_ventana_detalles()
 //al momento de presionar el boton para agregar nuevo subusuario y se abra el modal para ingresar los datos
 document.getElementById('crear_nuevo_subusuario').addEventListener('click', async ()=>{
 
+    document.getElementById('modal-crear-subusuarios').children[0].classList.remove('modal-lg');
     //limpiar de errores antes de validarlos
     document.getElementById('nombrecompleto_subusuario').classList.remove('is-invalid');
     document.getElementById('nombre_subusuario').classList.remove('is-invalid');
@@ -292,7 +296,7 @@ document.getElementById('crear_nuevo_subusuario').addEventListener('click', asyn
     document.getElementById('envio_comandos').checked = false;
     //fin vaciar inputs
 
-    document.getElementById('arbol_principal_guardar_subusuario').setAttribute('open', '');
+    //document.getElementById('arbol_principal_guardar_subusuario').setAttribute('open', '');
 
     document.getElementById('id_subusuario_editar').value = ""; //para saber que es un nuevo subusuario
 
@@ -310,14 +314,27 @@ document.getElementById('crear_nuevo_subusuario').addEventListener('click', asyn
     .then(res => res.json())
     .then(res => {
         //console.log(res);
+
+        $('#alertas_subusuario').DataTable().clear().draw();
+        $('#vehiculos_subusuario').DataTable().clear().draw();
+        $('#modulos_subusuario').DataTable().clear().draw();
+        $('#grupogeocercas_subusuario').DataTable().clear().draw();
+        $('#grupopuntos_subusuario').DataTable().clear().draw();
+        $('#grupovehiculos_subusuario').DataTable().clear().draw();
+
+        document.getElementById('numero_alertas_subusuario').textContent = res.alertas.length;
+        document.getElementById('numero_vehiculos_subusuario').textContent = res.vehiculos.length;
+        document.getElementById('numero_modulos_subusuario').textContent = res.modulos.length;
+        document.getElementById('numero_grupopuntos_subusuario').textContent = res.grupo_puntos.length;
+        document.getElementById('numero_grupovehiculos_subusuario').textContent = res.grupo_vehiculos.length;
+        document.getElementById('numero_grupogeocercas_subusuario').textContent = res.grupo_geocercas.length;
+
         //document.body.style.cursor = 'default';
         //document.getElementById('crear_nuevo_subusuario').removeAttribute('disabled');
         document.getElementById('busqueda_agrega_recursos_subusuario').value = "";
 
         //Quitar checks principales para marcar todos los recursos
         document.getElementById('checkbox_principal_asignar_vehiculo').checked = false;
-        /* document.getElementById('checkbox_principal_asignar_punto').checked = false;
-        document.getElementById('checkbox_principal_asignar_geocerca').checked = false; */
         document.getElementById('checkbox_principal_asignar_alerta').checked = false;
         document.getElementById('checkbox_principal_asignar_modulo').checked = false;
         document.getElementById('checkbox_principal_asignar_grupo_puntos').checked = false;
@@ -326,27 +343,23 @@ document.getElementById('crear_nuevo_subusuario').addEventListener('click', asyn
         //Fin quitar checks principales para marcar todos los recursos
 
         //Minimizar todos los recursos
-        document.getElementById('lista_vehiculos_agregar').parentElement.removeAttribute('open');
-        /* document.getElementById('lista_puntos_agregar').parentElement.removeAttribute('open');
-        document.getElementById('lista_geocercas_agregar').parentElement.removeAttribute('open'); */
+        /* document.getElementById('lista_vehiculos_agregar').parentElement.removeAttribute('open');
         document.getElementById('lista_alertas_agregar').parentElement.removeAttribute('open');
         document.getElementById('lista_modulos_agregar').parentElement.removeAttribute('open');
         document.getElementById('lista_grupo_puntos_agregar').parentElement.removeAttribute('open');
         document.getElementById('lista_grupo_vehiculos_agregar').parentElement.removeAttribute('open');
-        document.getElementById('lista_grupo_geocercas_agregar').parentElement.removeAttribute('open');
+        document.getElementById('lista_grupo_geocercas_agregar').parentElement.removeAttribute('open'); */
         //Fin minimizar todos los recursos
 
         //eliminar las categorias que estaban antes
         //[...document.getElementById('categoria_subusuario').children].map( data => data.remove());
 
-        [...document.getElementById('lista_vehiculos_agregar').children].map( data => data.remove());
-        /* [...document.getElementById('lista_puntos_agregar').children].map( data => data.remove());
-        [...document.getElementById('lista_geocercas_agregar').children].map( data => data.remove()); */
+        /* [...document.getElementById('lista_vehiculos_agregar').children].map( data => data.remove());
         [...document.getElementById('lista_alertas_agregar').children].map( data => data.remove());
         [...document.getElementById('lista_modulos_agregar').children].map( data => data.remove());
         [...document.getElementById('lista_grupo_puntos_agregar').children].map( data => data.remove());
         [...document.getElementById('lista_grupo_vehiculos_agregar').children].map( data => data.remove());
-        [...document.getElementById('lista_grupo_geocercas_agregar').children].map( data => data.remove());
+        [...document.getElementById('lista_grupo_geocercas_agregar').children].map( data => data.remove()); */
 
         //agregar categorias al combo
         /* for(const categoria of res.categorias)
@@ -360,7 +373,8 @@ document.getElementById('crear_nuevo_subusuario').addEventListener('click', asyn
 
         for(const vehiculo of res.vehiculos)
         {
-            let li = document.createElement('li');
+            $('#vehiculos_subusuario').DataTable().row.add(['<input class="check_vehiculos d-block m-auto" type="checkbox">', vehiculo.IdActivo, `${vehiculo.Alias} [${vehiculo.Etiqueta}]`]);
+            /* let li = document.createElement('li');
             let input = document.createElement('input');
             let label = document.createElement('label');
             input.setAttribute('idvehiculo', vehiculo.IdActivo);
@@ -380,41 +394,13 @@ document.getElementById('crear_nuevo_subusuario').addEventListener('click', asyn
             label.style.fontSize = '12px';
             li.append(input);
             li.append(label);
-            document.getElementById('lista_vehiculos_agregar').append(li);
+            document.getElementById('lista_vehiculos_agregar').append(li); */
         }
-
-        /* for(const geocerca of res.geocercas)
-        {
-            let li = document.createElement('li');
-            let input = document.createElement('input');
-            let label = document.createElement('label');
-            input.setAttribute('idgeocerca', geocerca.IdGeocerca);
-            input.classList.add('checkbox_asignar_geocerca','mr-2');
-            input.type = 'checkbox';
-            label.textContent = geocerca.Nombre;
-            li.append(input);
-            li.append(label);
-            document.getElementById('lista_geocercas_agregar').append(li);
-        } */
-
-        /* for(const punto of res.puntos)
-        {
-            if(punto.Nombre == "") continue;
-            let li = document.createElement('li');
-            let input = document.createElement('input');
-            let label = document.createElement('label');
-            input.setAttribute('idpunto', punto.IdPunto);
-            input.classList.add('checkbox_asignar_punto','mr-2');
-            input.type = 'checkbox';
-            label.textContent = punto.Nombre;
-            li.append(input);
-            li.append(label);
-            document.getElementById('lista_puntos_agregar').append(li);
-        } */
 
         for(const alerta of res.alertas)
         {
-            let li = document.createElement('li');
+            $('#alertas_subusuario').DataTable().row.add(['<input class="check_alertas d-block m-auto" type="checkbox">', alerta.idAlerta, alerta.Evento]);
+            /* let li = document.createElement('li');
             let input = document.createElement('input');
             let label = document.createElement('label');
             input.setAttribute('idalerta', alerta.idAlerta);
@@ -434,12 +420,13 @@ document.getElementById('crear_nuevo_subusuario').addEventListener('click', asyn
             label.style.fontSize = '12px';
             li.append(input);
             li.append(label);
-            document.getElementById('lista_alertas_agregar').append(li);
+            document.getElementById('lista_alertas_agregar').append(li); */
         }
 
         for(const modulo of res.modulos)
         {
-            let li = document.createElement('li');
+            $('#modulos_subusuario').DataTable().row.add(['<input class="check_modulos d-block m-auto" type="checkbox">', modulo.idModulo, modulo.Nombre]);
+            /* let li = document.createElement('li');
             let input = document.createElement('input');
             let label = document.createElement('label');
             input.setAttribute('idmodulo', modulo.idModulo);
@@ -459,12 +446,13 @@ document.getElementById('crear_nuevo_subusuario').addEventListener('click', asyn
             label.style.fontSize = '12px';
             li.append(input);
             li.append(label);
-            document.getElementById('lista_modulos_agregar').append(li);
+            document.getElementById('lista_modulos_agregar').append(li); */
         }
 
         for(const grupo_punto of res.grupo_puntos)
         {
-            let li = document.createElement('li');
+            $('#grupopuntos_subusuario').DataTable().row.add(['<input class="check_grupopuntos d-block m-auto" type="checkbox">', grupo_punto.IdGrupoPunto, grupo_punto.Grupo]);
+            /* let li = document.createElement('li');
             let input = document.createElement('input');
             let label = document.createElement('label');
             input.setAttribute('idgrupopunto', grupo_punto.IdGrupoPunto);
@@ -484,12 +472,13 @@ document.getElementById('crear_nuevo_subusuario').addEventListener('click', asyn
             label.style.fontSize = '12px';
             li.append(input);
             li.append(label);
-            document.getElementById('lista_grupo_puntos_agregar').append(li);
+            document.getElementById('lista_grupo_puntos_agregar').append(li); */
         }
 
         for(const grupo_vehiculo of res.grupo_vehiculos)
         {
-            let li = document.createElement('li');
+            $('#grupovehiculos_subusuario').DataTable().row.add(['<input class="check_grupovehiculos d-block m-auto" type="checkbox">', grupo_vehiculo.IdGrupo, grupo_vehiculo.Grupo]);
+            /* let li = document.createElement('li');
             let input = document.createElement('input');
             let label = document.createElement('label');
             input.setAttribute('idgrupovehiculo', grupo_vehiculo.IdGrupo);
@@ -509,12 +498,13 @@ document.getElementById('crear_nuevo_subusuario').addEventListener('click', asyn
             label.style.fontSize = '12px';
             li.append(input);
             li.append(label);
-            document.getElementById('lista_grupo_vehiculos_agregar').append(li);
+            document.getElementById('lista_grupo_vehiculos_agregar').append(li); */
         }
 
         for(const grupo_geocerca of res.grupo_geocercas)
         {
-            let li = document.createElement('li');
+            $('#grupogeocercas_subusuario').DataTable().row.add(['<input class="check_grupogeocercas d-block m-auto" type="checkbox">', grupo_geocerca.IdGrupoGeocerca, grupo_geocerca.Nombre]);
+            /* let li = document.createElement('li');
             let input = document.createElement('input');
             let label = document.createElement('label');
             input.setAttribute('idgrupogeocerca', grupo_geocerca.IdGrupoGeocerca);
@@ -534,13 +524,20 @@ document.getElementById('crear_nuevo_subusuario').addEventListener('click', asyn
             label.style.fontSize = '12px';
             li.append(input);
             li.append(label);
-            document.getElementById('lista_grupo_geocercas_agregar').append(li);
+            document.getElementById('lista_grupo_geocercas_agregar').append(li); */
         }
+
+        $('#vehiculos_subusuario').DataTable().search('').draw();
+        $('#alertas_subusuario').DataTable().search('').draw();
+        $('#modulos_subusuario').DataTable().search('').draw();
+        $('#grupopuntos_subusuario').DataTable().search('').draw();
+        $('#grupovehiculos_subusuario').DataTable().search('').draw();
+        $('#grupogeocercas_subusuario').DataTable().search('').draw();
 
     })
     .catch(error => {
         new Notification({
-            text: 'Ocurrio un error al consultar el Subusuario',
+            text: 'Ocurrio un error al cargar recursos',
             style: {
                 background: '#DB0632',
                 color: '#fff',
@@ -556,6 +553,7 @@ document.getElementById('crear_nuevo_subusuario').addEventListener('click', asyn
             pauseOnHover: false,
             pauseOnFocusLoss: false
         });
+        console.log(error)
     });
 
     document.getElementById('boton_abrir_ventana_recursos_subusuario').classList.remove('disabled');
@@ -597,8 +595,6 @@ async function editar_subusuario(id)
 
         //Quitar checks principales para marcar todos los recursos
         document.getElementById('checkbox_principal_asignar_vehiculo').checked = false;
-        /* document.getElementById('checkbox_principal_asignar_punto').checked = false;
-        document.getElementById('checkbox_principal_asignar_geocerca').checked = false; */
         document.getElementById('checkbox_principal_asignar_alerta').checked = false;
         document.getElementById('checkbox_principal_asignar_modulo').checked = false;
         document.getElementById('checkbox_principal_asignar_grupo_puntos').checked = false;
@@ -608,29 +604,47 @@ async function editar_subusuario(id)
 
         document.getElementById('busqueda_agrega_recursos_subusuario').value = "";
 
-        document.getElementById('arbol_principal_guardar_subusuario').setAttribute('open', '');
+        document.getElementById('modal-crear-subusuarios').children[0].classList.remove('modal-lg');
+
+        document.getElementById('numero_alertas_subusuario').textContent = res.alertas.length;
+        document.getElementById('numero_vehiculos_subusuario').textContent = res.vehiculos.length;
+        document.getElementById('numero_modulos_subusuario').textContent = res.modulos.length;
+        document.getElementById('numero_grupopuntos_subusuario').textContent = res.grupo_puntos.length;
+        document.getElementById('numero_grupovehiculos_subusuario').textContent = res.grupo_vehiculos.length;
+        document.getElementById('numero_grupogeocercas_subusuario').textContent = res.grupo_geocercas.length;
+
+        $('#alertas_subusuario').DataTable().clear().draw();
+        $('#vehiculos_subusuario').DataTable().clear().draw();
+        $('#modulos_subusuario').DataTable().clear().draw();
+        $('#grupogeocercas_subusuario').DataTable().clear().draw();
+        $('#grupopuntos_subusuario').DataTable().clear().draw();
+        $('#grupovehiculos_subusuario').DataTable().clear().draw();
+
+        document.getElementById('busqueda_agrega_recursos_subusuario').value ="";
+
+        //document.getElementById('arbol_principal_guardar_subusuario').setAttribute('open', '');
 
         //Minimizar todos los recursos
-        document.getElementById('lista_vehiculos_agregar').parentElement.removeAttribute('open');
+        //document.getElementById('lista_vehiculos_agregar').parentElement.removeAttribute('open');
         /* document.getElementById('lista_puntos_agregar').parentElement.removeAttribute('open');
         document.getElementById('lista_geocercas_agregar').parentElement.removeAttribute('open'); */
-        document.getElementById('lista_alertas_agregar').parentElement.removeAttribute('open');
-        document.getElementById('lista_modulos_agregar').parentElement.removeAttribute('open');
-        document.getElementById('lista_grupo_puntos_agregar').parentElement.removeAttribute('open');
-        document.getElementById('lista_grupo_vehiculos_agregar').parentElement.removeAttribute('open');
-        document.getElementById('lista_grupo_geocercas_agregar').parentElement.removeAttribute('open');
+        //document.getElementById('lista_alertas_agregar').parentElement.removeAttribute('open');
+        //document.getElementById('lista_modulos_agregar').parentElement.removeAttribute('open');
+        //document.getElementById('lista_grupo_puntos_agregar').parentElement.removeAttribute('open');
+        //document.getElementById('lista_grupo_vehiculos_agregar').parentElement.removeAttribute('open');
+        //document.getElementById('lista_grupo_geocercas_agregar').parentElement.removeAttribute('open');
         //Fin minimizar todos los recursos
 
 
         //[...document.getElementById('categoria_subusuario').children].map( data => data.remove());
-        [...document.getElementById('lista_vehiculos_agregar').children].map( data => data.remove());
+        //[...document.getElementById('lista_vehiculos_agregar').children].map( data => data.remove());
         /* [...document.getElementById('lista_puntos_agregar').children].map( data => data.remove());
         [...document.getElementById('lista_geocercas_agregar').children].map( data => data.remove()); */
-        [...document.getElementById('lista_alertas_agregar').children].map( data => data.remove());
-        [...document.getElementById('lista_modulos_agregar').children].map( data => data.remove());
-        [...document.getElementById('lista_grupo_puntos_agregar').children].map( data => data.remove());
-        [...document.getElementById('lista_grupo_vehiculos_agregar').children].map( data => data.remove());
-        [...document.getElementById('lista_grupo_geocercas_agregar').children].map( data => data.remove());
+        //[...document.getElementById('lista_alertas_agregar').children].map( data => data.remove());
+        //[...document.getElementById('lista_modulos_agregar').children].map( data => data.remove());
+        //[...document.getElementById('lista_grupo_puntos_agregar').children].map( data => data.remove());
+        //[...document.getElementById('lista_grupo_vehiculos_agregar').children].map( data => data.remove());
+        //[...document.getElementById('lista_grupo_geocercas_agregar').children].map( data => data.remove());
 
         document.getElementById('id_subusuario_editar').value = res.sms[0].IdSubUsuario;
 
@@ -680,8 +694,6 @@ async function editar_subusuario(id)
 
         //vaciar las variables globales de asignaciones
         vehiculos_asignados_usuario = [];
-        /* puntos_asignados_usuario = [];
-        geocercas_asignadas_usuario = []; */
         alertas_asignadas_usuario = [];
         modulos_asignados_usuario = [];
         grupopuntos_asignados_usuario = [];
@@ -704,7 +716,16 @@ async function editar_subusuario(id)
 
         for(const vehiculo of res.vehiculos)
         {
-            let li = document.createElement('li');
+            if(res.vehiculos_pertenecen.includes(vehiculo.IdActivo))
+            {
+                $('#vehiculos_subusuario').DataTable().row.add(['<input checked class="check_vehiculos d-block m-auto" type="checkbox"/>', vehiculo.IdActivo, `${vehiculo.Alias} [${vehiculo.Etiqueta}]`]);
+            }
+            else
+            {
+                bandera_check_todos_seleccionados_vehiculos = 0;
+                $('#vehiculos_subusuario').DataTable().row.add(['<input class="check_vehiculos d-block m-auto" type="checkbox"/>', vehiculo.IdActivo, `${vehiculo.Alias} [${vehiculo.Etiqueta}]`]);
+            }
+            /* let li = document.createElement('li');
             let input = document.createElement('input');
             let label = document.createElement('label');
             input.setAttribute('idvehiculo', vehiculo.IdActivo);
@@ -726,48 +747,25 @@ async function editar_subusuario(id)
             label.style.fontSize = '12px';
             li.append(input);
             li.append(label);
-            document.getElementById('lista_vehiculos_agregar').append(li);
+            document.getElementById('lista_vehiculos_agregar').append(li); */
         }
-
-        /* for(const geocerca of res.geocercas)
-        {
-            let li = document.createElement('li');
-            let input = document.createElement('input');
-            let label = document.createElement('label');
-            input.setAttribute('idgeocerca', geocerca.IdGeocerca);
-            if(res.geocercas_pertenecen.includes(geocerca.IdGeocerca)) input.checked = true;
-            input.classList.add('checkbox_asignar_geocerca','mr-2');
-            input.type = 'checkbox';
-            label.textContent = geocerca.Nombre;
-            li.append(input);
-            li.append(label);
-            document.getElementById('lista_geocercas_agregar').append(li);
-        } */
-
-        /* for(const punto of res.puntos)
-        {
-            if(punto.Nombre == "") continue;
-            let li = document.createElement('li');
-            let input = document.createElement('input');
-            let label = document.createElement('label');
-            input.setAttribute('idpunto', punto.IdPunto);
-            if(res.puntos_pertenecen.includes(punto.IdPunto)) input.checked = true;
-            input.classList.add('checkbox_asignar_punto','mr-2');
-            input.type = 'checkbox';
-            label.textContent = punto.Nombre;
-            li.append(input);
-            li.append(label);
-            document.getElementById('lista_puntos_agregar').append(li);
-        } */
 
         for(const alerta of res.alertas)
         {
-            let li = document.createElement('li');
+            if(res.alertas_pertenecen.includes(alerta.idAlerta))
+            {
+                $('#alertas_subusuario').DataTable().row.add(['<input checked class="check_alertas d-block m-auto" type="checkbox"/>', alerta.idAlerta, alerta.Evento]);
+            }
+            else
+            {
+                bandera_check_todos_seleccionados_alertas = 0;
+                $('#alertas_subusuario').DataTable().row.add(['<input class="check_alertas d-block m-auto" type="checkbox"/>', alerta.idAlerta, alerta.Evento]);
+            }
+
+            /* let li = document.createElement('li');
             let input = document.createElement('input');
             let label = document.createElement('label');
             input.setAttribute('idalerta', alerta.idAlerta);
-            if(res.alertas_pertenecen.includes(alerta.idAlerta)) input.checked = true;
-            else bandera_check_todos_seleccionados_alertas = 0;
             input.classList.add('checkbox_asignar_alerta','mr-2');
             input.type = 'checkbox';
 
@@ -784,17 +782,25 @@ async function editar_subusuario(id)
             label.style.fontSize = '12px';
             li.append(input);
             li.append(label);
-            document.getElementById('lista_alertas_agregar').append(li);
+            document.getElementById('lista_alertas_agregar').append(li); */
         }
 
         for(const modulo of res.modulos)
         {
-            let li = document.createElement('li');
+            if(res.modulos_pertenecen.includes(modulo.idModulo))
+            {
+                $('#modulos_subusuario').DataTable().row.add(['<input checked class="check_modulos d-block m-auto" type="checkbox"/>', modulo.idModulo, modulo.Nombre]);
+            }
+            else
+            {
+                bandera_check_todos_seleccionados_modulos = 0;
+                $('#modulos_subusuario').DataTable().row.add(['<input class="check_modulos d-block m-auto" type="checkbox"/>', modulo.idModulo, modulo.Nombre]);
+            }
+
+            /* let li = document.createElement('li');
             let input = document.createElement('input');
             let label = document.createElement('label');
             input.setAttribute('idmodulo', modulo.idModulo);
-            if(res.modulos_pertenecen.includes(modulo.idModulo)) input.checked = true;
-            else bandera_check_todos_seleccionados_modulos = 0;
             input.classList.add('checkbox_asignar_modulo','mr-2');
             input.type = 'checkbox';
 
@@ -811,16 +817,24 @@ async function editar_subusuario(id)
             label.style.fontSize = '12px';
             li.append(input);
             li.append(label);
-            document.getElementById('lista_modulos_agregar').append(li);
+            document.getElementById('lista_modulos_agregar').append(li); */
         }
 
         for(const grupo_vehiculo of res.grupo_vehiculos)
         {
-            let li = document.createElement('li');
+            if(res.grupo_vehiculos_pertenecen.includes(grupo_vehiculo.IdGrupo))
+            {
+                $('#grupovehiculos_subusuario').DataTable().row.add(['<input checked class="check_grupovehiculos d-block m-auto" type="checkbox"/>', grupo_vehiculo.IdGrupo, grupo_vehiculo.Grupo]);
+            }
+            else
+            {
+                $('#grupovehiculos_subusuario').DataTable().row.add(['<input class="check_grupovehiculos d-block m-auto" type="checkbox"/>', grupo_vehiculo.IdGrupo, grupo_vehiculo.Grupo]);
+                bandera_check_todos_seleccionados_grupovehiculos = 0;
+            }
+
+            /* let li = document.createElement('li');
             let input = document.createElement('input');
             let label = document.createElement('label');
-            if(res.grupo_vehiculos_pertenecen.includes(grupo_vehiculo.IdGrupo)) input.checked = true;
-            else bandera_check_todos_seleccionados_grupovehiculos = 0;
             input.setAttribute('idgrupovehiculo', grupo_vehiculo.IdGrupo);
             input.classList.add('checkbox_asignar_grupo_vehiculo', 'mr-2');
             input.type = 'checkbox';
@@ -838,12 +852,22 @@ async function editar_subusuario(id)
             label.style.fontSize = '12px';
             li.append(input);
             li.append(label);
-            document.getElementById('lista_grupo_vehiculos_agregar').append(li);
+            document.getElementById('lista_grupo_vehiculos_agregar').append(li); */
         }
 
         for(const grupo_punto of res.grupo_puntos)
         {
-            let li = document.createElement('li');
+            if(res.grupo_puntos_pertenecen.includes(grupo_punto.IdGrupoPunto))
+            {
+                $('#grupopuntos_subusuario').DataTable().row.add(['<input checked class="check_grupopuntos d-block m-auto" type="checkbox"/>', grupo_punto.IdGrupoPunto, grupo_punto.Grupo]);
+            }
+            else
+            {
+                $('#grupopuntos_subusuario').DataTable().row.add(['<input class="check_grupopuntos d-block m-auto" type="checkbox"/>', grupo_punto.IdGrupoPunto, grupo_punto.Grupo]);
+                bandera_check_todos_seleccionados_grupopuntos = 0;
+            }
+
+            /* let li = document.createElement('li');
             let input = document.createElement('input');
             let label = document.createElement('label');
             if(res.grupo_puntos_pertenecen.includes(grupo_punto.IdGrupoPunto)) input.checked = true;
@@ -865,12 +889,22 @@ async function editar_subusuario(id)
             label.style.fontSize = '12px';
             li.append(input);
             li.append(label);
-            document.getElementById('lista_grupo_puntos_agregar').append(li);
+            document.getElementById('lista_grupo_puntos_agregar').append(li); */
         }
 
         for(const grupo_geocerca of res.grupo_geocercas)
         {
-            let li = document.createElement('li');
+            if(res.grupo_geocercas_pertenecen.includes(grupo_geocerca.IdGrupoGeocerca))
+            {
+                $('#grupogeocercas_subusuario').DataTable().row.add(['<input checked class="check_grupogeocercas d-block m-auto" type="checkbox"/>', grupo_geocerca.IdGrupoGeocerca, grupo_geocerca.Nombre]);
+            }
+            else
+            {
+                $('#grupogeocercas_subusuario').DataTable().row.add(['<input class="check_grupogeocercas d-block m-auto" type="checkbox"/>', grupo_geocerca.IdGrupoGeocerca, grupo_geocerca.Nombre]);
+                bandera_check_todos_seleccionados_grupogeocercas = 0;
+            }
+
+            /* let li = document.createElement('li');
             let input = document.createElement('input');
             let label = document.createElement('label');
             if(res.grupo_geocercas_pertenecen.includes(grupo_geocerca.IdGrupoGeocerca)) input.checked = true;
@@ -892,8 +926,15 @@ async function editar_subusuario(id)
             label.style.fontSize = '12px';
             li.append(input);
             li.append(label);
-            document.getElementById('lista_grupo_geocercas_agregar').append(li);
+            document.getElementById('lista_grupo_geocercas_agregar').append(li); */
         }
+
+        $('#vehiculos_subusuario').DataTable().search('').draw();
+        $('#alertas_subusuario').DataTable().search('').draw();
+        $('#modulos_subusuario').DataTable().search('').draw();
+        $('#grupogeocercas_subusuario').DataTable().search('').draw();
+        $('#grupopuntos_subusuario').DataTable().search('').draw();
+        $('#grupovehiculos_subusuario').DataTable().search('').draw();
 
         if( bandera_check_todos_seleccionados_vehiculos &&  res.vehiculos.length>0) document.getElementById('checkbox_principal_asignar_vehiculo').checked = true;
         if( bandera_check_todos_seleccionados_alertas &&  res.alertas.length>0) document.getElementById('checkbox_principal_asignar_alerta').checked = true;
@@ -923,38 +964,26 @@ async function ver_detalle_subusuario(id)
 {
     document.body.style.cursor = 'wait';
 
+    document.getElementById('busqueda_agrega_recursos_subusuario').value = "";
+
     await fetch(`subusuarios/${id}/mostrar?o=${getParameterByName('o')}&cp=${getParameterByName('cp')}`)
     .then(res => res.json())
     .then(res => {
-        //console.log(res);
+        console.log(res);
 
         document.body.style.cursor = 'default';
 
-        [...document.getElementById('lista_vehiculos_mostrar').children].map( data => data.remove());
-        /* [...document.getElementById('lista_puntos_mostrar').children].map( data => data.remove()); */
-        /* [...document.getElementById('lista_geocercas_mostrar').children].map( data => data.remove()); */
-        [...document.getElementById('lista_alertas_mostrar').children].map( data => data.remove());
-        [...document.getElementById('lista_modulos_mostrar').children].map( data => data.remove());
-        [...document.getElementById('lista_grupo_puntos_mostrar').children].map( data => data.remove());
-        [...document.getElementById('lista_grupo_vehiculos_mostrar').children].map( data => data.remove());
-        [...document.getElementById('lista_grupo_geocercas_mostrar').children].map( data => data.remove());
-
-        document.getElementById('arbol_principal_mostrar_subusuario').setAttribute('open', '');
-
-        //Minimizar todos los recursos
-        document.getElementById('lista_vehiculos_mostrar').parentElement.removeAttribute('open');
-        /* document.getElementById('lista_puntos_mostrar').parentElement.removeAttribute('open'); */
-        /* document.getElementById('lista_geocercas_mostrar').parentElement.removeAttribute('open'); */
-        document.getElementById('lista_alertas_mostrar').parentElement.removeAttribute('open');
-        document.getElementById('lista_modulos_mostrar').parentElement.removeAttribute('open');
-        document.getElementById('lista_grupo_puntos_mostrar').parentElement.removeAttribute('open');
-        document.getElementById('lista_grupo_vehiculos_mostrar').parentElement.removeAttribute('open');
-        document.getElementById('lista_grupo_geocercas_mostrar').parentElement.removeAttribute('open');
-        //Fin minimizar todos los recursos
+        $('#alertas_subusuario_mostrar').DataTable().clear().draw();
+        $('#modulos_subusuario_mostrar').DataTable().clear().draw();
+        $('#vehiculos_subusuario_mostrar').DataTable().clear().draw();
+        $('#grupovehiculos_subusuario_mostrar').DataTable().clear().draw();
+        $('#grupogeocercas_subusuario_mostrar').DataTable().clear().draw();
+        $('#grupopuntos_subusuario_mostrar').DataTable().clear().draw();
 
         for(const vehiculo of res.vehiculos)
         {
-            let li = document.createElement('li');
+            $('#vehiculos_subusuario_mostrar').DataTable().row.add([`${vehiculo.Alias} [${vehiculo.Etiqueta}]`]);
+            /* let li = document.createElement('li');
             let input = document.createElement('input');
             let label = document.createElement('label');
 
@@ -970,7 +999,7 @@ async function ver_detalle_subusuario(id)
 
             label.style.fontSize = '12px';
             li.append(label);
-            document.getElementById('lista_vehiculos_mostrar').append(li);
+            document.getElementById('lista_vehiculos_mostrar').append(li); */
         }
 
         /* for(const geocerca of res.geocercas)
@@ -995,7 +1024,8 @@ async function ver_detalle_subusuario(id)
 
         for(const alerta of res.alertas)
         {
-            let li = document.createElement('li');
+            $('#alertas_subusuario_mostrar').DataTable().row.add([alerta.Alerta]);
+            /* let li = document.createElement('li');
             let label = document.createElement('label');
 
             if(alerta.Alerta.length>30)
@@ -1010,12 +1040,13 @@ async function ver_detalle_subusuario(id)
 
             label.style.fontSize = '12px';
             li.append(label);
-            document.getElementById('lista_alertas_mostrar').append(li);
+            document.getElementById('lista_alertas_mostrar').append(li); */
         }
 
         for(const modulo of res.modulos)
         {
-            let li = document.createElement('li');
+            $('#modulos_subusuario_mostrar').DataTable().row.add([modulo.Nombre]);
+            /* let li = document.createElement('li');
             let label = document.createElement('label');
 
             if(modulo.Nombre.length>30)
@@ -1030,12 +1061,13 @@ async function ver_detalle_subusuario(id)
 
             label.style.fontSize = '12px';
             li.append(label);
-            document.getElementById('lista_modulos_mostrar').append(li);
+            document.getElementById('lista_modulos_mostrar').append(li); */
         }
 
         for(const grupo_punto of res.grupo_puntos)
         {
-            let li = document.createElement('li');
+            $('#grupopuntos_subusuario_mostrar').DataTable().row.add([grupo_punto.Grupo]);
+            /* let li = document.createElement('li');
             let label = document.createElement('label');
 
             if(grupo_punto.Grupo.length>30)
@@ -1050,12 +1082,13 @@ async function ver_detalle_subusuario(id)
 
             label.style.fontSize = '12px';
             li.append(label);
-            document.getElementById('lista_grupo_puntos_mostrar').append(li);
+            document.getElementById('lista_grupo_puntos_mostrar').append(li); */
         }
 
         for(const grupo_vehiculo of res.grupo_vehiculos)
         {
-            let li = document.createElement('li');
+            $('#grupovehiculos_subusuario_mostrar').DataTable().row.add([grupo_vehiculo.Grupo]);
+            /* let li = document.createElement('li');
             let label = document.createElement('label');
 
             if(grupo_vehiculo.Grupo.length>30)
@@ -1070,12 +1103,13 @@ async function ver_detalle_subusuario(id)
 
             label.style.fontSize = '12px';
             li.append(label);
-            document.getElementById('lista_grupo_vehiculos_mostrar').append(li);
+            document.getElementById('lista_grupo_vehiculos_mostrar').append(li); */
         }
 
         for(const grupo_geocerca of res.grupo_geocercas)
         {
-            let li = document.createElement('li');
+            $('#grupogeocercas_subusuario_mostrar').DataTable().row.add([grupo_geocerca.Nombre]);
+            /* let li = document.createElement('li');
             let label = document.createElement('label');
 
             if(grupo_geocerca.Nombre.length>30)
@@ -1090,10 +1124,24 @@ async function ver_detalle_subusuario(id)
 
             label.style.fontSize = '12px';
             li.append(label);
-            document.getElementById('lista_grupo_geocercas_mostrar').append(li);
+            document.getElementById('lista_grupo_geocercas_mostrar').append(li); */
         }
 
+        document.getElementById('numero_alertas_subusuario_mostrar').textContent = res.alertas.length;
+        document.getElementById('numero_modulos_subusuario_mostrar').textContent = res.modulos.length;
+        document.getElementById('numero_vehiculos_subusuario_mostrar').textContent = res.vehiculos.length;
+        document.getElementById('numero_grupogeocercas_subusuario_mostrar').textContent = res.grupo_geocercas.length;
+        document.getElementById('numero_grupopuntos_subusuario_mostrar').textContent = res.grupo_puntos.length;
+        document.getElementById('numero_grupovehiculos_subusuario_mostrar').textContent = res.grupo_vehiculos.length;
+
     })
+
+    $('#alertas_subusuario_mostrar').DataTable().draw();
+    $('#vehiculos_subusuario_mostrar').DataTable().draw();
+    $('#modulos_subusuario_mostrar').DataTable().draw();
+    $('#grupopuntos_subusuario_mostrar').DataTable().draw();
+    $('#grupovehiculos_subusuario_mostrar').DataTable().draw();
+    $('#grupogeocercas_subusuario_mostrar').DataTable().draw();
 
     $('#modal_mostrar_detalles_subusuario').modal();
 }
@@ -1173,7 +1221,6 @@ document.getElementById('confirmar_eliminacion_subusuario').addEventListener('cl
             pauseOnHover: false,
             pauseOnFocusLoss: false
         });
-
     });
 
 })
@@ -1195,14 +1242,52 @@ document.getElementById('boton_guardar_subusuario').addEventListener('click', ()
 
     document.getElementById('boton_asignar_subusuarios_grupos').classList.add('d-none');
 
-    [...document.getElementById('lista_vehiculos_agregar').children].map(data => (data.children[0].checked) ? vehiculos_asignados.push(data.children[0].getAttribute('idvehiculo')) : '');
-    //[...document.getElementById('lista_puntos_agregar').children].map(data => (data.children[0].checked) ? puntos_referencia_asignados.push(data.children[0].getAttribute('idpunto')) : '');
-    //[...document.getElementById('lista_geocercas_agregar').children].map(data => (data.children[0].checked) ? geocercas_asignadas.push(data.children[0].getAttribute('idgeocerca')) : '');
+    /* [...document.getElementById('lista_vehiculos_agregar').children].map(data => (data.children[0].checked) ? vehiculos_asignados.push(data.children[0].getAttribute('idvehiculo')) : '');
     [...document.getElementById('lista_alertas_agregar').children].map(data => (data.children[0].checked) ? alertas_asignadas.push(data.children[0].getAttribute('idalerta')) : '');
     [...document.getElementById('lista_modulos_agregar').children].map(data => (data.children[0].checked) ? modulos_asignados.push(data.children[0].getAttribute('idmodulo')) : '');
     [...document.getElementById('lista_grupo_puntos_agregar').children].map(data => (data.children[0].checked) ? grupopuntos_asignados.push(data.children[0].getAttribute('idgrupopunto')) : '');
     [...document.getElementById('lista_grupo_vehiculos_agregar').children].map(data => (data.children[0].checked) ? grupovehiculos_asignados.push(data.children[0].getAttribute('idgrupovehiculo')) : '');
-    [...document.getElementById('lista_grupo_geocercas_agregar').children].map(data => (data.children[0].checked) ? grupogeocercas_asignadas.push(data.children[0].getAttribute('idgrupogeocerca')) : '');
+    [...document.getElementById('lista_grupo_geocercas_agregar').children].map(data => (data.children[0].checked) ? grupogeocercas_asignadas.push(data.children[0].getAttribute('idgrupogeocerca')) : ''); */
+
+    //recorrer todos los recursos para guardar los checkeados
+    let alertas_totales = $('#alertas_subusuario').DataTable().rows().nodes().length;
+    let modulos_totales = $('#modulos_subusuario').DataTable().rows().nodes().length;
+    let vehiculos_totales = $('#vehiculos_subusuario').DataTable().rows().nodes().length;
+    let grupopuntos_totales = $('#grupopuntos_subusuario').DataTable().rows().nodes().length;
+    let grupogeocercas_totales = $('#grupogeocercas_subusuario').DataTable().rows().nodes().length;
+    let grupovehiculos_totales = $('#grupovehiculos_subusuario').DataTable().rows().nodes().length;
+
+    for (let i = 0; i < alertas_totales; i++)
+    {
+        if($('#alertas_subusuario').DataTable().row(i).node().children[0].children[0].checked) alertas_asignadas.push($('#alertas_subusuario').DataTable().row(i).data()[1]);
+    }
+
+    for (let i = 0; i < modulos_totales; i++)
+    {
+        if($('#modulos_subusuario').DataTable().row(i).node().children[0].children[0].checked) modulos_asignados.push($('#modulos_subusuario').DataTable().row(i).data()[1]);
+    }
+
+    for (let i = 0; i < vehiculos_totales; i++)
+    {
+        if($('#vehiculos_subusuario').DataTable().row(i).node().children[0].children[0].checked) vehiculos_asignados.push($('#vehiculos_subusuario').DataTable().row(i).data()[1]);
+    }
+
+    for (let i = 0; i < grupopuntos_totales; i++)
+    {
+        if($('#grupopuntos_subusuario').DataTable().row(i).node().children[0].children[0].checked) vehiculos_asignados.push($('#grupopuntos_subusuario').DataTable().row(i).data()[1]);
+    }
+
+    for (let i = 0; i < grupogeocercas_totales; i++)
+    {
+        if($('#grupogeocercas_subusuario').DataTable().row(i).node().children[0].children[0].checked) vehiculos_asignados.push($('#grupogeocercas_subusuario').DataTable().row(i).data()[1]);
+    }
+
+    for (let i = 0; i < grupovehiculos_totales; i++)
+    {
+        if($('#grupovehiculos_subusuario').DataTable().row(i).node().children[0].children[0].checked) grupovehiculos_asignados.push($('#grupovehiculos_subusuario').DataTable().row(i).data()[1]);
+    }
+
+    //fin recorrer todos los recursos para guardar los checkeados
 
     //recursos para asignar y guardar subusuario
     data.append('vehiculos_asignados', JSON.stringify(vehiculos_asignados));
@@ -2001,7 +2086,6 @@ $('#grupos').on('draw.dt', function()
         //agregar title a los nombres de los grupos incompletos
         $('#grupos').DataTable().row(i).node().setAttribute('title', $('#grupos').DataTable().cell(i,4).data());
     }
-
 });
 
 $('#subusuarios').on('draw.dt', function()
@@ -2026,7 +2110,6 @@ $('#subusuarios').on('draw.dt', function()
 
         if( $('#subusuarios').DataTable().data().length == checkeados ) document.getElementById('checkbox_principal_subusuarios').checked = true;
         else document.getElementById('checkbox_principal_subusuarios').checked = false;
-
     });
 
 });
@@ -2092,245 +2175,85 @@ function asignar_masivo(e){
 //filtrar datos al agregarlos
 document.getElementById('busqueda_agrega_recursos_subusuario').addEventListener('input', (e)=>{
 
-    //console.log('busqueda: ', e.target.value);
+    //busqueda en tablas
+    $('#alertas_subusuario').DataTable().search(e.target.value).draw();
+    $('#modulos_subusuario').DataTable().search(e.target.value).draw();
+    $('#vehiculos_subusuario').DataTable().search(e.target.value).draw();
+    $('#grupogeocercas_subusuario').DataTable().search(e.target.value).draw();
+    $('#grupopuntos_subusuario').DataTable().search(e.target.value).draw();
+    $('#grupovehiculos_subusuario').DataTable().search(e.target.value).draw();
+    //fin busqueda en tablas
 
-    let total_vehiculos = 0;
-    let total_vehiculos_marcados = 0;
-    let total_alertas = 0;
-    let total_alertas_marcadas = 0;
-    let total_modulos = 0;
-    let total_modulos_marcados = 0;
-    let total_grupopuntos = 0;
-    let total_grupopuntos_marcados = 0;
-    let total_grupovehiculos = 0;
-    let total_grupovehiculos_marcados = 0;
-    let total_grupogeocercas = 0;
-    let total_grupogeocercas_marcados = 0;
+    let total_alertas = $('#alertas_subusuario').DataTable().rows( { filter : 'applied'} ).nodes().length;
+    let total_modulos = $('#modulos_subusuario').DataTable().rows( { filter : 'applied'} ).nodes().length;
+    let total_vehiculos = $('#vehiculos_subusuario').DataTable().rows( { filter : 'applied'} ).nodes().length;
+    let total_grupogeocercas = $('#grupogeocercas_subusuario').DataTable().rows( { filter : 'applied'} ).nodes().length;
+    let total_grupopuntos = $('#grupopuntos_subusuario').DataTable().rows( { filter : 'applied'} ).nodes().length;
+    let total_grupovehiculos = $('#grupovehiculos_subusuario').DataTable().rows( { filter : 'applied'} ).nodes().length;
 
-    //variables que cambiando cuando se encuentra al 1 menos un recurso para poder abrir el arbol
-    let vehiculos_encontrados = false;
-    let alertas_encontradas = false;
-    let modulos_encontrados = false;
-    let grupopuntos_encontrados = false;
-    let grupovehiculos_encontrados = false;
-    let grupogeocercas_encontradas = false;
+    let total_alertas_checkeadas = 0;
+    let total_modulos_checkeados = 0;
+    let total_vehiculos_checkeados = 0;
+    let total_grupogeocercas_checkeadas = 0;
+    let total_grupopuntos_checkeados = 0;
+    let total_grupovehiculos_checkeados = 0;
 
-    //filtrando en la tabla de vehiculos
-    [...document.getElementById('lista_vehiculos_agregar').children].map(data => {
-        if(String(data.textContent).toLowerCase().includes(e.target.value.toLowerCase()))
-        {
-            vehiculos_encontrados = true;
-            data.classList.add('d-block');
-            data.classList.remove('d-none');
-            total_vehiculos++;
-            if(data.children[0].checked) total_vehiculos_marcados++;
-        }
-        else
-        {
-            data.classList.add('d-none');
-            data.classList.remove('d-block');
-        }
-    });
-    //filtrando en la tabla de puntos
-    /* [...document.getElementById('lista_puntos_agregar').children].map(data => {
-        if(String(data.textContent).toLowerCase().includes(e.target.value.toLowerCase()))
-        {
-            data.classList.add('d-block');
-            data.classList.remove('d-none');
-        }
-        else
-        {
-            data.classList.add('d-none');
-            data.classList.remove('d-block');
-        }
-    }); */
-    //filtrando en la tabla de geocercas
-    /* [...document.getElementById('lista_geocercas_agregar').children].map(data => {
-        if(String(data.textContent).toLowerCase().includes(e.target.value.toLowerCase()))
-        {
-            data.classList.add('d-block');
-            data.classList.remove('d-none');
-        }
-        else
-        {
-            data.classList.add('d-none');
-            data.classList.remove('d-block');
-        }
-    }); */
-    //filtrando en la tabla de alertas
-    [...document.getElementById('lista_alertas_agregar').children].map(data => {
-        if(String(data.textContent).toLowerCase().includes(e.target.value.toLowerCase()))
-        {
-            alertas_encontradas = true;
-            data.classList.add('d-block');
-            data.classList.remove('d-none');
-            total_alertas++;
-            if(data.children[0].checked) total_alertas_marcadas++;
-        }
-        else
-        {
-            data.classList.add('d-none');
-            data.classList.remove('d-block');
-        }
-    });
-    //filtrando en la tabla de modulos
-    [...document.getElementById('lista_modulos_agregar').children].map(data => {
-        if(String(data.textContent).toLowerCase().includes(e.target.value.toLowerCase()))
-        {
-            modulos_encontrados = true;
-            data.classList.add('d-block');
-            data.classList.remove('d-none');
-            total_modulos++;
-            if(data.children[0].checked) total_modulos_marcados++;
-        }
-        else
-        {
-            data.classList.add('d-none');
-            data.classList.remove('d-block');
-        }
-    });
-    //filtrando en la tabla de grupo_puntos
-    [...document.getElementById('lista_grupo_puntos_agregar').children].map(data => {
-        if(String(data.textContent).toLowerCase().includes(e.target.value.toLowerCase()))
-        {
-            grupopuntos_encontrados = true;
-            data.classList.add('d-block');
-            data.classList.remove('d-none');
-            total_grupopuntos++;
-            if(data.children[0].checked) total_grupopuntos_marcados++;
-        }
-        else
-        {
-            data.classList.add('d-none');
-            data.classList.remove('d-block');
-        }
-    });
-    //filtrando en la tabla de grupo_vehiculos
-    [...document.getElementById('lista_grupo_vehiculos_agregar').children].map(data => {
-        if(String(data.textContent).toLowerCase().includes(e.target.value.toLowerCase()))
-        {
-            grupovehiculos_encontrados = true;
-            data.classList.add('d-block');
-            data.classList.remove('d-none');
-            total_grupovehiculos++;
-            if(data.children[0].checked) total_grupovehiculos_marcados++;
-        }
-        else
-        {
-            data.classList.add('d-none');
-            data.classList.remove('d-block');
-        }
-    });
-    //filtrando en la tabla de grupo_geocercas
-    [...document.getElementById('lista_grupo_geocercas_agregar').children].map(data => {
-        if(String(data.textContent).toLowerCase().includes(e.target.value.toLowerCase()))
-        {
-            grupogeocercas_encontradas = true;
-            data.classList.add('d-block');
-            data.classList.remove('d-none');
-            total_grupogeocercas++;
-            if(data.children[0].checked) total_grupogeocercas_marcados++;
-        }
-        else
-        {
-            data.classList.add('d-none');
-            data.classList.remove('d-block');
-        }
-    });
+    //actualizar numero de recursos de tablas
+    document.getElementById('numero_alertas_subusuario').textContent = $('#alertas_subusuario').DataTable().rows( { filter : 'applied'} ).data().length;
+    document.getElementById('numero_modulos_subusuario').textContent = $('#modulos_subusuario').DataTable().rows( { filter : 'applied'} ).data().length;
+    document.getElementById('numero_vehiculos_subusuario').textContent = $('#vehiculos_subusuario').DataTable().rows( { filter : 'applied'} ).data().length;
+    document.getElementById('numero_grupogeocercas_subusuario').textContent = $('#grupogeocercas_subusuario').DataTable().rows( { filter : 'applied'} ).data().length;
+    document.getElementById('numero_grupopuntos_subusuario').textContent = $('#grupopuntos_subusuario').DataTable().rows( { filter : 'applied'} ).data().length;
+    document.getElementById('numero_grupovehiculos_subusuario').textContent = $('#grupovehiculos_subusuario').DataTable().rows( { filter : 'applied'} ).data().length;
+    //fin actualizar numero de recursos de tablas
 
-    /* console.log('total_vehiculos: ', total_vehiculos);
-    console.log('total_vehiculos_marcados: ', total_vehiculos);
-    console.log('total_alertas: ', total_alertas);
-    console.log('total_alertas_marcados: ', total_alertas);
-    console.log('total_modulos: ', total_modulos);
-    console.log('total_modulos_marcados: ', total_modulos);
-    console.log('total_grupopuntos: ', total_grupopuntos);
-    console.log('total_grupopuntos_marcados: ', total_grupopuntos);
-    console.log('total_grupogeocercas: ', total_grupogeocercas);
-    console.log('total_grupogeocercas_marcados: ', total_grupogeocercas); */
-
-    //verificar si todos los recursos encontrados estan marcados para dejar marcado su check principal de cada recurso
-    if(total_vehiculos == total_vehiculos_marcados && total_vehiculos_marcados>0)
+    for(let i=0; i<total_alertas; i++)
     {
-        document.getElementById('checkbox_principal_asignar_vehiculo').checked = true;
-    }
-    else
-    {
-        document.getElementById('checkbox_principal_asignar_vehiculo').checked = false;
+        if( $('#alertas_subusuario').DataTable().rows( { filter : 'applied'} ).nodes()[i].children[0].children[0].checked ) total_alertas_checkeadas++;
     }
 
-    if(total_alertas == total_alertas_marcadas && total_alertas_marcadas>0)
+    for(let i=0; i<total_modulos; i++)
     {
-        document.getElementById('checkbox_principal_asignar_alerta').checked = true;
-    }
-    else
-    {
-        document.getElementById('checkbox_principal_asignar_alerta').checked = false;
+        if( $('#modulos_subusuario').DataTable().rows( { filter : 'applied'} ).nodes()[i].children[0].children[0].checked ) total_modulos_checkeados++;
     }
 
-    if(total_modulos == total_modulos_marcados && total_modulos_marcados>0)
+    for(let i=0; i<total_vehiculos; i++)
     {
-        document.getElementById('checkbox_principal_asignar_modulo').checked = true;
-    }
-    else
-    {
-        document.getElementById('checkbox_principal_asignar_modulo').checked = false;
+        if( $('#vehiculos_subusuario').DataTable().rows( { filter : 'applied'} ).nodes()[i].children[0].children[0].checked ) total_vehiculos_checkeados++;
     }
 
-    if(total_grupopuntos == total_grupopuntos_marcados && total_grupopuntos_marcados>0)
+    for(let i=0; i<total_grupogeocercas; i++)
     {
-        document.getElementById('checkbox_principal_asignar_grupo_puntos').checked = true;
-    }
-    else
-    {
-        document.getElementById('checkbox_principal_asignar_grupo_puntos').checked = false;
+        if( $('#grupogeocercas_subusuario').DataTable().rows( { filter : 'applied'} ).nodes()[i].children[0].children[0].checked ) total_grupogeocercas_checkeadas++;
     }
 
-    if(total_grupovehiculos == total_grupovehiculos_marcados && total_grupovehiculos_marcados>0)
+    for(let i=0; i<total_grupopuntos; i++)
     {
-        document.getElementById('checkbox_principal_asignar_grupo_vehiculos').checked = true;
-    }
-    else
-    {
-        document.getElementById('checkbox_principal_asignar_grupo_vehiculos').checked = false;
+        if( $('#grupopuntos_subusuario').DataTable().rows( { filter : 'applied'} ).nodes()[i].children[0].children[0].checked ) total_grupopuntos_checkeados++;
     }
 
-    if(total_grupogeocercas == total_grupogeocercas_marcados && total_grupogeocercas_marcados>0)
+    for(let i=0; i<total_grupovehiculos; i++)
     {
-        document.getElementById('checkbox_principal_asignar_grupo_geocercas').checked = true;
+        if( $('#grupovehiculos_subusuario').DataTable().rows( { filter : 'applied'} ).nodes()[i].children[0].children[0].checked ) total_grupovehiculos_checkeados++;
     }
-    else
-    {
-        document.getElementById('checkbox_principal_asignar_grupo_geocercas').checked = false;
-    }
-    //fin verificacion
 
-    //verificar que se haya encontrado al menos algun registro de un recurso para dejar abierto el arbol en ese recurso
-    if(vehiculos_encontrados && e.target.value !='') document.getElementById('lista_vehiculos_agregar').parentElement.setAttribute('open', '');
-    else document.getElementById('lista_vehiculos_agregar').parentElement.removeAttribute('open');
+    if(total_alertas>0 && total_alertas == total_alertas_checkeadas) document.getElementById('checkbox_principal_asignar_alerta').checked = true;
+    else document.getElementById('checkbox_principal_asignar_alerta').checked = false;
 
-    if(alertas_encontradas  && e.target.value !='') document.getElementById('lista_alertas_agregar').parentElement.setAttribute('open', '');
-    else document.getElementById('lista_alertas_agregar').parentElement.removeAttribute('open');
+    if(total_modulos>0 && total_modulos == total_modulos_checkeados) document.getElementById('checkbox_principal_asignar_modulo').checked = true;
+    else document.getElementById('checkbox_principal_asignar_modulo').checked = false;
 
-    if(modulos_encontrados  && e.target.value !='') document.getElementById('lista_modulos_agregar').parentElement.setAttribute('open', '');
-    else document.getElementById('lista_modulos_agregar').parentElement.removeAttribute('open');
+    if(total_vehiculos>0 && total_vehiculos == total_vehiculos_checkeados) document.getElementById('checkbox_principal_asignar_vehiculo').checked = true;
+    else document.getElementById('checkbox_principal_asignar_vehiculo').checked = false;
 
-    if(grupopuntos_encontrados  && e.target.value !='') document.getElementById('lista_grupo_puntos_agregar').parentElement.setAttribute('open', '');
-    else document.getElementById('lista_grupo_puntos_agregar').parentElement.removeAttribute('open');
+    if(total_grupogeocercas>0 && total_grupogeocercas == total_grupogeocercas_checkeadas) document.getElementById('checkbox_principal_asignar_grupo_geocercas').checked = true;
+    else document.getElementById('checkbox_principal_asignar_grupo_geocercas').checked = false;
 
-    if(grupovehiculos_encontrados  && e.target.value !='') document.getElementById('lista_grupo_vehiculos_agregar').parentElement.setAttribute('open', '');
-    else document.getElementById('lista_grupo_vehiculos_agregar').parentElement.removeAttribute('open');
+    if(total_grupopuntos>0 && total_grupopuntos == total_grupopuntos_checkeados) document.getElementById('checkbox_principal_asignar_grupo_puntos').checked = true;
+    else document.getElementById('checkbox_principal_asignar_grupo_puntos').checked = false;
 
-    if(grupogeocercas_encontradas  && e.target.value !='') document.getElementById('lista_grupo_geocercas_agregar').parentElement.setAttribute('open', '');
-    else document.getElementById('lista_grupo_geocercas_agregar').parentElement.removeAttribute('open');
-
-    //fin verificacion
-
-    //console.log('vehiculos_encontrados: ', vehiculos_encontrados);
-    //console.log('alertas_encontradas: ', alertas_encontradas);
-    //console.log('modulos_encontrados: ', modulos_encontrados);
-    //console.log('grupopuntos_encontrados: ', grupopuntos_encontrados);
-    //console.log('grupogeocercas_encontradas: ', grupogeocercas_encontradas);
+    if(total_grupovehiculos>0 && total_grupovehiculos == total_grupovehiculos_checkeados) document.getElementById('checkbox_principal_asignar_grupo_vehiculos').checked = true;
+    else document.getElementById('checkbox_principal_asignar_grupo_vehiculos').checked = false;
 
 })
 
@@ -2628,6 +2551,18 @@ document.getElementById('agregar_fecha_caducidad').addEventListener('change', (e
 //*Con la finalidad de ajustar la paginacion de los subusuarios
 addEventListener('resize', ()=>{
     //console.log('resize');
+
+    if( screen.width < 376 )
+    {
+        document.getElementById('grupos').children[1].classList.add('d-none');
+        document.getElementById('colapsar_grupos').classList.add('img-rotate');
+    }
+    else
+    {
+        document.getElementById('grupos').children[1].classList.remove('d-none');
+        document.getElementById('colapsar_grupos').classList.remove('img-rotate');
+    }
+
     if(screen.width>800)
     {
         if( screen.height > 700 ) $('#subusuarios').DataTable().page.len( 10 ).draw();
@@ -2901,7 +2836,7 @@ async function guardado_rapido(event)
     });
 }
 
-document.getElementById('lista_vehiculos_agregar').addEventListener('click', (e)=>{
+/* document.getElementById('lista_vehiculos_agregar').addEventListener('click', (e)=>{
 
     let marcados = 0;
     let total_inputs = 0;
@@ -3002,7 +2937,7 @@ document.getElementById('lista_grupo_geocercas_agregar').addEventListener('click
     if( (total_inputs == marcados) && marcados>0 ) document.getElementById('checkbox_principal_asignar_grupo_geocercas').checked = true;
     else document.getElementById('checkbox_principal_asignar_grupo_geocercas').checked = false;
 
-});
+}); */
 
 //ajusta la altura de la notificacion dependiendo de cuantos errores haya encontrado la validacion
 function ajustar_altura(talla_errores)
@@ -3184,3 +3119,678 @@ document.getElementById('nombre_subusuario').addEventListener('input', (e) => {
     document.getElementById('nombre_subusuario').value = e.target.value.trim();
 });
 //fin evitar que existan espacios en blanco en subusuario
+
+//tablas de los recursos del subusuario
+
+$('#alertas_subusuario').DataTable({
+    info: false,
+    ordering:false,
+    pagingType: 'full_numbers',
+    language:
+        {
+            "lengthMenu": "",
+            "paginate": {
+                "first": "",
+                "last": "",
+                "next": "",
+                "previous": ""
+            },
+            "search": "Buscar:",
+            "zeroRecords": " ",
+            "emptyTable": " ",
+            "info": "Mostrando _START_ a _END_ de (_TOTAL_) elementos",
+            "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+        },
+    columnDefs: [
+        { width: "1%", target: 0 },
+        {
+            target: 1,
+            visible: false,
+            searchable: false,
+        },
+    ],
+});
+
+$('#alertas_subusuario_mostrar').DataTable({
+    info: false,
+    ordering:false,
+    pagingType: 'full_numbers',
+    language:
+        {
+            "lengthMenu": "",
+            "paginate": {
+                "first": "",
+                "last": "",
+                "next": "",
+                "previous": ""
+            },
+            "search": "Buscar:",
+            "zeroRecords": " ",
+            "emptyTable": " ",
+            "info": "Mostrando _START_ a _END_ de (_TOTAL_) elementos",
+            "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+        },
+});
+
+$('#vehiculos_subusuario').DataTable({
+    info: false,
+    ordering:false,
+    pagingType: 'full_numbers',
+    language:
+        {
+            "lengthMenu": "",
+            "paginate": {
+                "first": "",
+                "last": "",
+                "next": "",
+                "previous": ""
+            },
+            "search": "Buscar:",
+            "zeroRecords": " ",
+            "emptyTable": " ",
+            "info": "Mostrando _START_ a _END_ de (_TOTAL_) elementos",
+            "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+        },
+    columnDefs: [
+        { width: "1%", target: 0 },
+        {
+            target: 1,
+            visible: false,
+            searchable: false,
+        },
+    ],
+});
+
+$('#vehiculos_subusuario_mostrar').DataTable({
+    info: false,
+    ordering:false,
+    pagingType: 'full_numbers',
+    language:
+        {
+            "lengthMenu": "",
+            "paginate": {
+                "first": "",
+                "last": "",
+                "next": "",
+                "previous": ""
+            },
+            "search": "Buscar:",
+            "zeroRecords": " ",
+            "emptyTable": " ",
+            "info": "Mostrando _START_ a _END_ de (_TOTAL_) elementos",
+            "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+        },
+});
+
+$('#modulos_subusuario').DataTable({
+    info: false,
+    ordering:false,
+    pagingType: 'full_numbers',
+    language:
+        {
+            "lengthMenu": "",
+            "paginate": {
+                "first": "",
+                "last": "",
+                "next": "",
+                "previous": ""
+            },
+            "search": "Buscar:",
+            "zeroRecords": " ",
+            "emptyTable": " ",
+            "info": "Mostrando _START_ a _END_ de (_TOTAL_) elementos",
+            "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+        },
+    columnDefs: [
+        { width: "1%", target: 0 },
+        {
+            target: 1,
+            visible: false,
+            searchable: false,
+        },
+    ],
+});
+
+$('#modulos_subusuario_mostrar').DataTable({
+    info: false,
+    ordering:false,
+    pagingType: 'full_numbers',
+    language:
+        {
+            "lengthMenu": "",
+            "paginate": {
+                "first": "",
+                "last": "",
+                "next": "",
+                "previous": ""
+            },
+            "search": "Buscar:",
+            "zeroRecords": " ",
+            "emptyTable": " ",
+            "info": "Mostrando _START_ a _END_ de (_TOTAL_) elementos",
+            "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+        },
+});
+
+$('#grupovehiculos_subusuario').DataTable({
+    info: false,
+    ordering:false,
+    pagingType: 'full_numbers',
+    language:
+        {
+            "lengthMenu": "",
+            "paginate": {
+                "first": "",
+                "last": "",
+                "next": "",
+                "previous": ""
+            },
+            "search": "Buscar:",
+            "zeroRecords": " ",
+            "emptyTable": " ",
+            "info": "Mostrando _START_ a _END_ de (_TOTAL_) elementos",
+            "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+        },
+    columnDefs: [
+        { width: "1%", target: 0 },
+        {
+            target: 1,
+            visible: false,
+            searchable: false,
+        },
+    ],
+});
+
+$('#grupovehiculos_subusuario_mostrar').DataTable({
+    info: false,
+    ordering:false,
+    pagingType: 'full_numbers',
+    language:
+        {
+            "lengthMenu": "",
+            "paginate": {
+                "first": "",
+                "last": "",
+                "next": "",
+                "previous": ""
+            },
+            "search": "Buscar:",
+            "zeroRecords": " ",
+            "emptyTable": " ",
+            "info": "Mostrando _START_ a _END_ de (_TOTAL_) elementos",
+            "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+        },
+});
+
+$('#grupopuntos_subusuario').DataTable({
+    info: false,
+    ordering:false,
+    pagingType: 'full_numbers',
+    language:
+        {
+            "lengthMenu": "",
+            "paginate": {
+                "first": "",
+                "last": "",
+                "next": "",
+                "previous": ""
+            },
+            "search": "Buscar:",
+            "zeroRecords": " ",
+            "emptyTable": " ",
+            "info": "Mostrando _START_ a _END_ de (_TOTAL_) elementos",
+            "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+        },
+    columnDefs: [
+        { width: "1%", target: 0 },
+        {
+            target: 1,
+            visible: false,
+            searchable: false,
+        },
+    ],
+});
+
+$('#grupopuntos_subusuario_mostrar').DataTable({
+    info: false,
+    ordering:false,
+    pagingType: 'full_numbers',
+    language:
+        {
+            "lengthMenu": "",
+            "paginate": {
+                "first": "",
+                "last": "",
+                "next": "",
+                "previous": ""
+            },
+            "search": "Buscar:",
+            "zeroRecords": " ",
+            "emptyTable": " ",
+            "info": "Mostrando _START_ a _END_ de (_TOTAL_) elementos",
+            "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+        },
+});
+
+$('#grupogeocercas_subusuario').DataTable({
+    info: false,
+    ordering:false,
+    pagingType: 'full_numbers',
+    language:
+        {
+            "lengthMenu": "",
+            "paginate": {
+                "first": "",
+                "last": "",
+                "next": "",
+                "previous": ""
+            },
+            "search": "Buscar:",
+            "zeroRecords": " ",
+            "emptyTable": " ",
+            "info": "Mostrando _START_ a _END_ de (_TOTAL_) elementos",
+            "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+        },
+    columnDefs: [
+        { width: "1%", target: 0 },
+        {
+            target: 1,
+            visible: false,
+            searchable: false,
+        },
+    ],
+});
+
+$('#grupogeocercas_subusuario_mostrar').DataTable({
+    info: false,
+    ordering:false,
+    pagingType: 'full_numbers',
+    language:
+        {
+            "lengthMenu": "",
+            "paginate": {
+                "first": "",
+                "last": "",
+                "next": "",
+                "previous": ""
+            },
+            "search": "Buscar:",
+            "zeroRecords": " ",
+            "emptyTable": " ",
+            "info": "Mostrando _START_ a _END_ de (_TOTAL_) elementos",
+            "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+        },
+});
+
+$('#alertas_subusuario').on('draw.dt', ()=>{
+
+    if( [...document.querySelectorAll('#alertas_subusuario_paginate span')[0].children].length > 1 )
+    {
+        document.getElementById('alertas_subusuario_paginate').classList.remove('d-none');
+        //document.getElementById('alertas_subusuario_info').classList.remove('d-none');
+    }
+    else
+    {
+        document.getElementById('alertas_subusuario_paginate').classList.add('d-none');
+        //document.getElementById('alertas_subusuario_info').classList.add('d-none');
+    }
+
+    $('.check_alertas').on('click', ()=>{
+        let total_registros = Number($("#alertas_subusuario").DataTable().rows( { filter : 'applied'} ).nodes().length);
+        let checkeados = 0;
+
+        for (let i = 0; i < total_registros; i++)
+        {
+            if( $("#alertas_subusuario").DataTable().rows( { filter : 'applied'} ).nodes()[i].children[0].children[0].checked) checkeados++;
+        }
+
+        if( checkeados>0 && total_registros == checkeados ) document.getElementById('checkbox_principal_asignar_alerta').checked = true;
+        else document.getElementById('checkbox_principal_asignar_alerta').checked = false;
+    });
+
+});
+
+$('#alertas_subusuario_mostrar').on('draw.dt', ()=>{
+
+    if( [...document.querySelectorAll('#alertas_subusuario_mostrar_paginate span')[0].children].length > 1 )
+    {
+        document.getElementById('alertas_subusuario_mostrar_paginate').classList.remove('d-none');
+        //document.getElementById('alertas_subusuario_info').classList.remove('d-none');
+    }
+    else
+    {
+        document.getElementById('alertas_subusuario_mostrar_paginate').classList.add('d-none');
+        //document.getElementById('alertas_subusuario_info').classList.add('d-none');
+    }
+});
+
+$('#modulos_subusuario_mostrar').on('draw.dt', ()=>{
+
+    if( [...document.querySelectorAll('#modulos_subusuario_mostrar_paginate span')[0].children].length > 1 )
+    {
+        document.getElementById('modulos_subusuario_mostrar_paginate').classList.remove('d-none');
+        //document.getElementById('modulos_subusuario_info').classList.remove('d-none');
+    }
+    else
+    {
+        document.getElementById('modulos_subusuario_mostrar_paginate').classList.add('d-none');
+        //document.getElementById('modulos_subusuario_info').classList.add('d-none');
+    }
+});
+
+$('#vehiculos_subusuario_mostrar').on('draw.dt', ()=>{
+
+    if( [...document.querySelectorAll('#vehiculos_subusuario_mostrar_paginate span')[0].children].length > 1 )
+    {
+        document.getElementById('vehiculos_subusuario_mostrar_paginate').classList.remove('d-none');
+        //document.getElementById('vehiculos_subusuario_info').classList.remove('d-none');
+    }
+    else
+    {
+        document.getElementById('vehiculos_subusuario_mostrar_paginate').classList.add('d-none');
+        //document.getElementById('vehiculos_subusuario_info').classList.add('d-none');
+    }
+});
+
+$('#grupogeocercas_subusuario_mostrar').on('draw.dt', ()=>{
+
+    if( [...document.querySelectorAll('#grupogeocercas_subusuario_mostrar_paginate span')[0].children].length > 1 )
+    {
+        document.getElementById('grupogeocercas_subusuario_mostrar_paginate').classList.remove('d-none');
+        //document.getElementById('grupogeocercas_subusuario_info').classList.remove('d-none');
+    }
+    else
+    {
+        document.getElementById('grupogeocercas_subusuario_mostrar_paginate').classList.add('d-none');
+        //document.getElementById('grupogeocercas_subusuario_info').classList.add('d-none');
+    }
+});
+
+$('#grupopuntos_subusuario_mostrar').on('draw.dt', ()=>{
+
+    if( [...document.querySelectorAll('#grupopuntos_subusuario_mostrar_paginate span')[0].children].length > 1 )
+    {
+        document.getElementById('grupopuntos_subusuario_mostrar_paginate').classList.remove('d-none');
+        //document.getElementById('grupopuntos_subusuario_info').classList.remove('d-none');
+    }
+    else
+    {
+        document.getElementById('grupopuntos_subusuario_mostrar_paginate').classList.add('d-none');
+        //document.getElementById('grupopuntos_subusuario_info').classList.add('d-none');
+    }
+});
+
+$('#grupovehiculos_subusuario_mostrar').on('draw.dt', ()=>{
+
+    if( [...document.querySelectorAll('#grupovehiculos_subusuario_mostrar_paginate span')[0].children].length > 1 )
+    {
+        document.getElementById('grupovehiculos_subusuario_mostrar_paginate').classList.remove('d-none');
+        //document.getElementById('grupovehiculos_subusuario_info').classList.remove('d-none');
+    }
+    else
+    {
+        document.getElementById('grupovehiculos_subusuario_mostrar_paginate').classList.add('d-none');
+        //document.getElementById('grupovehiculos_subusuario_info').classList.add('d-none');
+    }
+});
+
+
+$('#vehiculos_subusuario').on('draw.dt', ()=>{
+
+    if( [...document.querySelectorAll('#vehiculos_subusuario_paginate span')[0].children].length > 1 )
+    {
+        document.getElementById('vehiculos_subusuario_paginate').classList.remove('d-none');
+        //document.getElementById('alertas_subusuario_info').classList.remove('d-none');
+    }
+    else
+    {
+        document.getElementById('vehiculos_subusuario_paginate').classList.add('d-none');
+        //document.getElementById('alertas_subusuario_info').classList.add('d-none');
+    }
+
+    $('.check_vehiculos').on('click', ()=>{
+        let total_registros = Number($("#vehiculos_subusuario").DataTable().rows( { filter : 'applied'} ).nodes().length);
+        let checkeados = 0;
+
+        for (let i = 0; i < total_registros; i++)
+        {
+            if( $("#vehiculos_subusuario").DataTable().rows( { filter : 'applied'} ).nodes()[i].children[0].children[0].checked) checkeados++;
+        }
+
+        if( checkeados>0 && total_registros == checkeados ) document.getElementById('checkbox_principal_asignar_vehiculo').checked = true;
+        else document.getElementById('checkbox_principal_asignar_vehiculo').checked = false;
+    });
+
+});
+
+$('#modulos_subusuario').on('draw.dt', ()=>{
+
+    if( [...document.querySelectorAll('#modulos_subusuario_paginate span')[0].children].length > 1 )
+    {
+        document.getElementById('modulos_subusuario_paginate').classList.remove('d-none');
+        //document.getElementById('alertas_subusuario_info').classList.remove('d-none');
+    }
+    else
+    {
+        document.getElementById('modulos_subusuario_paginate').classList.add('d-none');
+        //document.getElementById('alertas_subusuario_info').classList.add('d-none');
+    }
+
+    $('.check_modulos').on('click', ()=>{
+        let total_registros = Number($("#modulos_subusuario").DataTable().rows( { filter : 'applied'} ).nodes().length);
+        let checkeados = 0;
+
+        for (let i = 0; i < total_registros; i++)
+        {
+            if( $("#modulos_subusuario").DataTable().rows( { filter : 'applied'} ).nodes()[i].children[0].children[0].checked) checkeados++;
+        }
+
+        if( checkeados>0 && total_registros == checkeados ) document.getElementById('checkbox_principal_asignar_modulo').checked = true;
+        else document.getElementById('checkbox_principal_asignar_modulo').checked = false;
+    });
+});
+
+$('#grupogeocercas_subusuario').on('draw.dt', ()=>{
+
+    if( [...document.querySelectorAll('#grupogeocercas_subusuario_paginate span')[0].children].length > 1 )
+    {
+        document.getElementById('grupogeocercas_subusuario_paginate').classList.remove('d-none');
+        //document.getElementById('alertas_subusuario_info').classList.remove('d-none');
+    }
+    else
+    {
+        document.getElementById('grupogeocercas_subusuario_paginate').classList.add('d-none');
+        //document.getElementById('alertas_subusuario_info').classList.add('d-none');
+    }
+
+    $('.check_grupogeocercas').on('click', ()=>{
+        let total_registros = Number($("#grupogeocercas_subusuario").DataTable().rows( { filter : 'applied'} ).nodes().length);
+        let checkeados = 0;
+
+        for (let i = 0; i < total_registros; i++)
+        {
+            if( $("#grupogeocercas_subusuario").DataTable().rows( { filter : 'applied'} ).nodes()[i].children[0].children[0].checked) checkeados++;
+        }
+
+        if( checkeados>0 && total_registros == checkeados ) document.getElementById('checkbox_principal_asignar_grupo_geocercas').checked = true;
+        else document.getElementById('checkbox_principal_asignar_grupo_geocercas').checked = false;
+    });
+
+});
+
+$('#grupopuntos_subusuario').on('draw.dt', ()=>{
+
+    if( [...document.querySelectorAll('#grupopuntos_subusuario_paginate span')[0].children].length > 1 )
+    {
+        document.getElementById('grupopuntos_subusuario_paginate').classList.remove('d-none');
+        //document.getElementById('alertas_subusuario_info').classList.remove('d-none');
+    }
+    else
+    {
+        document.getElementById('grupopuntos_subusuario_paginate').classList.add('d-none');
+        //document.getElementById('alertas_subusuario_info').classList.add('d-none');
+    }
+
+    $('.check_grupopuntos').on('click', ()=>{
+        let total_registros = Number($("#grupopuntos_subusuario").DataTable().rows( { filter : 'applied'} ).nodes().length);
+        let checkeados = 0;
+
+        for (let i = 0; i < total_registros; i++)
+        {
+            if( $("#grupopuntos_subusuario").DataTable().rows( { filter : 'applied'} ).nodes()[i].children[0].children[0].checked) checkeados++;
+        }
+
+        if( checkeados>0 && total_registros == checkeados ) document.getElementById('checkbox_principal_asignar_grupo_puntos').checked = true;
+        else document.getElementById('checkbox_principal_asignar_grupo_puntos').checked = false;
+    });
+});
+
+$('#grupovehiculos_subusuario').on('draw.dt', ()=>{
+
+    if( [...document.querySelectorAll('#grupovehiculos_subusuario_paginate span')[0].children].length > 1 )
+    {
+        document.getElementById('grupovehiculos_subusuario_paginate').classList.remove('d-none');
+        //document.getElementById('alertas_subusuario_info').classList.remove('d-none');
+    }
+    else
+    {
+        document.getElementById('grupovehiculos_subusuario_paginate').classList.add('d-none');
+        //document.getElementById('alertas_subusuario_info').classList.add('d-none');
+    }
+
+    $('.check_grupovehiculos').on('click', ()=>{
+        let total_registros = Number($("#grupovehiculos_subusuario").DataTable().rows( { filter : 'applied'} ).nodes().length);
+        let checkeados = 0;
+
+        for (let i = 0; i < total_registros; i++)
+        {
+            if( $("#grupovehiculos_subusuario").DataTable().rows( { filter : 'applied'} ).nodes()[i].children[0].children[0].checked) checkeados++;
+        }
+
+        if( checkeados>0 && total_registros == checkeados ) document.getElementById('checkbox_principal_asignar_grupo_vehiculos').checked = true;
+        else document.getElementById('checkbox_principal_asignar_grupo_vehiculos').checked = false;
+    });
+
+});
+
+//asignaciones a recursos
+document.getElementById('checkbox_principal_asignar_alerta').addEventListener('click', ()=>{
+
+    let size = $("#alertas_subusuario").DataTable().rows( { filter : 'applied'} ).nodes().length
+
+    if( document.getElementById('checkbox_principal_asignar_alerta').checked )
+    {
+        for (let i = 0; i < size; i++)
+        {
+            $("#alertas_subusuario").DataTable().rows( { filter : 'applied'} ).nodes()[i].children[0].children[0].checked = true;
+        }
+    }
+    else
+    {
+        for (let i = 0; i < size; i++)
+        {
+            $("#alertas_subusuario").DataTable().rows( { filter : 'applied'} ).nodes()[i].children[0].children[0].checked = false;
+        }
+    }
+});
+
+document.getElementById('checkbox_principal_asignar_vehiculo').addEventListener('click', ()=>{
+
+    let size = $('#vehiculos_subusuario').DataTable().data().length;
+
+    if( document.getElementById('checkbox_principal_asignar_vehiculo').checked )
+    {
+        for (let i = 0; i < size; i++)
+        {
+            $('#vehiculos_subusuario').DataTable().cell(i,0).node().children[0].checked = true;
+        }
+    }
+    else
+    {
+        for (let i = 0; i < size; i++)
+        {
+            $('#vehiculos_subusuario').DataTable().cell(i,0).node().children[0].checked = false;
+        }
+    }
+});
+
+document.getElementById('checkbox_principal_asignar_modulo').addEventListener('click', ()=>{
+
+    let size = $('#modulos_subusuario').DataTable().data().length;
+
+    if( document.getElementById('checkbox_principal_asignar_modulo').checked )
+    {
+        for (let i = 0; i < size; i++)
+        {
+            $('#modulos_subusuario').DataTable().cell(i,0).node().children[0].checked = true;
+        }
+    }
+    else
+    {
+        for (let i = 0; i < size; i++)
+        {
+            $('#modulos_subusuario').DataTable().cell(i,0).node().children[0].checked = false;
+        }
+    }
+});
+
+document.getElementById('checkbox_principal_asignar_grupo_puntos').addEventListener('click', ()=>{
+
+    let size = $('#grupopuntos_subusuario').DataTable().data().length;
+
+    if( document.getElementById('checkbox_principal_asignar_grupo_puntos').checked )
+    {
+        for (let i = 0; i < size; i++)
+        {
+            $('#grupopuntos_subusuario').DataTable().cell(i,0).node().children[0].checked = true;
+        }
+    }
+    else
+    {
+        for (let i = 0; i < size; i++)
+        {
+            $('#grupopuntos_subusuario').DataTable().cell(i,0).node().children[0].checked = false;
+        }
+    }
+});
+
+document.getElementById('checkbox_principal_asignar_grupo_geocercas').addEventListener('click', ()=>{
+
+    let size = $('#grupogeocercas_subusuario').DataTable().data().length;
+
+    if( document.getElementById('checkbox_principal_asignar_grupo_geocercas').checked )
+    {
+        for (let i = 0; i < size; i++)
+        {
+            $('#grupogeocercas_subusuario').DataTable().cell(i,0).node().children[0].checked = true;
+        }
+    }
+    else
+    {
+        for (let i = 0; i < size; i++)
+        {
+            $('#grupogeocercas_subusuario').DataTable().cell(i,0).node().children[0].checked = false;
+        }
+    }
+});
+
+document.getElementById('checkbox_principal_asignar_grupo_vehiculos').addEventListener('click', ()=>{
+
+    let size = $('#grupovehiculos_subusuario').DataTable().data().length;
+
+    if( document.getElementById('checkbox_principal_asignar_grupo_vehiculos').checked )
+    {
+        for (let i = 0; i < size; i++)
+        {
+            $('#grupovehiculos_subusuario').DataTable().cell(i,0).node().children[0].checked = true;
+        }
+    }
+    else
+    {
+        for (let i = 0; i < size; i++)
+        {
+            $('#grupovehiculos_subusuario').DataTable().cell(i,0).node().children[0].checked = false;
+        }
+    }
+});
+//fin asignaciones a recursos

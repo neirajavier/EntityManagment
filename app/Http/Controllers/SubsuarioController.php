@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
-/* use Illuminate\Support\Facades\Cache; */
+use Illuminate\Support\Facades\Cache;
 
 class SubsuarioController extends Controller
 {
@@ -44,6 +44,29 @@ class SubsuarioController extends Controller
             return 'sqlsrv';
         }
     }
+
+    /* public function consultarKey($key, $codigo_pais)
+    {
+        $conexion = $this->obtener_cadena($codigo_pais);
+
+        try
+        {
+            if( Cache::has($key))
+            {
+                return Cache::get($key);
+            }
+            else
+            {
+                $datos_usuario = DB::connection($conexion)->select('exec spUsuarioConsultarKey ?', [$key]);
+                Cache::put('key', $datos_usuario[0]->IdUsuario);
+                return $datos_usuario[0]->IdUsuario;
+            }
+        }
+        catch(Exception $e)
+        {
+            return NULL;
+        }
+    } */
 
     public function consultarKey($key,$codigo_pais)
     {
