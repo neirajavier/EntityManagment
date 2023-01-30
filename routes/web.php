@@ -17,8 +17,7 @@ use App\Http\Controllers\CategoriaController;
 */
 
 Route::get('/', [SubsuarioController::class, 'index'])->name('subusuario.index');
-
-Route::resource('mensaje', MensajeController::class);
+Route::get('subusuarios', [SubsuarioController::class, 'index']);
 
 Route::post('grupo', [GrupoController::class, 'store']);
 Route::get('grupos/consultar', [GrupoController::class, 'index']);
@@ -38,5 +37,9 @@ Route::get('subusuarios/consultar', [SubsuarioController::class, 'consultadata']
 Route::delete('subusuarios/{id}', [SubsuarioController::class, 'destroy']);
 
 Route::get('categorias', [CategoriaController::class, 'index']);
+
+Route::get('revision', function(){
+    return public_path('');
+});
 
 
