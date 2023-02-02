@@ -402,3 +402,19 @@ table td {
     position: absolute !important;
     z-index: 1000;
 }
+
+.body-dark
+{
+    background: #454d55;
+}
+
+.fondo_card_dark
+{
+    background: #343a40;
+    color:white;
+}
+
+.estilos_label_input_dark
+{
+    color:white;
+}

@@ -154,7 +154,7 @@ class SubsuarioController extends Controller
             }
             if($busqueda_filtrar != '')
             {
-                if( !str_contains($subusuario->SubUsuario, $busqueda_filtrar) ) continue;
+                if( !str_contains(strtolower($subusuario->SubUsuario), strtolower($busqueda_filtrar)) && !str_contains(strtolower($subusuario->NombreCompleto), strtolower($busqueda_filtrar))) continue;
             }
             if($grupo_filtrar != 0)
             {
@@ -193,9 +193,13 @@ class SubsuarioController extends Controller
             return [];
         }
 
-        if(!Cache::has($id_usuario))
+        if(Cache::has($id_usuario))
         {
-            /* $geocercas = DB::select('exec spGeocercaConsultar ?', [$id_usuario]); */
+            return response()->json(Cache::get($id_usuario));
+        }
+		else
+        {
+        	/* $geocercas = DB::select('exec spGeocercaConsultar ?', [$id_usuario]); */
             $vehiculos = DB::connection($conexion)->select('exec spActivosUsuarioConsultarV2 ?', [$id_usuario]);
             $alertas = DB::connection($conexion)->select('exec spD_AlertaConsultar ?,?', [$id_usuario,0]);
             $modulos = DB::connection($conexion)->select('exec spModuloConsultar ?', [$id_usuario]);
@@ -203,10 +207,8 @@ class SubsuarioController extends Controller
             $grupo_vehiculos = DB::connection($conexion)->select('exec spGrupoConsultar ?', [$id_usuario]);
             $grupo_geocercas = DB::connection($conexion)->select('exec spGrupoGeocercaConsultar ?, ?', [$id_usuario, 0]);
             Cache::put($id_usuario, ['vehiculos' => $vehiculos, 'alertas' => $alertas, 'modulos' => $modulos, 'grupo_puntos' => $grupo_puntos, 'grupo_geocercas' => $grupo_geocercas, 'grupo_vehiculos' => $grupo_vehiculos]);
-
+        	return response()->json(Cache::get($id_usuario));
         }
-
-        return response()->json(Cache::get($id_usuario));
 
         /* $categorias = DB::connection($conexion)->select('exec spLlenarCombo ?', ['CATEGORIASUB']); */
         //$categorias = DB::connection($conexion)->table('SubUsuarioCategoria')->select('IdCategoria', 'Descripcion')->get();

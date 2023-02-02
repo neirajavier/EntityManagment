@@ -56,7 +56,7 @@
                             </div>
                             <div class="col-sm-12 col-md-12 col-lg-9 col-12">
                                 <div class="row">
-                                    <div class="has-search ml-4 col-sm-11">
+                                    <div class="has-search ml-4 col-sm-11 m-auto">
                                         <span class="fa fa-search form-control-feedback"></span>
                                         <input type="text" class="form-control" placeholder="Buscar Subusuarios ..." id="busqueda_general">
                                     </div>
@@ -67,7 +67,7 @@
                 </div>
             </div>
         </div>
-        <div class="row fondo_card m-auto" style="height:83vh;">
+        <div id="contenedor_fondo" class="row fondo_card m-auto" style="height:83vh;">
             <div id="lista_card" class="col-sm-3 fondo_card col-md-4 col-xl-3 col-12 pt-1 collapse width show">
                 <div class="card fondo_card" {{-- style="height:83vh;" --}}>
                     <div class="row">
@@ -118,7 +118,8 @@
                                 </li>
                             </ul> --}}
                             <hr class="linea">
-                            <div id="vehiculos-asignados" role="tabpanel" class="px-1 bg-white table-responsive">
+                            <button id="boton_movil_abrir_filtro_subusuario"data-toggle="modal" data-target="#modal_filtrar_subusuarios_categoria" class="d-none m-auto btn btn-sm pb-1" style="background: #a9a8a8;"><img class="mb-1" style="height:15px; width:15px;" src="http://subusuarios.test/iconos/clasificar b.png" alt="Filtrar Categorias"></button>
+                            <div id="vehiculos-asignados" role="tabpanel" class="px-1 pb-1 bg-white">
                                 <table id="subusuarios" width="100%" class="p-auto row-border">
                                     <thead class="fondo_cabecera">
                                         <tr>
@@ -127,7 +128,7 @@
                                             <th style="font-size:13px;">Nombre</th>
                                             <th style="font-size:13px;">Subusuario</th>
                                             <th style="font-size:13px;">Caducidad</th>
-                                            <th style="font-size:13px;">Categoría <button id="abrir_filtro_categorias" class="btn" title="Filtrar Categorias"><img class="mb-1" style="height:20px; width:20px;" src="{{asset('iconos/clasificar b.png')}}" alt="Filtrar Categorias"></button></th>
+                                            <th style="font-size:13px;">Categoría <button id="abrir_filtro_categorias" data-toggle="modal" data-target="#modal_filtrar_subusuarios_categoria" class="btn boton_pc_abrir_filtro_subusuario" title="Filtrar Categorias"><img class="mb-1" style="height:20px; width:20px;" src="{{asset('iconos/clasificar b.png')}}" alt="Filtrar Categorias"></button></th>
                                             <th style=""></th>
                                         </tr>
                                     </thead>
@@ -150,7 +151,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true" style="color: black;">&times;</span>
+                        <span class="boton_cerrar_modal" aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
@@ -162,7 +163,7 @@
                             <div class="col-2"><button id="guardar_grupo" class="btn botones_tabla" title="Guardar"><img style="heigth:22px; width:22px;" src="{{asset('iconos/guardar r.png')}}"></button></div>
                         </div>
 
-                        <div style="background: white; border-radius:10px;" class="pl-3 pr-3">
+                        <div id="caja_inputs_grupos" style="background: white; border-radius:10px;" class="pl-3 pr-3">
                             <div class="row">
                                 <input type="hidden" id="id_grupo">
                                 <div class="col-12">
@@ -171,7 +172,7 @@
                                     <div class="invalid-feedback">Nombre es requerido.</div>
                                 </div>
                                 <br>
-                                <div class="col-12">
+                                <div class="col-12 pb-1">
                                     <label for="descripcion_grupo" class="estilos_label_input">Descripcion</label>
                                     <input class="form-control" type="text" name="descripcion_grupo" id="descripcion_grupo">
                                 </div>
@@ -195,7 +196,7 @@
                             <div class="col-11"></div>
                             <input type="hidden" id="id_grupo_eliminar">
                             <button type="button" class="col-1 close float-right" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
+                                <span class="boton_cerrar_modal" aria-hidden="true">&times;</span>
                               </button>
                         </div>
                         <div class="row">
@@ -221,7 +222,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true" style="color: black;">&times;</span>
+                        <span class="boton_cerrar_modal" aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
@@ -251,7 +252,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                        <span class="boton_cerrar_modal" aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
@@ -259,7 +260,7 @@
                         <input id="input_buscar_categoria" type="text" class="col-10 form-control m-auto" placeholder="Buscar por categoria">
                     </div>
                     <div class="row mt-1">
-                        <div class="offset-1 col-1"><input type="checkbox" id="seleccionar_todos_filtros_categoria"></div><label class="col-9" for="seleccionar_todos_filtros_categoria"> SELECCIONAR TODOS</label>
+                        <div class="offset-1 col-1"><input type="checkbox" id="seleccionar_todos_filtros_categoria"></div><label class="col-9" id="label_seleccionar_todos_filtros_categoria" for="seleccionar_todos_filtros_categoria"> SELECCIONAR TODOS</label>
                     </div>
                     {{-- Todos elementos de los grupos subusuarios --}}
                     <div id="categorias" style="background: #dedede; margin: 2px; border-radius:5px;">
@@ -291,7 +292,7 @@
                             <div class="col-11"></div>
                             <input type="hidden" id="id_subusuario_eliminar">
                             <button type="button" class="col-1 close float-right" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
+                                <span class="boton_cerrar_modal" aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="row">
@@ -316,7 +317,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                        <span class="boton_cerrar_modal" aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
@@ -460,7 +461,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true" style="color: black;">&times;</span>
+                        <span class="boton_cerrar_modal" aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
@@ -468,7 +469,7 @@
                     <div class="tab-content">
                         <div id="ventana_detalles_subusuarios" class="tab-pane fade show active" role="tabpanel" aria-selected="true" aria-labelledby="ventana_detalles_subusuarios">
                             <div class="row">
-                                <b class="col-sm-10 col-10 mt-2" style="text-align:center;">DATOS DEL SUBUSUARIO</b>
+                                <b class="col-sm-10 col-10 mt-2" id="titulo_datos_subusuario" style="text-align:center;">DATOS DEL SUBUSUARIO</b>
                                 <a class="btn nav-link botones_tabla" id="boton_abrir_ventana_recursos_subusuario" title="Siguiente" onclick="abrir_ventana_recursos();"><img style="height:22px; width:22px;" src="{{asset('iconos/flecha derecha.png')}}" alt="siguiente"></a>
                             </div>
                             <div class="px-3">
@@ -480,7 +481,7 @@
                                         <label for="nombre_subusuario" class="estilos_label_input">SUBUSUARIO</label><input id="nombre_subusuario" maxlength="50"  class="form-control" type="text"><div class="invalid-feedback">Subusuario requerido.</div>
                                     </div>
                                     <div class="col-12">
-                                        <label for="clave_subusuario" class="estilos_label_input">CLAVE</label><input id="clave_subusuario" maxlength="50"  class="form-control" type="text"><div class="invalid-feedback">Clave requerida.</div>
+                                        <label for="clave_subusuario" class="estilos_label_input">CLAVE <i id="cambiar_input_clave" modo="mostrar" title="ocultar clave" class="fa fa-eye-slash botones_tabla"></i></label><input id="clave_subusuario" maxlength="50"  class="form-control" type="text"><div class="invalid-feedback">Clave requerida.</div>
                                     </div>
                                     {{-- <label class="col-md-12 estilos_label_input" for="clave_subusuario">Clave</label>
                                     <div class="input-group input-group-md col-md-12">
@@ -577,7 +578,7 @@
                         </div>
                         <div id="ventana_recursos_subusuario" class="tab-pane fade" role="tabpanel" aria-selected="false" aria-labelledby="ventana_recursos_subusuario">
                             <div class="row">
-                                <b class="col-sm-9 col-9 mt-2" style="text-align:center;">DATOS DE ASIGNACIÓN</b>
+                                <b class="col-sm-9 col-9 mt-2" id="titulo_datos_asignacion" style="text-align:center;">DATOS DE ASIGNACIÓN</b>
                             </div>
                             <div class="row mb-3">
                                 <input class="ml-3 col-sm-9 col-8 form-control" type="search" id="busqueda_agrega_recursos_subusuario" placeholder="Buscar por ..."><a class="btn nav-link botones_tabla col-1" id="boton_guardar_subusuario" title="Guardar Subusuario"><img style="height:22px; width:22px;" src="{{asset('iconos/guardar r.png')}}" alt="Guardar"></a><a class="btn nav-link botones_tabla col-1" id="boton_abrir_ventana_detalles_subusuarios" onclick="abrir_ventana_detalles();" title="Regresar"><img style="height:22px; width:22px;" class="img-rotate" src="{{asset('iconos/flecha derecha.png')}}" alt="siguiente"></a>

@@ -97,11 +97,13 @@ $(document).ready( function () {
         info: true,
         ordering: false,
         pagingType: 'full_numbers',
-        /* responsive: true, */
+        /* rowReorder: {
+            selector: 'td:nth-child(3)'
+        }, */
+        responsive: true,
         /* fixedColumns:   {
     heightMatch: 'semiauto'
 }, */
-
         columnDefs: [
         { width: "1%", targets: 0 },
         { width: "11%", targets: 1 },
@@ -1395,15 +1397,6 @@ document.getElementById('boton_guardar_subusuario').addEventListener('click', ()
             }
         })
         .catch(error => {
-            /* $.toast({
-                heading: 'Error',
-                text: 'Ocurrió un error al guardar el subusuario',
-                position: 'bottom-center',
-                icon: 'error',
-                hideAfter: 1000,
-                loader: false
-            }); */
-
             new Notification({
                 text: 'Ocurrió un error al guardar el subusuario',
                 style: {
@@ -1870,7 +1863,7 @@ document.getElementById('confirmar_eliminacion_grupo').addEventListener('click',
 
     document.body.style.cursor = 'wait';
 
-    await fetch(`grupos/${document.getElementById('id_grupo_eliminar').value}?cp=${getParameterByName('cp')}`,{
+    await fetch(`grupos/${document.getElementById('id_grupo_eliminar').value}?o=${getParameterByName('o')}&cp=${getParameterByName('cp')}`,{
         headers: {'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').getAttribute('content')},
         method: 'delete'
     })
@@ -2095,9 +2088,11 @@ $('#subusuarios').on('draw.dt', function()
     verificar_checkeo_principal_subusuarios();
     verificar_paginacion();
 
+    if( screen.width < 380 ) pantalla_movil();
+
     $('.check_subusuarios').on('click', ()=>{
 
-        let size = Number($('#subusuarios').DataTable().data().length)
+        let size = Number($('#subusuarios').DataTable().data().length);
         let checkeados = 0;
 
         for (let i = 0; i < size; i++)
@@ -2300,11 +2295,15 @@ document.getElementById('input_buscar_lista_subusuarios_asignar').addEventListen
 })
 
 
-document.getElementById('abrir_filtro_categorias').addEventListener('click', ()=>{
-    //actualizar_categorias();
+/* document.getElementById('abrir_filtro_categorias').addEventListener('click', ()=>{
     $('#modal_filtrar_subusuarios_categoria').modal();
     document.getElementById('input_buscar_categoria').focus();
-})
+}); */
+
+$('#modal_filtrar_subusuarios_categoria').on('shown.bs.modal', function()
+{
+    document.getElementById('input_buscar_categoria').focus();
+});
 
 document.getElementById('seleccionar_todos_filtros_categoria').addEventListener('click', ()=>{
 
@@ -2552,15 +2551,17 @@ document.getElementById('agregar_fecha_caducidad').addEventListener('change', (e
 addEventListener('resize', ()=>{
     //console.log('resize');
 
-    if( screen.width < 376 )
+    if( screen.width < 380 )
     {
         document.getElementById('grupos').children[1].classList.add('d-none');
         document.getElementById('colapsar_grupos').classList.add('img-rotate');
+        document.getElementById('contenedor_fondo').style.height = "";
     }
     else
     {
         document.getElementById('grupos').children[1].classList.remove('d-none');
         document.getElementById('colapsar_grupos').classList.remove('img-rotate');
+        document.getElementById('contenedor_fondo').style.height = "83vh";
     }
 
     if(screen.width>800)
@@ -3794,3 +3795,92 @@ document.getElementById('checkbox_principal_asignar_grupo_vehiculos').addEventLi
     }
 });
 //fin asignaciones a recursos
+
+function modooscuroactivo()
+{
+    document.body.classList.add('body-dark');
+    document.getElementById('boton_reiniciar_subusuarios').style.color = 'white';
+    //document.querySelector('.active').style.background = "#d5271b";
+    document.getElementById('numero_total_subusuarios').style.background = '#454d55';
+    [...document.querySelectorAll('.fondo_card')].map( data => data.classList.replace('fondo_card', 'fondo_card_dark'));
+    [...document.querySelectorAll('.subrayado')].map( data => data.style.color = 'white');
+    [...document.querySelectorAll('.estilos_label_input')].map(data => data.classList.add('estilos_label_input_dark'));
+    [...document.querySelectorAll('.modal-content')].map(data => data.classList.add('bg-dark'));
+    [...document.querySelectorAll('.card')].map(data => data.style.border = "none");
+    document.getElementById('titulo_datos_subusuario').style.color = "white";
+    document.getElementById('titulo_datos_asignacion').style.color = "white";
+    document.getElementById('label_seleccionar_todos_filtros_categoria').style.color = "white";
+
+    [...document.querySelectorAll('.boton_cerrar_modal')].map(data => data.style.color = "white");
+    document.getElementById('categorias').style.background = "#454d55";
+    document.getElementById('caja_inputs_grupos').style.background = "#454d55";
+
+    //labels del modal filtro categorias
+    [...document.getElementById('categorias').children].map(data => console.log(data.children[0].children[1].style.color = "white"));
+    let filas_grupos = $('#grupos').DataTable().data().length;
+
+    for (let i = 0; i < filas_grupos; i++)
+    {
+        $('#grupos').DataTable().cell(i,1).node().style.color = "white";
+    }
+}
+
+function modooscurodesactivado()
+{
+    document.body.classList.remove('body-dark');
+    document.getElementById('boton_reiniciar_subusuarios').style.color = 'black';
+    [...document.querySelectorAll('.subrayado')].map( data => data.style.color = 'black');
+    [...document.querySelectorAll('.estilos_label_input')].map(data => data.classList.remove('estilos_label_input_dark'));
+    [...document.querySelectorAll('.modal-content')].map(data => data.classList.remove('bg-dark'));
+    [...document.querySelectorAll('.fondo_card_dark')].map( data => data.classList.replace('fondo_card_dark', 'fondo_card'));
+    document.getElementById('titulo_datos_subusuario').style.color = "black";
+    document.getElementById('titulo_datos_asignacion').style.color = "black";
+    document.getElementById('label_seleccionar_todos_filtros_categoria').style.color = "black";
+
+    [...document.querySelectorAll('.boton_cerrar_modal')].map(data => data.style.color = "black");
+    document.getElementById('categorias').style.background = "#dedede";
+
+    document.getElementById('caja_inputs_grupos').style.background = "white";
+
+    //labels del modal filtro categorias
+    [...document.getElementById('categorias').children].map(data => console.log(data.children[0].children[1].style.color = "white"));
+
+    let filas_grupos = $('#grupos').DataTable().data().length;
+
+    for (let i = 0; i < filas_grupos; i++)
+    {
+        $('#grupos').DataTable().cell(i,1).node().style.color = "black";
+    }
+
+}
+
+//verificar pantalla
+function pantalla_movil()
+{
+    document.getElementById('contenedor_fondo').style.height = "0px";
+    /* document.getElementById('boton_movil_abrir_filtro_subusuario').classList.remove('d-none');
+    document.getElementById('boton_movil_abrir_filtro_subusuario').classList.add('d-block');
+    document.getElementById('grupos').children[1].classList.add('d-none');
+    document.getElementById('colapsar_grupos').classList.add('img-rotate');
+    document.getElementById('contenedor_fondo').style.height = ""; */
+
+}
+
+document.getElementById('cambiar_input_clave').addEventListener('click', ()=>{
+
+    if(document.getElementById('cambiar_input_clave').getAttribute('modo') == 'ocultar')
+    {
+        document.getElementById('cambiar_input_clave').setAttribute('modo', 'mostrar');
+        document.getElementById('cambiar_input_clave').setAttribute('title', 'ocultar clave');
+        document.getElementById('cambiar_input_clave').classList.replace('fa-eye', 'fa-eye-slash');
+        document.getElementById('clave_subusuario').setAttribute('type', 'text');
+    }
+    else
+    {
+        document.getElementById('cambiar_input_clave').setAttribute('modo', 'ocultar');
+        document.getElementById('cambiar_input_clave').setAttribute('title', 'mostrar clave');
+        document.getElementById('cambiar_input_clave').classList.replace('fa-eye-slash', 'fa-eye');
+        document.getElementById('clave_subusuario').setAttribute('type', 'password');
+    }
+
+});
