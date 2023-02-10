@@ -592,7 +592,7 @@ async function editar_subusuario(id)
     await fetch(`subusuarios/${id}/editar?o=${getParameterByName('o')}&cp=${getParameterByName('cp')}`)
     .then(res => res.json())
     .then(res => {
-        console.log(res);
+        //console.log(res);
         document.body.style.cursor = 'default';
 
         //Quitar checks principales para marcar todos los recursos
@@ -2090,6 +2090,16 @@ $('#subusuarios').on('draw.dt', function()
 
     if( screen.width < 380 ) pantalla_movil();
 
+    let size = $('#subusuarios').DataTable().data().length;
+
+    //title para ver el nombre completo
+    for(let i = 0; i < size; i++)
+    {
+        $('#subusuarios').DataTable().rows().nodes()[i].children[1].title = $('#subusuarios').DataTable().rows().nodes()[i].children[1].textContent;
+        $('#subusuarios').DataTable().rows().nodes()[i].children[1].textContent = ($('#subusuarios').DataTable().rows().nodes()[i].children[1].textContent.length > 20) ? $('#subusuarios').DataTable().rows().nodes()[i].children[1].textContent.substr(0,17)+'...' : $('#subusuarios').DataTable().rows().nodes()[i].children[1].textContent;
+    }
+    //fin title para ver el nombre completo
+
     $('.check_subusuarios').on('click', ()=>{
 
         let size = Number($('#subusuarios').DataTable().data().length);
@@ -2152,7 +2162,7 @@ function asignar_masivo(e){
         [...document.getElementsByClassName(e.target.getAttribute('clasecheck'))].map(data => {
             if(!data.parentElement.classList.contains('d-none'))
             {
-                data.checked = true
+                data.checked = true;
             }
         });
     }
@@ -2658,9 +2668,8 @@ $('#subusuarios tbody').on('click', 'tr td', async (e)=>{
         $('#subusuarios').DataTable().row(e.target._DT_CellIndex.row).data();
 
         id_subusuario = $('#subusuarios').DataTable().row(e.target._DT_CellIndex.row).data()[1];
-
-        $('#subusuarios').DataTable().cell(e.target._DT_CellIndex.row, e.target._DT_CellIndex.column).data('<input onblur="guardado_rapido(event)" class="form-control" value="'+e.target.textContent+'">');
-
+        if(e.target.cellIndex == 1) $('#subusuarios').DataTable().cell(e.target._DT_CellIndex.row, e.target._DT_CellIndex.column).data('<input onblur="guardado_rapido(event)" class="form-control" value="'+e.target.title+'">');
+        else $('#subusuarios').DataTable().cell(e.target._DT_CellIndex.row, e.target._DT_CellIndex.column).data('<input onblur="guardado_rapido(event)" class="form-control" value="'+e.target.textContent+'">');
         //focus al imput invocado
         $('#subusuarios').DataTable().cell(e.target._DT_CellIndex.row, e.target._DT_CellIndex.column).node().firstChild.focus();
 

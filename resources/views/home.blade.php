@@ -5,28 +5,28 @@
 @section('css')
     <link rel="stylesheet" href="{{asset('css/estilos.css')}}">
     <style>
-        #subusuarios_first, #alertas_subusuario_first, #modulos_subusuario_first, #grupopuntos_subusuario_first, #grupogeocercas_subusuario_first, #grupovehiculos_subusuario_first, #alertas_subusuario_mostrar_first, #modulos_subusuario_mostrar_first, #vehiculos_subusuario_mostrar_first, #grupogeocercas_subusuario_mostrar_first, #grupopuntos_subusuario_mostrar_first, #grupovehiculos_subusuario_mostrar_first
+        #subusuarios_first, #vehiculos_subusuario_first, #alertas_subusuario_first, #modulos_subusuario_first, #grupopuntos_subusuario_first, #grupogeocercas_subusuario_first, #grupovehiculos_subusuario_first, #alertas_subusuario_mostrar_first, #modulos_subusuario_mostrar_first, #vehiculos_subusuario_mostrar_first, #grupogeocercas_subusuario_mostrar_first, #grupopuntos_subusuario_mostrar_first, #grupovehiculos_subusuario_mostrar_first
         {
             background-image: url('{{asset("iconos/primero.png")}}');
             background-repeat: no-repeat;
             display: inline;
         }
 
-        #subusuarios_previous, #alertas_subusuario_previous, #modulos_subusuario_previous, #grupopuntos_subusuario_previous, #grupogeocercas_subusuario_previous, #grupovehiculos_subusuario_previous, #alertas_subusuario_mostrar_previous, #modulos_subusuario_mostrar_previous, #vehiculos_subusuario_mostrar_previous, #grupogeocercas_subusuario_mostrar_previous, #grupopuntos_subusuario_mostrar_previous, #grupovehiculos_subusuario_mostrar_previous
+        #subusuarios_previous, #vehiculos_subusuario_previous, #alertas_subusuario_previous, #modulos_subusuario_previous, #grupopuntos_subusuario_previous, #grupogeocercas_subusuario_previous, #grupovehiculos_subusuario_previous, #alertas_subusuario_mostrar_previous, #modulos_subusuario_mostrar_previous, #vehiculos_subusuario_mostrar_previous, #grupogeocercas_subusuario_mostrar_previous, #grupopuntos_subusuario_mostrar_previous, #grupovehiculos_subusuario_mostrar_previous
         {
             background-image: url('{{asset("iconos/anterior.png")}}');
             background-repeat: no-repeat;
             display: inline;
         }
 
-        #subusuarios_next, #alertas_subusuario_next, #modulos_subusuario_next, #grupopuntos_subusuario_next, #grupogeocercas_subusuario_next, #grupovehiculos_subusuario_next, #alertas_subusuario_mostrar_next,  #modulos_subusuario_mostrar_next, #vehiculos_subusuario_mostrar_next, #grupogeocercas_subusuario_mostrar_next, #grupopuntos_subusuario_mostrar_next, #grupovehiculos_subusuario_mostrar_next
+        #subusuarios_next, #alertas_subusuario_next, #vehiculos_subusuario_next,#modulos_subusuario_next, #grupopuntos_subusuario_next, #grupogeocercas_subusuario_next, #grupovehiculos_subusuario_next, #alertas_subusuario_mostrar_next,  #modulos_subusuario_mostrar_next, #vehiculos_subusuario_mostrar_next, #grupogeocercas_subusuario_mostrar_next, #grupopuntos_subusuario_mostrar_next, #grupovehiculos_subusuario_mostrar_next
         {
             background-image: url('{{asset("iconos/siguiente.png")}}');
             background-repeat: no-repeat;
             display: inline;
         }
 
-        #subusuarios_last, #alertas_subusuario_last, #modulos_subusuario_last, #grupopuntos_subusuario_last, #grupogeocercas_subusuario_last, #grupovehiculos_subusuario_last, #alertas_subusuario_mostrar_last,  #modulos_subusuario_mostrar_last, #vehiculos_subusuario_mostrar_last, #grupogeocercas_subusuario_mostrar_last, #grupopuntos_subusuario_mostrar_last, #grupovehiculos_subusuario_mostrar_last
+        #subusuarios_last, #vehiculos_subusuario_last ,#alertas_subusuario_last, #modulos_subusuario_last, #grupopuntos_subusuario_last, #grupogeocercas_subusuario_last, #grupovehiculos_subusuario_last, #alertas_subusuario_mostrar_last,  #modulos_subusuario_mostrar_last, #vehiculos_subusuario_mostrar_last, #grupogeocercas_subusuario_mostrar_last, #grupopuntos_subusuario_mostrar_last, #grupovehiculos_subusuario_mostrar_last
         {
             background-image: url('{{asset("iconos/ultimo.png")}}');
             background-repeat: no-repeat;

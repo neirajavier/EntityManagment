@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\MensajeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SubsuarioController;
 use App\Http\Controllers\GrupoController;
@@ -38,8 +37,4 @@ Route::delete('subusuarios/{id}', [SubsuarioController::class, 'destroy']);
 
 Route::get('categorias', [CategoriaController::class, 'index']);
 
-Route::get('revision', function(){
-    return public_path('');
-});
-
-
+//Route::get('version', function(){ phpinfo(); });
