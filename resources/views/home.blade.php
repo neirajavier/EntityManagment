@@ -103,7 +103,10 @@
             </div>
             <div class="col-sm-9 col-md-8 col-xl-9 col-12 pt-1 fondo_card" id="spinner">
                 <div id="datos" class="card fondo_card mb-1" {{-- style="height:83vh;" --}}>
-                    <button id="boton_asignar_subusuarios_grupos" class="btn col-lg-1 col-2 botones_tabla d-none"><img style="height:20px; width:20px;" src="{{asset('iconos/asignar grupo.png')}}" alt="asignar subusuarios"></button>
+                    <div id="botones_subusuarios_grupos" class="d-none">
+                        <button id="boton_asignar_subusuarios_grupos" class="btn botones_tabla"><img style="height:20px; width:20px;" src="{{asset('iconos/asignar grupo.png')}}" alt="asignar subusuarios"></button>
+                        <button id="boton_eliminar_subusuarios_general" class="btn botones_tabla"><img style="height:17px; width:17px;" src="{{asset('iconos/eliminar2.png')}}" alt="eliminar ubusuarios general"></button>
+                    </div>
                     <div style="padding-top:0px; padding-button:0px;" class="card-body collapse show" id="datos_completos_usuarios">
                         {{-- <ul class="nav nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item">
@@ -311,6 +314,35 @@
     </div>
     {{-- Fin modal eliminar subusuario --}}
 
+    {{-- Modal eliminar varios subusuarios --}}
+    <div class="modal" id="modal_eliminar_varios_subusuarios" tabindex="-1" aria-labelledby="eliminarModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content" style="background: #ebebeb;">
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-11"></div>
+                            <input type="hidden" id="ids_subusuario_eliminar">
+                            <button type="button" class="col-1 close float-right" data-dismiss="modal" aria-label="Close">
+                                <span class="boton_cerrar_modal" aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 m-auto text-center pt-3 pb-3">
+                                <b class="titulo_modales_eliminar">¿Quieres eliminar estos subusuarios?</b>
+                            </div>
+                                <button id="confirmar_eliminacion_varios_subusuarios" class="col-4 btn btn-danger btn-sm d-block m-auto">Aceptar</button>
+                        </div>
+                        <br>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- Fin modal eliminar varios subusuarios --}}
+
     {{-- Modal mostrar detalles del subusuario --}}
     <div class="modal" id="modal_mostrar_detalles_subusuario" tabindex="-1" aria-labelledby="mostrarDetallesModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -325,12 +357,12 @@
                         <div class="row">
                             <div class="col-sm-4 col-12">
                               <div class="list-group" id="list-tab2" role="tablist">
-                                <a style="font-size:15px;" class="list-group-item list-group-item-action active" id="lista_recursos_alertas_mostrar" data-toggle="list" href="#lista-alertas-mostrar" role="tab" aria-controls="alertas-mostrar">Alertas <span id="numero_alertas_subusuario_mostrar" class="badge badge-secondary badge-pill d-none" title="Alertas Asignadas"></span></a>
-                                <a style="font-size:15px;" class="list-group-item list-group-item-action" id="lista_recursos_modulos_mostrar" data-toggle="list" href="#lista-modulos-mostrar" role="tab" aria-controls="modulos-mostrar">Modulos <span id="numero_modulos_subusuario_mostrar" class="badge badge-secondary badge-pill d-none" title="Modulos Asignados"></span></a>
-                                <a style="font-size:15px;" class="list-group-item list-group-item-action" id="lista_recursos_vehiculos_mostrar" data-toggle="list" href="#lista-vehiculos-mostrar" role="tab" aria-controls="vehiculos-mostrar">Vehiculos <span id="numero_vehiculos_subusuario_mostrar" class="badge badge-secondary badge-pill d-none" title="Vehiculos Asignados"></span></a>
-                                <a style="font-size:15px;" class="list-group-item list-group-item-action" id="lista_recursos_grupogeocercas_mostrar" data-toggle="list" href="#lista-grupogeocercas-mostrar" role="tab" aria-controls="grupogeocercas-mostrar">Grupo de Geocercas <span id="numero_grupogeocercas_subusuario_mostrar" class="badge badge-secondary badge-pill d-none" title="Grupo de Geocercas Asignados"></a>
-                                <a style="font-size:15px;" class="list-group-item list-group-item-action" id="lista_recursos_grupopuntos_mostrar" data-toggle="list" href="#lista-grupopuntos-mostrar" role="tab" aria-controls="grupopuntos-mostrar">Grupo de Puntos <span id="numero_grupopuntos_subusuario_mostrar" class="badge badge-secondary badge-pill d-none" title="Grupo de Puntos Asignados"></span></a>
-                                <a style="font-size:15px;" class="list-group-item list-group-item-action" id="lista_recursos_grupovehiculos_mostrar" data-toggle="list" href="#lista-grupovehiculos-mostrar" role="tab" aria-controls="grupovehiculos-mostrar">Grupo de Vehiculos <span id="numero_grupovehiculos_subusuario_mostrar" class="badge badge-secondary badge-pill d-none" title="Grupo de Vehiculos Asignados"></span></a>
+                                <a style="font-size:15px;" class="list-group-item list-group-item-action active" id="lista_recursos_alertas_mostrar" data-toggle="list" href="#lista-alertas-mostrar" role="tab" aria-controls="alertas-mostrar">Alertas <span id="numero_alertas_subusuario_mostrar" class="badge badge-secondary badge-pill" title="Alertas Asignadas"></span></a>
+                                <a style="font-size:15px;" class="list-group-item list-group-item-action" id="lista_recursos_modulos_mostrar" data-toggle="list" href="#lista-modulos-mostrar" role="tab" aria-controls="modulos-mostrar">Modulos <span id="numero_modulos_subusuario_mostrar" class="badge badge-secondary badge-pill" title="Modulos Asignados"></span></a>
+                                <a style="font-size:15px;" class="list-group-item list-group-item-action" id="lista_recursos_vehiculos_mostrar" data-toggle="list" href="#lista-vehiculos-mostrar" role="tab" aria-controls="vehiculos-mostrar">Vehiculos <span id="numero_vehiculos_subusuario_mostrar" class="badge badge-secondary badge-pill" title="Vehiculos Asignados"></span></a>
+                                <a style="font-size:15px;" class="list-group-item list-group-item-action" id="lista_recursos_grupogeocercas_mostrar" data-toggle="list" href="#lista-grupogeocercas-mostrar" role="tab" aria-controls="grupogeocercas-mostrar">Grupo de Geocercas <span id="numero_grupogeocercas_subusuario_mostrar" class="badge badge-secondary badge-pill" title="Grupo de Geocercas Asignados"></a>
+                                <a style="font-size:15px;" class="list-group-item list-group-item-action" id="lista_recursos_grupopuntos_mostrar" data-toggle="list" href="#lista-grupopuntos-mostrar" role="tab" aria-controls="grupopuntos-mostrar">Grupo de Puntos <span id="numero_grupopuntos_subusuario_mostrar" class="badge badge-secondary badge-pill" title="Grupo de Puntos Asignados"></span></a>
+                                <a style="font-size:15px;" class="list-group-item list-group-item-action" id="lista_recursos_grupovehiculos_mostrar" data-toggle="list" href="#lista-grupovehiculos-mostrar" role="tab" aria-controls="grupovehiculos-mostrar">Grupo de Vehiculos <span id="numero_grupovehiculos_subusuario_mostrar" class="badge badge-secondary badge-pill" title="Grupo de Vehiculos Asignados"></span></a>
                               </div>
                             </div>
                             <div class="col-sm-8 col-12">

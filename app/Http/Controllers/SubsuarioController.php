@@ -172,7 +172,7 @@ class SubsuarioController extends Controller
                 <button class="btn btn-outline botones_tabla" onclick="eliminar_subusuario('.$subusuario->IdSubUsuario.','."'".$subusuario->SubUsuario."'".')" title="Eliminar Subusuario"><img class="imag-icon" src="'.$icono_eliminar.'"></button>
                 <button class="btn btn-outline botones_tabla" onclick="ver_detalle_subusuario('.$subusuario->IdSubUsuario.')" title="Ver Detalles"><img style="height:20px; width:20px;" src="'.$icono_detalle.'"></button></div>',
             ]
-        );
+            );
         }
 
         return response()->json(['data' => $jsonfinal]);
@@ -995,5 +995,33 @@ class SubsuarioController extends Controller
         $conexion = $this->obtener_cadena($request->cp);
         $total_eliminados = DB::connection($conexion)->update('exec spSubUsuarioEliminar ?, ?', [$id_usuario, $id]);
         return response()->json(['sms' => 'ok']);
+    }
+
+    public function eliminar_mas(Request $request)
+    {
+        $conexion = $this->obtener_cadena($request->cp);
+        $id_usuario = $this->consultarKey($request->o, $request->cp);
+        $ids_eliminar = json_decode($request->ids_eliminar);
+
+        DB::connection($conexion)->beginTransaction();
+        try
+        {
+            foreach($ids_eliminar as $id)
+            {
+                DB::connection($conexion)->update('exec spSubUsuarioEliminar ?, ?', [$id_usuario, $id]);
+            }
+
+            DB::connection($conexion)->commit();
+
+            return response()->json(['sms' => 'ok']);
+        }
+        catch(Exception $e)
+        {
+            DB::connection($conexion)->rollBack();
+            Log::critical($e->getMessage(), ['conexion' => $conexion, 'code' => $e->getCode(), 'trace' => $e->getTrace()]);
+            return response()->json(['sms' => $e]);
+        }
+
+        //return response()->json(['sms' => $ids_eliminar]);
     }
 }

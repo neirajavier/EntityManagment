@@ -190,7 +190,7 @@ document.getElementById('checkbox_principal_subusuarios').addEventListener('clic
             $('#subusuarios').DataTable().cell(i,0).node().children[0].checked = true;
         }
         //luego de check en todos, se habilita el boton para asignar a grupos de subsuarios
-        document.getElementById('boton_asignar_subusuarios_grupos').classList.remove('d-none');
+        document.getElementById('botones_subusuarios_grupos').classList.remove('d-none');
     }
     else
     {
@@ -199,7 +199,7 @@ document.getElementById('checkbox_principal_subusuarios').addEventListener('clic
             $('#subusuarios').DataTable().cell(i,0).node().children[0].checked = false;
         }
         //luego de check en todos, se deshabilita el boton para asignar a grupos de subsuarios
-        document.getElementById('boton_asignar_subusuarios_grupos').classList.add('d-none');
+        document.getElementById('botones_subusuarios_grupos').classList.add('d-none');
     }
 })
 
@@ -1174,7 +1174,7 @@ document.getElementById('confirmar_eliminacion_subusuario').addEventListener('cl
             }); */
 
             new Notification({
-                text: 'Subusuario eliminado con exito',
+                text: 'Subusuario eliminado con éxito',
                 style: {
                     background: '#36bb34',
                     color: '#fff',
@@ -1242,7 +1242,7 @@ document.getElementById('boton_guardar_subusuario').addEventListener('click', ()
     let grupovehiculos_asignados = [];
     let grupogeocercas_asignadas = [];
 
-    document.getElementById('boton_asignar_subusuarios_grupos').classList.add('d-none');
+    document.getElementById('botones_subusuarios_grupos').classList.add('d-none');
 
     /* [...document.getElementById('lista_vehiculos_agregar').children].map(data => (data.children[0].checked) ? vehiculos_asignados.push(data.children[0].getAttribute('idvehiculo')) : '');
     [...document.getElementById('lista_alertas_agregar').children].map(data => (data.children[0].checked) ? alertas_asignadas.push(data.children[0].getAttribute('idalerta')) : '');
@@ -1346,7 +1346,7 @@ document.getElementById('boton_guardar_subusuario').addEventListener('click', ()
             if(res.sms == 'ok')
             {
                 new Notification({
-                    text: 'Subusuario guardado con exito',
+                    text: 'Subusuario guardado con éxito',
                     style: {
                         background: '#36BB34',
                         color: '#fff',
@@ -1439,7 +1439,7 @@ document.getElementById('boton_guardar_subusuario').addEventListener('click', ()
                 }); */
 
                 new Notification({
-                    text: 'Subusuario actualizado con exito',
+                    text: 'Subusuario actualizado con éxito',
                     style: {
                         background: '#36BB34',
                         color: '#fff',
@@ -1616,7 +1616,7 @@ document.getElementById('guardar_grupo').addEventListener('click', async ()=>{
                 }); */
 
                 new Notification({
-                    text: 'Grupo guardado con exito',
+                    text: 'Grupo guardado con éxito',
                     style: {
                         background: '#36BB34',
                         color: '#fff',
@@ -1722,7 +1722,7 @@ document.getElementById('guardar_grupo').addEventListener('click', async ()=>{
                 }); */
 
                 new Notification({
-                    text: 'Grupo editado con exito',
+                    text: 'Grupo editado con éxito',
                     style: {
                         background: '#36BB34',
                         color: '#fff',
@@ -1877,7 +1877,7 @@ document.getElementById('confirmar_eliminacion_grupo').addEventListener('click',
 
             /* $.toast({
                 heading: 'Eliminado',
-                text: 'Grupo eliminado con exito',
+                text: 'Grupo eliminado con éxito',
                 position: 'bottom-center',
                 icon: 'success',
                 hideAfter: 1000,
@@ -1885,7 +1885,7 @@ document.getElementById('confirmar_eliminacion_grupo').addEventListener('click',
             }); */
 
             new Notification({
-                text: 'Grupo eliminado con exito',
+                text: 'Grupo eliminado con éxito',
                 style: {
                     background: '#36BB34',
                     color: '#fff',
@@ -1909,7 +1909,7 @@ document.getElementById('confirmar_eliminacion_grupo').addEventListener('click',
             $('#subusuarios').DataTable().ajax.reload();
             $('#modal_eliminar_grupo').modal('hide');
 
-            document.getElementById('boton_asignar_subusuarios_grupos').classList.add('d-none');
+            document.getElementById('botones_subusuarios_grupos').classList.add('d-none');
         }
 
     })
@@ -2110,8 +2110,8 @@ $('#subusuarios').on('draw.dt', function()
             if( $('#subusuarios').DataTable().cell(i,0).node().children[0].checked == true ) checkeados++;
         }
 
-        if(checkeados == 0) document.getElementById('boton_asignar_subusuarios_grupos').classList.add('d-none');
-        else document.getElementById('boton_asignar_subusuarios_grupos').classList.remove('d-none');
+        if(checkeados == 0) document.getElementById('botones_subusuarios_grupos').classList.add('d-none');
+        else document.getElementById('botones_subusuarios_grupos').classList.remove('d-none');
 
         if( $('#subusuarios').DataTable().data().length == checkeados ) document.getElementById('checkbox_principal_subusuarios').checked = true;
         else document.getElementById('checkbox_principal_subusuarios').checked = false;
@@ -2393,7 +2393,7 @@ document.getElementById('asignar_subusuarios_grupos').addEventListener('click', 
             }) */
 
             new Notification({
-                text: 'Grupo asignado con exito',
+                text: 'Grupo asignado con éxito',
                 style: {
                     background: '#36BB34',
                     color: '#fff',
@@ -2447,7 +2447,7 @@ document.getElementById('asignar_subusuarios_grupos').addEventListener('click', 
     $('#modal_asignar_subusuarios_grupo').modal('hide');
     $('#modal_eliminar_grupo').modal('hide');
 
-    document.getElementById('boton_asignar_subusuarios_grupos').classList.add('d-none');
+    document.getElementById('botones_subusuarios_grupos').classList.add('d-none');
 
     /* console.log('ids_grupos: ', ids_grupos);
     console.log('ids_subusuarios: ', ids_subusuarios); */
@@ -2537,7 +2537,7 @@ $('#grupos').on( 'click', 'tbody tr', function (e)
     $('#subusuarios').DataTable().ajax.url(`subusuarios/consultar?o=${getParameterByName('o')}&cp=${getParameterByName('cp')}&criterio=${JSON.stringify(busqueda)}`);
     $('#subusuarios').DataTable().ajax.reload();
 
-    document.getElementById('boton_asignar_subusuarios_grupos').classList.add('d-none');
+    document.getElementById('botones_subusuarios_grupos').classList.add('d-none');
 
 } );
 //Fin buscando subusuarios por grupo
@@ -2763,7 +2763,7 @@ async function guardado_rapido(event)
         if(res.sms == 'ok')
         {
             new Notification({
-                text: (campo_actualizar_tabla == 'nombrecompleto') ? 'Nombre cambiado con exito' : 'Subusuario cambiado con exito',
+                text: (campo_actualizar_tabla == 'nombrecompleto') ? 'Nombre cambiado con éxito' : 'Subusuario cambiado con éxito',
                 style: {
                     background: '#36BB34',
                     color: '#fff',
@@ -2781,7 +2781,7 @@ async function guardado_rapido(event)
             });
 
             $('#subusuarios').DataTable().ajax.reload();
-            document.getElementById('boton_asignar_subusuarios_grupos').classList.add('d-none');
+            document.getElementById('botones_subusuarios_grupos').classList.add('d-none');
 
             //quitar input y poner el campo como estaba
             /* for (let i = 0; i < size; i++)
@@ -2839,7 +2839,7 @@ async function guardado_rapido(event)
             } */
 
             $('#subusuarios').DataTable().ajax.reload();
-            document.getElementById('boton_asignar_subusuarios_grupos').classList.add('d-none');
+            document.getElementById('botones_subusuarios_grupos').classList.add('d-none');
 
         }
 
@@ -3804,6 +3804,58 @@ document.getElementById('checkbox_principal_asignar_grupo_vehiculos').addEventLi
     }
 });
 //fin asignaciones a recursos
+
+document.getElementById('boton_eliminar_subusuarios_general').addEventListener('click', ()=>{
+    $('#modal_eliminar_varios_subusuarios').modal();
+});
+
+document.getElementById('confirmar_eliminacion_varios_subusuarios').addEventListener('click', async ()=>{
+
+    let data = new FormData();
+    let subusuarios_checkeados = [];
+    let size = $('#subusuarios').DataTable().data().length;
+
+    for(let i=0; i<size; i++)
+    {
+        if($('#subusuarios').DataTable().cell(i,0).node().children[0].checked)
+        {
+            subusuarios_checkeados.push($('#subusuarios').DataTable().cell(i,1).data());
+        }
+    }
+
+    data.append('ids_eliminar', JSON.stringify(subusuarios_checkeados));
+
+    await fetch(`subusuarios/eliminar_mas?o=${getParameterByName('o')}&cp=${getParameterByName('cp')}`, {
+        method: 'post',
+        body: data,
+        headers: {'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').getAttribute('content')},
+    },
+    )
+    .then(res => res.json())
+    .then(res => {
+
+        new Notification({
+            text: 'Subusuarios eliminados con éxito',
+            style: {
+                background: '#36bb34',
+                color: '#fff',
+                width: '230px',
+                height: '60px'
+            },
+            position: 'bottom-center',
+            autoClose: 3000,
+            canClose: false,
+            showProgress: false,
+            pauseOnHover: false,
+            pauseOnFocusLoss: false,
+            pauseOnHover: false,
+            pauseOnFocusLoss: false
+        });
+
+        $('#subusuarios').DataTable().ajax.reload();
+        $('#modal_eliminar_varios_subusuarios').modal('hide');
+    });
+});
 
 function modooscuroactivo()
 {

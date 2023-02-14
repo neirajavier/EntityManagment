@@ -34,6 +34,7 @@ Route::post('subusuarios/asignar_grupos_subusuarios', [SubsuarioController::clas
 Route::post('subusuarios/{id}/actualizar', [SubsuarioController::class, 'update']);
 Route::get('subusuarios/consultar', [SubsuarioController::class, 'consultadata']);
 Route::delete('subusuarios/{id}', [SubsuarioController::class, 'destroy']);
+Route::post('subusuarios/eliminar_mas', [SubsuarioController::class, 'eliminar_mas']);
 
 Route::get('categorias', [CategoriaController::class, 'index']);
 
