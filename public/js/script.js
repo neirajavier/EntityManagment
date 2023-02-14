@@ -129,8 +129,8 @@ $(document).ready( function () {
             "search": "Buscar:",
             "zeroRecords": " ",
             "emptyTable": " ",
-            "info": "Mostrando _START_ a _END_ de (_TOTAL_) elementos",
-            "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "info": "Página _PAGE_ de _PAGES_ (_TOTAL_ elementos)",
+            "infoEmpty": "Página _PAGE_ de _PAGES_ (_TOTAL_ elementos)",
         },
         columnDefs: [
             {
@@ -3148,8 +3148,8 @@ $('#alertas_subusuario').DataTable({
             "search": "Buscar:",
             "zeroRecords": " ",
             "emptyTable": " ",
-            "info": "Mostrando _START_ a _END_ de (_TOTAL_) elementos",
-            "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "info": "Página _PAGE_ de _PAGES_ (_TOTAL_ elementos)",
+            "infoEmpty": "Página _PAGE_ de _PAGES_ (_TOTAL_ elementos)",
         },
     columnDefs: [
         { width: "1%", target: 0 },
@@ -3177,8 +3177,8 @@ $('#alertas_subusuario_mostrar').DataTable({
             "search": "Buscar:",
             "zeroRecords": " ",
             "emptyTable": " ",
-            "info": "Mostrando _START_ a _END_ de (_TOTAL_) elementos",
-            "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "info": "Página _PAGE_ de _PAGES_ (_TOTAL_ elementos)",
+            "infoEmpty": "Página _PAGE_ de _PAGES_ (_TOTAL_ elementos)",
         },
 });
 
@@ -3198,8 +3198,8 @@ $('#vehiculos_subusuario').DataTable({
             "search": "Buscar:",
             "zeroRecords": " ",
             "emptyTable": " ",
-            "info": "Mostrando _START_ a _END_ de (_TOTAL_) elementos",
-            "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "info": "Página _PAGE_ de _PAGES_ (_TOTAL_ elementos)",
+            "infoEmpty": "Página _PAGE_ de _PAGES_ (_TOTAL_ elementos)",
         },
     columnDefs: [
         { width: "1%", target: 0 },
@@ -3227,8 +3227,8 @@ $('#vehiculos_subusuario_mostrar').DataTable({
             "search": "Buscar:",
             "zeroRecords": " ",
             "emptyTable": " ",
-            "info": "Mostrando _START_ a _END_ de (_TOTAL_) elementos",
-            "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "info": "Página _PAGE_ de _PAGES_ (_TOTAL_ elementos)",
+            "infoEmpty": "Página _PAGE_ de _PAGES_ (_TOTAL_ elementos)",
         },
 });
 
@@ -3248,8 +3248,8 @@ $('#modulos_subusuario').DataTable({
             "search": "Buscar:",
             "zeroRecords": " ",
             "emptyTable": " ",
-            "info": "Mostrando _START_ a _END_ de (_TOTAL_) elementos",
-            "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "info": "Página _PAGE_ de _PAGES_ (_TOTAL_ elementos)",
+            "infoEmpty": "Página _PAGE_ de _PAGES_ (_TOTAL_ elementos)",
         },
     columnDefs: [
         { width: "1%", target: 0 },
@@ -3277,8 +3277,8 @@ $('#modulos_subusuario_mostrar').DataTable({
             "search": "Buscar:",
             "zeroRecords": " ",
             "emptyTable": " ",
-            "info": "Mostrando _START_ a _END_ de (_TOTAL_) elementos",
-            "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "info": "Página _PAGE_ de _PAGES_ (_TOTAL_ elementos)",
+            "infoEmpty": "Página _PAGE_ de _PAGES_ (_TOTAL_ elementos)",
         },
 });
 
@@ -3298,8 +3298,8 @@ $('#grupovehiculos_subusuario').DataTable({
             "search": "Buscar:",
             "zeroRecords": " ",
             "emptyTable": " ",
-            "info": "Mostrando _START_ a _END_ de (_TOTAL_) elementos",
-            "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "info": "Página _PAGE_ de _PAGES_ (_TOTAL_ elementos)",
+            "infoEmpty": "Página _PAGE_ de _PAGES_ (_TOTAL_ elementos)",
         },
     columnDefs: [
         { width: "1%", target: 0 },
@@ -3327,8 +3327,8 @@ $('#grupovehiculos_subusuario_mostrar').DataTable({
             "search": "Buscar:",
             "zeroRecords": " ",
             "emptyTable": " ",
-            "info": "Mostrando _START_ a _END_ de (_TOTAL_) elementos",
-            "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "info": "Página _PAGE_ de _PAGES_ (_TOTAL_ elementos)",
+            "infoEmpty": "Página _PAGE_ de _PAGES_ (_TOTAL_ elementos)",
         },
 });
 
@@ -3348,8 +3348,8 @@ $('#grupopuntos_subusuario').DataTable({
             "search": "Buscar:",
             "zeroRecords": " ",
             "emptyTable": " ",
-            "info": "Mostrando _START_ a _END_ de (_TOTAL_) elementos",
-            "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "info": "Página _PAGE_ de _PAGES_ (_TOTAL_ elementos)",
+            "infoEmpty": "Página _PAGE_ de _PAGES_ (_TOTAL_ elementos)",
         },
     columnDefs: [
         { width: "1%", target: 0 },
@@ -3377,8 +3377,8 @@ $('#grupopuntos_subusuario_mostrar').DataTable({
             "search": "Buscar:",
             "zeroRecords": " ",
             "emptyTable": " ",
-            "info": "Mostrando _START_ a _END_ de (_TOTAL_) elementos",
-            "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "info": "Página _PAGE_ de _PAGES_ (_TOTAL_ elementos)",
+            "infoEmpty": "Página _PAGE_ de _PAGES_ (_TOTAL_ elementos)",
         },
 });
 
@@ -3398,8 +3398,8 @@ $('#grupogeocercas_subusuario').DataTable({
             "search": "Buscar:",
             "zeroRecords": " ",
             "emptyTable": " ",
-            "info": "Mostrando _START_ a _END_ de (_TOTAL_) elementos",
-            "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "info": "Página _PAGE_ de _PAGES_ (_TOTAL_ elementos)",
+            "infoEmpty": "Página _PAGE_ de _PAGES_ (_TOTAL_ elementos)",
         },
     columnDefs: [
         { width: "1%", target: 0 },
@@ -3427,8 +3427,8 @@ $('#grupogeocercas_subusuario_mostrar').DataTable({
             "search": "Buscar:",
             "zeroRecords": " ",
             "emptyTable": " ",
-            "info": "Mostrando _START_ a _END_ de (_TOTAL_) elementos",
-            "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "info": "Página _PAGE_ de _PAGES_ (_TOTAL_ elementos)",
+            "infoEmpty": "Página _PAGE_ de _PAGES_ (_TOTAL_ elementos)",
         },
 });
 

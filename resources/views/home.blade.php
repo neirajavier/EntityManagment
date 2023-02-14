@@ -513,7 +513,7 @@
                                         <label for="nombre_subusuario" class="estilos_label_input">SUBUSUARIO</label><input id="nombre_subusuario" maxlength="50"  class="form-control" type="text"><div class="invalid-feedback">Subusuario requerido.</div>
                                     </div>
                                     <div class="col-12">
-                                        <label for="clave_subusuario" class="estilos_label_input">CLAVE <i id="cambiar_input_clave" modo="mostrar" title="ocultar clave" class="fa fa-eye-slash botones_tabla"></i></label><input id="clave_subusuario" maxlength="50"  class="form-control" type="text"><div class="invalid-feedback">Clave requerida.</div>
+                                        <label for="clave_subusuario" class="estilos_label_input">CLAVE <i id="cambiar_input_clave" modo="ocultar" title="Mostrar Clave" class="fa fa-eye botones_tabla"></i></label><input id="clave_subusuario" maxlength="50"  class="form-control" type="password"><div class="invalid-feedback">Clave requerida.</div>
                                     </div>
                                     {{-- <label class="col-md-12 estilos_label_input" for="clave_subusuario">Clave</label>
                                     <div class="input-group input-group-md col-md-12">
