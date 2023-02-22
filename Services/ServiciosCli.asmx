@@ -1,0 +1,1 @@
+﻿<%@ WebService Language="vb" CodeBehind="ServiciosCli.asmx.vb" Class="ArtemisAdmin.ServiciosCli" %>

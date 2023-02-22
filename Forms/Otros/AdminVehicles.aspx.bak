@@ -1,0 +1,293 @@
+﻿<%@ Page Language="VB" AutoEventWireup="false" CodeFile="AdminVehicles.aspx.vb" Inherits="Pages_AdminVehicles" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <script src="../Scripts/jquery.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Administrador de Vehiculos</title>
+    <link href="Admin/AdminVehicles.css" rel="stylesheet" />        
+    <script src="Main/Compress.js"></script>
+    <script src="Admin/AdminVehicles.js?v=<%=SVN %>""></script>
+</head>
+<body>    
+    <div class="container-fluid">
+        <link rel='stylesheet prefetch' href='http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css' />
+        <div class="mail-box">
+            <aside class="sm-side">
+                <div class="user-head" style="background-color:white">
+                    <a class="inbox-avatar" href="javascript:;">
+                        <%--<img width="64" hieght="60" src="http://bootsnipp.com/img/avatars/ebeb306fd7ec11ab68cbcaa34282158bd80361a7.jpg" />--%>
+                        <%--<img id="imglogosuperior" runat="server" src="../Login/images/hmn2/logo_hmn2.png" />--%>
+                        <a href="#myModal" hidden="hidden" data-toggle="modal" data-target="#mventana" onclick="editargrupo(0,-1);"  class="btn btn-compose">Nuevo Grupo</a>
+                    </a>
+                    <div class="user-name">
+                        <%--<h5 class="text text-dark"><a href="#">Usuario:</a></h5>
+
+                        <span><a href="#">Info.Ali.Pci@Gmail.com</a></span>--%>
+                    </div>
+                    <a class="mail-dropdown pull-right" href="javascript:;">
+                        <i class="fa fa-chevron-down"></i>
+                    </a>
+                </div>
+                <div class="inbox-body">                    
+                    <!-- Modal -->
+                    <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade" style="display: none;">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                                    <h4 class="modal-title">Compose</h4>
+                                </div>
+                                <div class="modal-body">                                   
+                                </div>
+                            </div>
+                            <!-- /.modal-content -->
+                        </div>
+                        <!-- /.modal-dialog -->
+                    </div>
+                    <!-- /.modal -->
+                </div>
+                <ul class="inbox-nav inbox-divider">
+                    <li class="active">
+                        <a href="#"><i class="fa fa-inbox"></i>Total Unidades <span class="label label-danger pull-right" id="sptotalgrupos"></span></a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-inbox"></i>Total Unidades en Grupos<span class="label label-danger pull-right" id="sptotalsingrupo"></span></a>
+                    </li>
+                    <li>
+                        
+                    </li>
+                    <li>
+                        
+                    </li>
+                    <li>
+                        
+                    </li>
+                </ul>
+                <ul class="nav nav-pills nav-stacked labels-info inbox-divider" id="ulgrupos">
+                    <%--<li>
+                        <h4><b>Unidades por Grupo</b></h4>
+                    </li>--%>
+                    <%--<li><a href="#"><i class=" fa fa-sign-blank text-danger"></i>Work </a></li>
+                    <li><a href="#"><i class=" fa fa-sign-blank text-success"></i>Design </a></li>
+                    <li><a href="#"><i class=" fa fa-sign-blank text-info "></i>Family </a>
+                    </li>
+                    <li><a href="#"><i class=" fa fa-sign-blank text-warning "></i>Friends </a>
+                    </li>--%>                    
+                </ul>
+                <ul class="nav nav-pills nav-stacked labels-info inbox-divider" id="ulsingrupos">
+                   <%-- <li>
+                        <h4><b>Unidades sin Grupo</b></h4>
+                    </li>--%>
+                    <%--<li><a href="#"><i class=" fa fa-sign-blank text-danger"></i>Work </a></li>
+                    <li><a href="#"><i class=" fa fa-sign-blank text-success"></i>Design </a></li>
+                    <li><a href="#"><i class=" fa fa-sign-blank text-info "></i>Family </a>
+                    </li>
+                    <li><a href="#"><i class=" fa fa-sign-blank text-warning "></i>Friends </a>
+                    </li>
+                    <li><a href="#"><i class=" fa fa-sign-blank text-primary "></i>Office </a>
+                    </li>--%>
+                </ul>
+
+                <ul class="nav nav-pills nav-stacked labels-info ">
+                  <%--  <li>
+                        <h4>Buddy online</h4>
+                    </li>
+                    <li><a href="#"><i class=" fa fa-circle text-success"></i>Alireza Zare
+                        <p>I do not think</p>
+                    </a></li>
+                    <li><a href="#"><i class=" fa fa-circle text-danger"></i>Dark Coders<p>Busy with coding</p>
+                    </a></li>
+                    <li><a href="#"><i class=" fa fa-circle text-muted "></i>Mentaalist
+                        <p>I out of control</p>
+                    </a>
+                    </li>
+                    <li><a href="#"><i class=" fa fa-circle text-muted "></i>H3s4m<p>I am not here</p>
+                    </a>
+                    </li>
+                    <li><a href="#"><i class=" fa fa-circle text-muted "></i>Dead man<p>I do not think</p>
+                    </a>
+                    </li>--%>
+                </ul>
+
+                <div class="inbox-body text-center">
+                    <div class="btn-group">
+                       <%-- <a class="btn mini btn-primary" href="javascript:;">
+                            <i class="fa fa-plus"></i>
+                        </a>--%>
+                    </div>
+                    <div class="btn-group">
+                       <%-- <a class="btn mini btn-success" href="javascript:;">
+                            <i class="fa fa-phone"></i>
+                        </a>--%>
+                    </div>
+                    <div class="btn-group">
+                       <%-- <a class="btn mini btn-info" href="javascript:;">
+                            <i class="fa fa-cog"></i>
+                        </a>--%>
+                    </div>
+                </div>
+            </aside>
+            <aside class="lg-side">
+                <div class="inbox-head text-light">
+                    <h3 style="color:white">
+                        Administración de Grupos
+                    </h3>
+                    <form action="#" class="pull-right position" runat="server" id="frmgrupo">
+                        <div class="input-append">
+                            <input type="text" class="sr-input" placeholder="Buscar Grupo" runat="server" id="txfiltro" />
+                            <button class="btn sr-btn" type="button"><i class="fa fa-search"></i></button>
+                        </div>
+
+                        <div class="modal fade" id="mventana" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 id="tcomandos" class="modal-title small"><b>GRUPOS - EDICION</b></h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <asp:HiddenField ID="hdidgrupo" runat="server" />
+                                        <fieldset>
+                                            <div class="form-group row">
+                                                <label class="col-md-3 control-label" for="txpunto"><b>Grupo *</b></label>
+                                                <div class="col-md-9">
+                                                    <input id="txgrupo" name="txgrupo" type="text" placeholder="Nombre del grupo" class="form-control input-md" runat="server" required="" style="width: 100%" />
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label class="col-md-3 control-label" for="txdescripcion">Descripcion</label>
+                                                <div class="col-md-9">
+                                                    <textarea class="form-control" id="txdescripcion" placeholder="Descripcion del grupo" name="txdescripcion" runat="server" style="width: 100%"></textarea>
+                                                </div>
+                                            </div>                                                                                                                                    
+                                        </fieldset>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button id="btnguardar" type="button" class="btn btn-sm btn-success" onclick="guardargrupo('');">Guardar</button>
+                                        <button id="btncerrar" type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="dview" runat="server" style="display: none"></div>
+                        <asp:HiddenField ID="hdindex" runat="server" />
+                        <asp:HiddenField ID="hdwuid" runat="server" />
+                        <asp:HiddenField ID="txUsuario" runat="server" />
+                        <asp:HiddenField ID="idusuario" runat="server" />
+                        <asp:HiddenField ID="idperfil" runat="server" />
+                        <asp:HiddenField ID="hdpais" runat="server" />
+                        <asp:HiddenField ID="hddec" runat="server" />
+                        <asp:HiddenField ID="hdurlgrupos" runat="server" /> 
+                    </form>
+                </div>
+                <div class="inbox-body">
+                    <div class="mail-option">
+                        <div class="chk-all">
+                            <input type="checkbox" class="mail-checkbox mail-group-checkbox" />
+                            <div class="btn-group">
+                                <a data-toggle="dropdown" href="#" class="btn mini all" aria-expanded="false">All
+                                        
+                                    <i class="fa fa-angle-down "></i>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">None</a></li>
+                                    <li><a href="#">Read</a></li>
+                                    <li><a href="#">Unread</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="btn-group">
+                            <a data-original-title="Refresh" data-placement="top" data-toggle="dropdown" href="#" class="btn mini tooltips">
+                                <i class=" fa fa-refresh"></i>
+                            </a>
+                        </div>
+                        <div class="btn-group hidden-phone">
+                            <a data-toggle="dropdown" href="#" class="btn mini blue" aria-expanded="false">More
+                                    
+                                <i class="fa fa-angle-down "></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#"><i class="fa fa-pencil"></i>Mark as Read</a></li>
+                                <li><a href="#"><i class="fa fa-ban"></i>Spam</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#"><i class="fa fa-trash-o"></i>Delete</a></li>
+                            </ul>
+                        </div>
+                        <div class="btn-group">
+                            <a data-toggle="dropdown" href="#" class="btn mini blue">Move to
+                                    
+                                <i class="fa fa-angle-down "></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#"><i class="fa fa-pencil"></i>Mark as Read</a></li>
+                                <li><a href="#"><i class="fa fa-ban"></i>Spam</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#"><i class="fa fa-trash-o"></i>Delete</a></li>
+                            </ul>
+                        </div>
+
+                        <ul class="unstyled inbox-pagination">
+                            <%--<li><span>1-1 of 1</span></li>--%>
+                            <li>&nbsp;</li>
+                            <li>
+                                <a class="np-btn" href="#"><i class="fa fa-angle-left  pagination-left"></i></a>
+                            </li>
+                            <li>
+                                <a class="np-btn" href="#"><i class="fa fa-angle-right pagination-right"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <table class="table table-inbox table-hover small" border="1" id="tgrupos">
+                        <thead>
+                            <tr>
+                                <td>
+                                    Grupo
+                                </td>
+                                <td>
+                                    Descripcion
+                                </td>
+                                <td style="width:60px; text-align:center">
+                                    Unidades
+                                </td>
+                                <td style="width:160px">
+                                    Fecha Ingreso
+                                </td>
+                                <td style="width:40px">
+                                    &nbsp;
+                                </td>
+                                <td style="width:40px">
+                                    &nbsp;
+                                </td>
+                                 <td style="width:40px">
+                                    &nbsp;
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody id="reggrupos" style="max-height:300px; overflow-x:hidden; overflow-y:auto">
+                            <%--<tr class="">                                
+                                <td class="view-message  dont-show">Grupo 1</td>
+                                <td class="view-message">Descripcion Grupo</td>                                
+                                <td class="view-message">2</td>
+                                <td class="view-message">01/01/2022 9:45</td>
+                                <td class="inbox-small-cells"></td>
+                                <td class="inbox-small-cells"></td>
+                            </tr>--%>
+                        </tbody>
+                    </table>
+                </div>
+            </aside>
+        </div>
+    </div> 
+</body>
+</html>

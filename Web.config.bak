@@ -1,0 +1,263 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Para obtener más información sobre cómo configurar la aplicación ASP.NET, visite
+  https://go.microsoft.com/fwlink/?LinkId=169433
+  -->
+<configuration>
+  <!--
+    Para obtener una descripción de los cambios de web.config, vea http://go.microsoft.com/fwlink/?LinkId=235367.
+
+    Los siguientes atributos se pueden establecer en la etiqueta <httpRuntime>.
+      <system.Web>
+        <httpRuntime targetFramework="4.8" />
+      </system.Web>
+  -->
+  <configSections>
+    <sectionGroup name="applicationSettings" type="System.Configuration.ApplicationSettingsGroup, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+      <section name="ArtemisAdmin.My.MySettings" type="System.Configuration.ClientSettingsSection, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" requirePermission="false" />
+    </sectionGroup>
+    <sectionGroup name="devExpress">
+      <section name="themes" type="DevExpress.Web.ThemesConfigurationSection, DevExpress.Web.v21.2, Version=21.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" requirePermission="false" />
+      <section name="compression" type="DevExpress.Web.CompressionConfigurationSection, DevExpress.Web.v21.2, Version=21.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" requirePermission="false" />
+      <section name="settings" type="DevExpress.Web.SettingsConfigurationSection, DevExpress.Web.v21.2, Version=21.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" requirePermission="false" />
+      <section name="errors" type="DevExpress.Web.ErrorsConfigurationSection, DevExpress.Web.v21.2, Version=21.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" requirePermission="false" />
+      <section name="resources" type="DevExpress.Web.ResourcesConfigurationSection, DevExpress.Web.v21.2, Version=21.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" requirePermission="false" />
+    </sectionGroup>
+  </configSections>
+  <connectionStrings>
+    <!--<add name="PX_DBConnectionString" connectionString="Data Source=bdprincipal,47000;Initial Catalog=PX_DB;Persist Security Info=True;User ID=geousr;Password=w1EC!vQ3"
+		 providerName="System.Data.SqlClient" />
+    <add name="bdprincipalPX_DB" connectionString="XpoProvider=MSSqlServer;data source=bdprincipal,47000;user id=jsandoval;password=Nada321.;initial catalog=PX_DB;Persist Security Info=true" />-->
+	<add name="GEOSYSConnectionStringPE" connectionString="Data Source=10.40.0.17,47000;Initial Catalog=GEOSYS;Persist Security Info=True;User ID=geousr;Password=PoChiNPE" providerName="System.Data.SqlClient" />
+	<add name="PX_DBConnectionString" connectionString="Data Source=10.100.97.177,47000;Initial Catalog=PX_DB;Persist Security Info=True;User ID=geousr;Password=w1EC!vQ3" providerName="System.Data.SqlClient" />
+    <add name="bdprincipalPX_DB" connectionString="XpoProvider=MSSqlServer;data source=10.100.97.177,47000;user id=jsandoval;password=Nada321.;initial catalog=PX_DB;Persist Security Info=true" />
+  </connectionStrings>
+  <appSettings>
+    <add key="CadenaConexion" value="database=PX_DB;server=10.100.97.177,47000;user=geousr;password=w1EC!vQ3;Asynchronous Processing=True;" />
+    <add key="CadenaConexionGR" value="database=GEOSYS_Rastrac;server=10.100.97.177,47000;user=geousr;password=w1EC!vQ3;Asynchronous Processing=True;" />
+    <add key="CadenaConexionRS" value="database=GEOSYSR;server=10.100.97.200,47000;user=cdtdev;password=cdt;Asynchronous Processing=True;" />
+    <!--<add key="CadenaConexion" value="database=PX_DB;server=bdprincipal,47000;user=geousr;password=w1EC!vQ3;Asynchronous Processing=True;" />
+		<add key="CadenaConexionGR" value="database=GEOSYS_Rastrac;server=bdprincipal,47000;user=geousr;password=w1EC!vQ3;Asynchronous Processing=True;" />
+		<add key="CadenaConexionRS" value="database=GEOSYSR;server=bdreportes,47000;user=cdtdev;password=cdt;Asynchronous Processing=True;" />-->
+    <add key="MailErrores" value="lmoscoso@carsegsa.com" />
+    <add key="MostrarCalles" value="false" />
+    <add key="CrearImagenes" value="0" />
+	<add key="sk" value="VelocidaD.HUN"/>
+	<add key="Protect" value="1"/>
+    <add key="Version" value="Geo" />
+    <add key="SuperKey" value="KEY." />
+    <add key="Banner" value="Banner2011.jpg" />
+    <add key="CoordenadasInicialMapa" value="-2.5672;-79.9172" />
+    <add key="OSCalle.OSGetCalles" value="https://tyr.24hm.net/OsCalles/OSGetCalles.asmx" />
+    <add key="ReverseGEO" value="1" />
+	<add key="gmailpassrecovery" value="1"/>
+	<add key="mailserver" value="10.100.97.105"/>
+	<add key="gmailserver" value="smtp.gmail.com"/>
+	<add key="gmailmail" value="helpdesk@huntermonitoreo.com"/>
+	<add key="gmailport" value="587"/>
+	<add key="gmailpass" value="CarsegHelP.2020"/>
+	<add key="gmaildisplayname" value="Recuperacion contraseña geosys"/>
+	<add key="MailControl" value="centralmonitoreo@carsegsa.com"/>
+	<add key="cuentagmail" value="10.100.97.105"/>
+    <add key="Regis_0_100" value="2" />
+    <add key="Regis_100_250" value="3" />
+    <add key="Regis_250_500" value="10" />
+    <add key="Regis_500_M" value="40" />
+    <add key="KeyGMRecorrido" value="ABQIAAAAo12cG_mtBNlOF2j51KsMaRT3sMLVnSxrcBPem0z8j92mKoX68BTM_0BRAK3wDueZIud5UKcS_drW3w" />
+    <add key="PerfilSoloConsultas" value="5" />
+    <add key="MotorMapaDefault" value="GM" />
+    <add key="ConfirmarUsuariosNuevos" value="S" />
+    <add key="OrigenNombreEventos" value="P" />
+    <add key="ShowHeader" value="false" />
+    <add key="MailNotificaciones" value="geosys@huntermonitoreo.com" />
+    <add key="MailCopia" value="lmoscoso@carsegsa.com" />
+    <add key="MailCopiaServer" value="log@carsegsa-tec.com" />
+    <add key="DebugMails" value="true" />
+    <add key="MostrarReestablecer" value="true" />
+    <add key="MaximoUnidadesMostrar" value="4000" />
+    <add key="RecrearRecorrido" value="1" />
+    <add key="AutoRegistroUsuarios" value="true" />
+    <add key="HabilitarRQ" value="true" />
+    <add key="Debug" value="true" />
+    <add key="MaxSubUsuarios" value="4" />
+    <add key="DebugGoogle" value="0" />
+    <add key="PuntsRefAsyn" value="1" />
+    <add key="UsuarioEmail" value="lmoscoso@carsegsa.com" />
+    <add key="ClaveEmail" value="LAMC2009" />
+    <add key="ProductosSinReportes" value="6383_6386_6611_6719_6759_6840_6859_6864_6874_6875_6894_6898_6899_6902_6905_6909_6916_6934_6936_6943_6948_6950_6979_6997_7016_7020_7029_7036_7060_7071_7076_7077_7085" />
+    <add key="SVN" value="20210616005T090" />
+    <add key="urlRQ" value="https://www.huntermonitoreo.com/XAdmin/Paginas/RQ/Reclamos.aspx" />
+    <add key="ModoRQ" value="W" />
+    <add key="AnchoRQ" value="555" />
+    <add key="AltoRQ" value="5000" />
+    <add key="xRQ" value="150" />
+    <add key="yRQ" value="150" />
+    <add key="DiasMapa" value="15" />
+    <add key="RegistrosMapa" value="10000" />
+    <add key="DirectorioLink" value="Geo" />
+    <add key="EtiquetasReportes" value="false" />
+    <add key="masterkey" value="HUNTERgps2o16" />
+    <add key="UrlCalles" value="https://tyr.24hm.net/GeoTest/Servicios/Busquedas.asmx" />
+    <add key="MostrarDash" value="true" />
+    <add key="StepsHistograma" value="false" />
+    <add key="pdfvn" value="true" />
+    <add key="urlreportes" value="https://190.223.20.13/reports_test/admin_report.php" />
+    <add key="timerTransporte" value="70" />
+    <add key="ChartImageHandler" value="storage=file;timeout=20;dir=c:\TempImageFiles\;" />
+    <add key="maxLargoClave" value="8" />
+    <add key="mostrarChequeos" value="false" />
+    <add key="UrlReportesGeo" value="https://tyr.24hm.net/Geo/Paginas/Recorrido.aspx?" />
+    <add key="RegistroUnidades" value="0918136011_hunterconsola2_areacontrol" />
+	<add key="UrlPrincipal" value="https://tyr.24hm.net/Artemis"/>
+    <add key="ImagenDirecciones" value="images/direcciones_overlay.jpg" />
+    <add key="FondoMain" value="#FFFFFF" />
+    <add key="MaxRegistrosRecorrido" value="3000" />
+    <add key="AppID" value="6QQTRyaOluHC5AeLXMJQ" />
+    <add key="AppCode" value="NzzElf0H7smxuo_k-gqqJQ" />
+	<add key="KeyGoogle" value="AIzaSyCD0DtFGhBHK2Z-jIM6HTFAL4GUvEydijI"/>
+    <add key="VersionGoogle" value="3.46" />
+    <add key="UsarHoraWebServer" value="0" />
+    <add key="ServidorMapasPE" value="http://191.98.146.186" />
+    <add key="ServidorMapasPEx" value="http://191.98.146.186:8080" />
+    <add key="ServidorCapasPE" value="http://191.98.146.186:8080" />
+    <add key="PaginaLogin" value="Loginv3.aspx" />
+    <add key="maxIntentosLogin" value="5" />
+    <add key="TemporalizarAlertas" value="0" />
+    <add key="AutoRefresh" value="0" />
+    <add key="vs:EnableBrowserLink" value="true" />
+    <add key="TimeOut" value="50" />
+    <add key="ClusterRecorrido" value="false" />
+    <add key="ClusterMain" value="true" />
+    <add key="CalculoDesviacion" value="0" />
+    <add key="MostrarRastro" value="1" />
+    <add key="MostrarNV" value="0" />
+    <add key="urlface" value="https://www.facebook.com/hunterecuador/?fref=ts" />
+    <add key="urltw" value="https://twitter.com/hunterecuador" />
+    <add key="PaisRegistro" value="EC" />
+    <add key="MostrarTips" value="1" />
+    <add key="MostrarTipSMS" value="0" />
+    <add key="ArbolEI" value="1" />
+    <add key="ColorPrincipal" value="#0032A1" />
+    <add key="ColorBanner" value="#0032A1" />
+    <add key="ClientePrefijo" value="hmn" />
+    <add key="RegistroEmail" value="0" />
+    <add key="ImagenPais" value="Login/imagesnew/mapa-icon.png" />
+    <add key="UbicacionSuspendidos" value="BR" />
+    <add key="RutaDocumetos" value="http://10.100.97.105:8080/Mixercon/v1/documents/" />
+    <add key="EliminarAsignacionEnSubUsuario" value="0" />
+    <add key="IncluirPuntosBusqueda" value="1" />
+    <add key="IncluirGeocercasBusqueda" value="1" />
+    <add key="ExpandirArbolPuntos" value="0" />
+    <add key="IncluirGruposBusqueda" value="1" />
+    <add key="PermitirLoginRemoto" value="1" />
+    <add key="TiempoSesionRemota" value="900" />
+    <add key="AlertarSesionRemota" value="1" />
+    <add key="EmailSesionRemota" value="jneira@carsegsa.com" />
+    <add key="EmailSesionRemota1" value="lmoscoso@carsegsa.com" />
+	<add key="vs:EnableBrowserLink" value="false"/>
+	<add key="urlmenu" value="https://tyr.24hm.net/Geo/rLogin.aspx?TIME="/>
+	<add key="Entorno" value="PROD"/>
+	<add key="VersionPROD" value="3.2.0"/>
+	<add key="IdAplicacion" value="32"/>
+	<add key="TimerPush" value="33000"/>
+	<add key="TimerPushAlertas" value="61000"/>
+	<add key="UsuariosEspeciales" value="116608;15524;120306;112433;118030"/>
+	<add key="SEPARADOR_DEC" value="."/>
+	<add key="SEPARADOR_MIL" value=","/>
+	<add key="modupdatealertas" value="2"/>
+	<add key="urlETA" value="http://10.100.97.178:5000/"/>
+	<add key="urlRestablecer" value="'https://am.24hm.net/account.php?data=0680EB0061196963496F87A243106E13'"/>
+	<add key="urlRegistro" value="'https://am.24hm.net/register.php?data=0680EB0061196963496F87A243106E13'"/>
+	<add key="urlCambioClave" value="https://am.24hm.net/changePassword.php?data="/>
+	<add key="urlConfirmarDatos" value="Pages/Last/ConfirmarDatos.aspx?data="/>
+	<add key="metodoAdherencia" value="2"/>
+	<add key="urldash" value="https://tyr.24hm.net/GeoApps/DashBoard/dashflota.aspx?o="/>
+	<add key="urldashm" value="https://tyr.24hm.net/GeoApps/DashBoard/Mobile/dashflotam.aspx?o="/>
+	<add key="urldashpe" value="http://www.huntermonitoreoperu.com/GeoApps/DashBoardDev/dashflota.aspx?o="/>
+	<add key="urldashpem" value="http://www.huntermonitoreoperu.com/GeoApps/DashBoardDev/Mobile/dashflotam.aspx?o="/>
+	<add key="urladmin" value="https://tyr.24hm.net/ArtemisAdmin/"/>
+	<add key="maxgeocercas" value="900"/>
+	<add key="maxpuntos" value="3500"/>
+	<add key="maxpagina" value="2000"/>
+	<add key="urlreportesplus" value="https://tyr.24hm.net/ReportesPlus/Reportes/"/>
+	<add key="ModoSuceso" value="1"/>
+	<add key="AdminArtemis" value="1"/>
+	<add key="urlAdminArtemis" value="https://tyr.24hm.net/ArtemisAdmin/"/>
+	<add key="urldocx" value="https://tyr.24hm.net/staticmap/temp/docrv2.php"/>
+	<add key="urlxlsx" value="https://tyr.24hm.net/staticmap/temp/xlsr.php"/>
+	<add key="tmpfolder" value="C:\inetpub\wwwroot\Artemis\Pages\Users"/>
+	<add key="keydata" value="26kHunterDEVJ24t"/>
+	<add key="urlvisor" value="https://tyr.24hm.net/GeoApps/VisorAlertas/VisorAlertas/VisorAlertas.aspx?o="/>
+	<add key="urlvisorpe" value="http://www.huntermonitoreoperu.com/GeoApps/VisorAlertas/VisorAlertas/VisorAlertas.aspx?o="/>
+	<add key="reportetrygeosys" value="1"/>
+  </appSettings>
+  <system.web>
+    <!--<sessionState timeout="360" mode="StateServer" stateConnectionString="tcpip=localhost:42424"></sessionState>-->
+    <!--<sessionState timeout="360" mode="StateServer" stateConnectionString="tcpip=10.100.97.171:42424"></sessionState>-->
+    <compilation debug="true" targetFramework="4.8">
+      <assemblies>
+        <add assembly="DevExpress.Web.ASPxThemes.v21.2, Version=21.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+        <add assembly="DevExpress.Data.v21.2, Version=21.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+        <add assembly="DevExpress.Xpo.v21.2, Version=21.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+        <add assembly="DevExpress.Web.v21.2, Version=21.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+        <add assembly="DevExpress.DataAccess.v21.2, Version=21.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+      </assemblies>
+    </compilation>
+    <httpRuntime targetFramework="4.8" />
+    <customErrors mode="Off" />
+    <httpModules>
+      <add type="DevExpress.Web.ASPxHttpHandlerModule, DevExpress.Web.v21.2, Version=21.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" name="ASPxHttpHandlerModule" />
+    </httpModules>
+    <httpHandlers>
+      <add type="DevExpress.Web.ASPxHttpHandlerModule, DevExpress.Web.v21.2, Version=21.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" verb="GET,POST" path="DX.ashx" validate="false" />
+    </httpHandlers>
+    <pages>
+      <controls>
+        <add tagPrefix="ajaxToolkit" assembly="AjaxControlToolkit" namespace="AjaxControlToolkit" />
+      <add tagPrefix="ef" assembly="Microsoft.AspNet.EntityDataSource" namespace="Microsoft.AspNet.EntityDataSource" /></controls>
+    </pages>
+  </system.web>
+  <applicationSettings>
+    <ArtemisAdmin.My.MySettings>
+      <setting name="Protect" serializeAs="String">
+        <value>0</value>
+      </setting>
+      <setting name="sk" serializeAs="String">
+        <value>VelocidaD.HUN</value>
+      </setting>
+      <setting name="IdAplicacion" serializeAs="String">
+        <value>32</value>
+      </setting>
+    </ArtemisAdmin.My.MySettings>
+  </applicationSettings>
+  <system.webServer>
+    <modules>
+      <add type="DevExpress.Web.ASPxHttpHandlerModule, DevExpress.Web.v21.2, Version=21.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" name="ASPxHttpHandlerModule" />
+    </modules>
+    <validation validateIntegratedModeConfiguration="false" />
+    <handlers>
+      <add type="DevExpress.Web.ASPxHttpHandlerModule, DevExpress.Web.v21.2, Version=21.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" verb="GET,POST" path="DX.ashx" name="ASPxHttpHandlerModule" preCondition="integratedMode" />
+    </handlers>
+    <httpProtocol>
+      <customHeaders>
+        <add name="Access-Control-Allow-Headers" value="SOAPAction,Origin, X-Requested-With, Content-Type, Accept" />
+        <add name="Access-Control-Allow-Origin" value="*" />
+        <add name="Access-Control-Allow-Methods" value="POST,GET,OPTIONS" />
+      </customHeaders>
+    </httpProtocol>
+  </system.webServer>
+  <devExpress>
+    <!--<themes enableThemesAssembly="true" styleSheetTheme="" theme="PlasticBlue" customThemeAssemblies="" baseColor="" font=""/>-->
+    <themes enableThemesAssembly="true" styleSheetTheme="" theme="Metropolis1" customThemeAssemblies="MyCustomTheme3" baseColor="" font="" />
+    <compression enableHtmlCompression="false" enableCallbackCompression="true" enableResourceCompression="true" enableResourceMerging="true" />
+    <settings accessibilityCompliant="false" doctypeMode="Html5" rightToLeft="false" checkReferencesToExternalScripts="true" protectControlState="true" ieCompatibilityVersion="edge" />
+    <errors callbackErrorRedirectUrl="" />
+  </devExpress>
+  <system.codedom>
+    <compilers>
+      <compiler extension=".cs" language="c#;cs;csharp" warningLevel="4" compilerOptions="/langversion:7.3 /nowarn:1659;1699;1701;612;618" type="Microsoft.CodeDom.Providers.DotNetCompilerPlatform.CSharpCodeProvider, Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=3.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+      <compiler extension=".vb" language="vb;vbs;visualbasic;vbscript" warningLevel="4" compilerOptions="/langversion:default /nowarn:41008,40000,40008 /define:_MYTYPE=\&quot;Web\&quot; /optionInfer+" type="Microsoft.CodeDom.Providers.DotNetCompilerPlatform.VBCodeProvider, Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=3.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    </compilers>
+  </system.codedom>
+</configuration>
+<!--ProjectGuid: 5791886A-7087-4C82-8C31-90BF15CCEA96-->

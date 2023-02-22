@@ -1,0 +1,379 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+  <Database Name="PX_DB" Class="OdinDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=10.100.97.211,47000;Initial Catalog=PX_DB;Persist Security Info=True;User ID=geousr" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="PX_DBConnectionString" Provider="System.Data.SqlClient" />
+  <Function Name="dbo.spGrupoConsultar" Method="spGrupoConsultar">
+    <Parameter Name="idUsuario" Type="System.Int32" DbType="Int"/>
+    <Parameter Name="Nombre" Parameter="nombre" Type="System.String" DbType="VarChar(20)" />
+    <ElementType Name="spGrupoConsultarResult">
+      <Column Name="IdGrupo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Grupo" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Descripcion" Type="System.String" DbType="VarChar(150)" CanBeNull="true" />
+      <Column Name="IdUsuario" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Cantidad" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="FechaIngreso" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.spGrupoEliminar" Method="spGrupoEliminar">
+    <Parameter Name="idGrupo" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.spGrupoIngresar" Method="spGrupoIngresar">
+    <Parameter Name="Grupo" Parameter="grupo" Type="System.String" DbType="VarChar(50)" />
+    <Parameter Name="Descripcion" Parameter="descripcion" Type="System.String" DbType="VarChar(100)" />
+    <Parameter Name="IdUsuario" Parameter="idUsuario" Type="System.Int32" DbType="Int" />
+    <Parameter Name="UsuarioIngreso" Parameter="usuarioIngreso" Type="System.String" DbType="VarChar(50)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.spGrupoListar" Method="spGrupoListar">
+    <Parameter Name="idUsuario" Type="System.Int32" DbType="Int" />
+    <Parameter Name="IdGrupo" Parameter="idGrupo" Type="System.Int32" DbType="Int" />
+    <Parameter Name="vid" Type="System.String" DbType="VarChar(20)" />
+    <ElementType Name="spGrupoListarResult">
+      <Column Name="idActivo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IdGrupo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Grupo" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Alias" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Etiqueta" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="Descripcion" Type="System.String" DbType="VarChar(150)" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.spGrupoActualizar" Method="spGrupoActualizar">
+    <Parameter Name="idGrupo" Type="System.Int32" DbType="Int" />
+    <Parameter Name="Grupo" Parameter="grupo" Type="System.String" DbType="VarChar(50)" />
+    <Parameter Name="Descripcion" Parameter="descripcion" Type="System.String" DbType="VarChar(100)" />
+    <Parameter Name="IdUsuario" Parameter="idUsuario" Type="System.Int32" DbType="Int" />
+    <Parameter Name="UsuarioModificacion" Parameter="usuarioModificacion" Type="System.String" DbType="VarChar(50)" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.spActivoGrupoConsultar" Method="spActivoGrupoConsultar">
+    <Parameter Name="idUsuario" Type="System.String" DbType="VarChar(50)" />
+    <Parameter Name="idGrupo" Type="System.Int32" DbType="Int" />
+    <ElementType Name="spActivoGrupoConsultarResult">
+      <Column Name="idActivo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="idGrupo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Grupo" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Alias" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="IdMarca" Type="System.String" DbType="VarChar(3)" CanBeNull="true" />
+      <Column Name="Marca" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="idModelo" Type="System.String" DbType="VarChar(3)" CanBeNull="true" />
+      <Column Name="Modelo" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="IdUsuario" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.spActivoGrupoUsuarioConsultar" Method="spActivoGrupoUsuarioConsultar">
+    <Parameter Name="idUsuario" Type="System.Int32" DbType="Int" />
+    <ElementType Name="spActivoGrupoUsuarioConsultarResult">
+      <Column Name="IdGrupo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Grupo" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Descripcion" Type="System.String" DbType="VarChar(150)" CanBeNull="true" />
+      <Column Name="Cantidad" Type="System.Int32" DbType="Int" CanBeNull="true" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.spLogUsuarioGeoIngresar" Method="spLogUsuarioGeoIngresar">
+    <Parameter Name="Usuario" Parameter="usuario" Type="System.String" DbType="VarChar(150)" />
+    <Parameter Name="Accion" Parameter="accion" Type="System.String" DbType="VarChar(100)" />
+    <Parameter Name="Descripcion" Parameter="descripcion" Type="System.String" DbType="VarChar(1000)" />
+    <Parameter Name="UsuarioEquipo" Parameter="usuarioEquipo" Type="System.String" DbType="VarChar(150)" />
+    <Parameter Name="IP" Parameter="iP" Type="System.String" DbType="VarChar(200)" />
+    <Parameter Name="IdAplicacion" Parameter="idAplicacion" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.getUsuarioxID" Method="getUsuarioxID" IsComposable="true">
+    <Parameter Name="idUsuario" Type="System.Int32" DbType="Int" />
+    <Return Type="System.String" />
+  </Function>
+  <Function Name="dbo.getSubUsuarioXID" Method="getSubUsuarioXID" IsComposable="true">
+    <Parameter Name="IdUsuario" Parameter="idUsuario" Type="System.Int32" DbType="Int" />
+    <Parameter Name="IdSubUsuario" Parameter="idSubUsuario" Type="System.Int32" DbType="Int" />
+    <Return Type="System.String" />
+  </Function>
+  <Function Name="dbo.ContarGruposUsuario" Method="ContarGruposUsuario" IsComposable="true">
+    <Parameter Name="IdUsuario" Parameter="idUsuario" Type="System.Int32" DbType="Int" />
+    <Parameter Name="IdGrupo" Parameter="idGrupo" Type="System.Int32" DbType="Int" />
+    <Parameter Name="IdRegistro" Parameter="idRegistro" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.getCountUnidadesGrupo" Method="getCountUnidadesGrupo" IsComposable="true">
+    <Parameter Name="idGrupo" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int16" />
+  </Function>
+  <Function Name="dbo.maxGrupoUsuario" Method="maxGrupoUsuario" IsComposable="true">
+    <Parameter Name="IdUsuario" Parameter="idUsuario" Type="System.Int32" DbType="Int" />
+    <Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.ContarGrupoGeocercas" Method="ContarGrupoGeocercas" IsComposable="true">
+	<Parameter Name="idGrupoGeocerca" Type="System.Int32" DbType="Int" />
+	<Return Type="System.Int16" />
+  </Function>
+  <Function Name="dbo.ExisteSubUsuario" Method="ExisteSubUsuario" IsComposable="true">
+	  <Parameter Name="SubUsuario" Parameter="subUsuario" Type="System.String" DbType="VarChar(40)" />
+	  <Return Type="System.Int16" />
+  </Function>
+	  <Function Name="dbo.ExisteUsuario" Method="ExisteUsuario" IsComposable="true">
+		  <Parameter Name="Usuario" Parameter="usuario" Type="System.String" DbType="VarChar(40)" />
+		  <Return Type="System.Int16" />
+	  </Function>
+  <Function Name="dbo.getLastPuntoUsuario" Method="getLastPuntoUsuario" IsComposable="true">
+	<Parameter Name="IdUsuario" Parameter="idUsuario" Type="System.Int32" DbType="Int" />
+	<Return Type="System.Int32" />
+  </Function>
+  <Function Name="dbo.spUsuarioConsultarKey" Method="spUsuarioConsultarKey">
+    <Parameter Name="Key" Parameter="key" Type="System.String" DbType="VarChar(300)" />
+    <ElementType Name="spUsuarioConsultarKeyResult">
+      <Column Name="IdUsuario" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Usuario" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Clave" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Administrador" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="AdministradorConcesionario" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+      <Column Name="Estado" Type="System.String" DbType="VarChar(3)" CanBeNull="true" />
+      <Column Name="Nombre" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="DirLogo" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ConfirmoEmail" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="ConfirmoCelular" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="TipoEntidad" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IdEntidad" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.spSubUsuarioConsultarKey" Method="spSubUsuarioConsultarKey">
+    <Parameter Name="Key" Parameter="key" Type="System.String" DbType="VarChar(300)" />
+    <ElementType Name="spSubUsuarioConsultarKeyResult">
+      <Column Name="IdUsuario" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IdSubUsuario" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Clave" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Administrador" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AdministradorConcesionario" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Estado" Type="System.String" DbType="VarChar(1) NOT NULL" CanBeNull="false" />
+      <Column Name="Nombre" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="DirLogo" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ConfirmoEmail" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ConfirmoCelular" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="TipoEntidad" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IdEntidad" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+    </ElementType>
+  </Function>
+  <Function Name="dbo.spListarActivosEntidadSubUsuario" Method="spListarActivosEntidadSubUsuario">
+	<Parameter Name="Entidad" Parameter="entidad" Type="System.String" DbType="VarChar(50)" />
+	<Parameter Name="IdSubUsuario" Parameter="idSubUsuario" Type="System.Int32" DbType="Int" />
+	<Parameter Name="IdUsuario" Parameter="idUsuario" Type="System.Int32" DbType="Int" />
+	<ElementType Name="spListarActivosEntidadSubUsuarioResult">
+	    <Column Name="IdEntidad" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+		<Column Name="Alias" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+		<Column Name="Vid" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+		<Column Name="Etiqueta" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+		<Column Name="Ignicion" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+		<Column Name="[Codigo Producto]" Member="Codigo_Producto" Type="System.String" DbType="VarChar(41)" CanBeNull="true" />
+		<Column Name="IdActivo" Type="System.Int32" DbType="Int" CanBeNull="true" />
+		<Column Name="Estado" Type="System.String" DbType="VarChar(3)" CanBeNull="true" />
+	</ElementType>
+  </Function>
+	<Function Name="dbo.spDatosGrupoConsultar" Method="spDatosGrupoConsultar">
+		<Parameter Name="idUsuario" Type="System.Int32" DbType="Int" />
+		<Parameter Name="idGrupo" Type="System.Int32" DbType="Int" />
+		<ElementType Name="spDatosGrupoConsultarResult">
+			<Column Name="Grupo" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+			<Column Name="Descripcion" Type="System.String" DbType="VarChar(150)" CanBeNull="true" />
+			<Column Name="FechaModificacion" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+		</ElementType>
+	</Function>
+	<Function Name="dbo.spGrupoActivosConsultar" Method="spGrupoActivosConsultar">
+		<Parameter Name="idGrupo" Type="System.Int32" DbType="Int" />
+		<ElementType Name="spGrupoActivosConsultarResult">
+			<Column Name="idActivo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+			<Column Name="idGrupo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+			<Column Name="UsuarioIngreso" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+			<Column Name="FechaIngreso" Type="System.String" DbType="VarChar(61)" CanBeNull="true" />
+			<Column Name="FechaCaducidad" Type="System.String" DbType="VarChar(61)" CanBeNull="true" />
+		</ElementType>
+	</Function>
+	<Function Name="dbo.ExisteGrupo" Method="ExisteGrupo" IsComposable="true">
+		<Parameter Name="Grupo" Parameter="grupo" Type="System.String" DbType="VarChar(40)" />
+		<Parameter Name="IdUsuario" Parameter="idUsuario" Type="System.Int32" DbType="Int" />
+		<Return Type="System.Int16" />
+	</Function>
+	<Function Name="dbo.ExisteGrupoGeo" Method="ExisteGrupoGeo" IsComposable="true">
+		<Parameter Name="Grupo" Parameter="grupo" Type="System.String" DbType="VarChar(40)" />
+		<Parameter Name="IdUsuario" Parameter="idUsuario" Type="System.Int32" DbType="Int" />
+		<Return Type="System.Int16" />
+	</Function>  
+	<Function Name="dbo.ContarGrupos" Method="ContarGrupos" IsComposable="true">
+		<Parameter Name="IdUsuario" Parameter="idUsuario" Type="System.Int32" DbType="Int" />
+		<Return Type="System.String" />
+	</Function>
+	<Function Name="dbo.spGrupoUnidadesEliminar" Method="spGrupoUnidadesEliminar">
+		<Parameter Name="idUsuario" Type="System.Int32" DbType="Int" />
+		<Parameter Name="idGrupo" Type="System.Int32" DbType="Int" />
+		<Return Type="System.Int32" />
+	</Function>
+	<Function Name="dbo.spGrupoUsuariosEliminar" Method="spGrupoUsuariosEliminar">
+		<Parameter Name="idUsuario" Type="System.Int32" DbType="Int" />
+		<Parameter Name="idGrupo" Type="System.Int32" DbType="Int" />
+		<Return Type="System.Int32" />
+	</Function>
+	<Function Name="dbo.spSubUsuarioConsultar" Method="spSubUsuarioConsultar">
+		<Parameter Name="IdUsuario" Parameter="idUsuario" Type="System.Int32" DbType="Int" />
+		<ElementType Name="spSubUsuarioConsultarResult">
+			<Column Name="IdUsuario" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+			<Column Name="IdSubUsuario" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+			<Column Name="SubUsuario" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+			<Column Name="NombreCompleto" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+			<Column Name="Clave" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+			<Column Name="Estado" Type="System.String" DbType="VarChar(5)" CanBeNull="true" />
+			<Column Name="FechaIngreso" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+			<Column Name="FechaCaducidad" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+			<Column Name="FechaUltimoLogin" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+			<Column Name="VerRecorridos" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+			<Column Name="VerKilometraje" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+			<Column Name="VerAlertas" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+			<Column Name="AdmAlertas" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+			<Column Name="AdmGeocercas" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+		</ElementType>
+	</Function>
+	<Function Name="dbo.spSubUsuarioDatosConsultar" Method="spSubUsuarioDatosConsultar">
+		<Parameter Name="IdUsuario" Parameter="idUsuario" Type="System.Int32" DbType="Int" />
+		<ElementType Name="spSubUsuarioDatosConsultarResult">
+			<Column Name="IdUsuario" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+			<Column Name="IdSubUsuario" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+			<Column Name="SubUsuario" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+			<Column Name="NombreCompleto" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+			<Column Name="Clave" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+			<Column Name="Estado" Type="System.String" DbType="VarChar(5)" CanBeNull="true" />
+			<Column Name="FechaIngreso" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+			<Column Name="FechaCaducidad" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+			<Column Name="FechaUltimoLogin" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+			<Column Name="VerRecorridos" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+			<Column Name="VerKilometraje" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+			<Column Name="VerAlertas" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+			<Column Name="AdmAlertas" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+			<Column Name="AdmGeocercas" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+			<Column Name="VerSeguimiento" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+			<Column Name="VerDashBoard" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+			<Column Name="CrearLinksSeguimiento" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+			<Column Name="IdCategoria" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="true" />
+			<Column Name="EnvioComandos" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+			<Column Name="Email" Type="System.String" DbType="VarChar(80)" CanBeNull="true" />
+			<Column Name="EditarEtiqueta" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+			<Column Name="AdmConfiguracion" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+			<Column Name="ReasignarDespachos" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+		</ElementType>
+	</Function>
+	<Function Name="dbo.spGrupoSubUsuariosConsultar" Method="spGrupoSubUsuariosConsultar">
+		<Parameter Name="idUsuario" Type="System.Int32" DbType="Int" />
+		<Parameter Name="idGrupo" Type="System.Int32" DbType="Int" />
+		<ElementType Name="spGrupoSubUsuariosConsultarResult">
+			<Column Name="idUsuario" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+			<Column Name="IdSubUsuario" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+			<Column Name="idGrupo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+			<Column Name="FechaIngreso" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+			<Column Name="FechaCaducidad" Type="System.String" DbType="VarChar(61)" CanBeNull="true" />
+		</ElementType>
+	</Function>
+	<Function Name="dbo.spGrupoSubUsuariosConsultarV2" Method="spGrupoSubUsuariosConsultar2">
+		<Parameter Name="idUsuario" Type="System.Int32" DbType="Int" />
+		<Parameter Name="idSubUsuario" Type="System.Int32" DbType="Int" />
+		<Parameter Name="idGrupo" Type="System.Int32" DbType="Int" />
+		<ElementType Name="spGrupoSubUsuariosConsultarResult">
+			<Column Name="idUsuario" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+			<Column Name="IdSubUsuario" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+			<Column Name="idGrupo" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+			<Column Name="UsuarioIngreso" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+			<Column Name="FechaIngreso" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+			<Column Name="FechaCaducidad" Type="System.String" DbType="VarChar(61)" CanBeNull="true" />
+		</ElementType>
+	</Function>  
+	<Function Name="dbo.getMaxCI" Method="getMaxCI" IsComposable="true">
+		<Parameter Name="idPais" Type="System.String" DbType="VarChar(3)" />
+			<Return Type="System.Int16" />
+	</Function>
+	<Function Name="dbo.spUsuarioEntidadConsultar" Method="spUsuarioEntidadConsultar">
+		<Parameter Name="idUsuario" Type="System.Int32" DbType="Int" />
+		<Parameter Name="Ip" Type="System.String" DbType="VarChar(10)" />
+		<ElementType Name="spUsuarioEntidadConsultarResult">
+			<Column Name="idEntidad" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+			<Column Name="TipoEntidad" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+			<Column Name="Nombre" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+			<Column Name="TelefonoCelular" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+			<Column Name="Email" Type="System.String" DbType="VarChar(61)" CanBeNull="true" />
+		</ElementType>
+	</Function>
+	<Function Name="dbo.spGeocercaGrupoEliminar" Method="spGeocercaGrupoEliminar">
+		<Parameter Name="idGrupoGeocerca" Type="System.Int32" DbType="Int" />
+		<Parameter Name="idGeocerca" Type="System.Int32" DbType="Int" />
+		<Parameter Name="idUsuario" Type="System.Int32" DbType="Int" />
+			<Return Type="System.Int32" />
+	</Function>
+	<Function Name="dbo.spGeocercaGrupoInsertar" Method="spGeocercaGrupoInsertar">
+		<Parameter Name="idGrupoGeocerca" Type="System.Int32" DbType="Int" />
+		<Parameter Name="IdGeocerca" Parameter="idGeocerca" Type="System.Int32" DbType="Int" />
+		<Parameter Name="IdUsuario" Parameter="idUsuario" Type="System.Int32" DbType="Int" />
+		<Return Type="System.Int32" />
+	</Function>
+	<Function Name="dbo.spGeocercaGrupoConsultar" Method="spGeocercaGrupoConsultar">
+		<Parameter Name="idUsuario" Type="System.Int32" DbType="Int" />
+		<Parameter Name="idGrupoGeocerca" Type="System.Int32" DbType="Int" />
+		<ElementType Name="spGeocercaGrupoConsultarResult">
+			<Column Name="idGrupoGeocerca" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+			<Column Name="Grupo" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+			<Column Name="IdGeocerca" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+			<Column Name="Geocerca" Type="System.String" DbType="VarChar(100) NOT NULL" CanBeNull="false" />
+			<Column Name="Tipo" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+		</ElementType>
+	</Function>
+	<Function Name="dbo.spGeocercaConsultar" Method="spGeocercaConsultar">
+		<Parameter Name="idUsuario" Type="System.Int32" DbType="Int" />
+		<ElementType Name="spGeocercaConsultarResult">
+			<Column Name="IdGeocerca" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+			<Column Name="Nombre" Type="System.String" DbType="VarChar(8000)" CanBeNull="true" />
+			<Column Name="Tipo" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+			<Column Name="[Tipo Geocerca]" Member="Tipo_Geocerca" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+			<Column Name="Parametro1" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+			<Column Name="IdUsuario" Type="System.Int32" DbType="Int" CanBeNull="true" />
+			<Column Name="Dato" Type="System.String" DbType="VarChar(8000)" CanBeNull="true" />
+			<Column Name="Puntos" Type="System.Int32" DbType="Int" CanBeNull="true" />
+		</ElementType>
+	</Function>
+	<Function Name="dbo.spGeocercaConsultarCli" Method="spGeocercaConsultarCli">
+		<Parameter Name="idGeocerca" Type="System.Int32" DbType="Int" />
+		<ElementType Name="spGeocercaConsultarCliResult">
+			  <Column Name="IdGeocerca" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+			  <Column Name="Nombre" Type="System.String" DbType="VarChar(8000)" CanBeNull="true" />
+			  <Column Name="Tipo" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
+			  <Column Name="[Tipo Geocerca]" Member="Tipo_Geocerca" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+			  <Column Name="Parametro1" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+			  <Column Name="IdUsuario" Type="System.Int32" DbType="Int" CanBeNull="true" />
+			  <Column Name="Dato" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+			  <Column Name="Puntos" Type="System.Int32" DbType="Int" CanBeNull="true" />
+		  </ElementType>
+	  </Function>
+	  <Function Name="dbo.spConductorConsultarV2" Method="spConductorConsultarV2">
+		  <Parameter Name="parIdUsuario" Parameter="idUsuario" Type="System.Int32" DbType="Int" />
+		  <Parameter Name="parIdentificacion" Parameter="identificacion" Type="System.String" DbType="VarChar(50)" />
+		  <ElementType Name="spConductoresConsultarResult">
+			  <Column Name="NombreCompleto" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+			  <Column Name="Identificacion" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+			  <Column Name="Nombre" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+			  <Column Name="Apellido" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+			  <Column Name="Genero" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+			  <Column Name="Altura" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+			  <Column Name="TipoSangre" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+			  <Column Name="NumSeguroSocial" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+			  <Column Name="RestriccionLicencia" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+			  <Column Name="ExpiracionLicencia" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+			  <Column Name="Poliza" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+			  <Column Name="idCiaSeguro" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="true" />
+			  <Column Name="CiaSeguro" Type="System.String" DbType="VarChar(80)" CanBeNull="true" />
+			  <Column Name="ExpiracionSeguro" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+			  <Column Name="Domicilio" Type="System.String" DbType="VarChar(300)" CanBeNull="true" />
+			  <Column Name="TelefDomicilio" Type="System.String" DbType="VarChar(30)" CanBeNull="true" />
+			  <Column Name="TelefCelular" Type="System.String" DbType="VarChar(30)" CanBeNull="true" />
+			  <Column Name="Email" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+			  <Column Name="DadoDeBaja" Type="System.String" DbType="VarChar(5)" CanBeNull="true" />
+			  <Column Name="MotivoBaja" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+			  <Column Name="DriverID" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+			  <Column Name="TelefEmergencia" Type="System.String" DbType="VarChar(80)" CanBeNull="true" />
+			  <Column Name="NumeroEmergenia" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+			  <Column Name="AlertarVencimiento" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+			  <Column Name="FechaNacimiento" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+			  <Column Name="Edad" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="true" />
+		  </ElementType>
+	  </Function>
+</Database>
