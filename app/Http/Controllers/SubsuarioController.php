@@ -97,7 +97,7 @@ class SubsuarioController extends Controller
     public function index(Request $request)
     {
         Cache::flush();
-        $conexion = $this->obtener_cadena($request->cp);
+        $conexion = ($request->cp != NULL) ? $this->obtener_cadena($request->cp) : $this->obtener_cadena($request->CP);
         $datos_usuario = DB::connection($conexion)->select('exec spUsuarioConsultarKey ?', [$request->o]);
         Cache::put($request->o, $datos_usuario[0]->IdUsuario);
         $categorias = DB::connection($conexion)->select('select IdCategoria, Descripcion from SubUsuarioCategoria');
@@ -193,12 +193,12 @@ class SubsuarioController extends Controller
             return [];
         }
 
-        if(Cache::has($id_usuario))
+        /* if(Cache::has($id_usuario))
         {
             return response()->json(Cache::get($id_usuario));
         }
 		else
-        {
+        { */
         	/* $geocercas = DB::select('exec spGeocercaConsultar ?', [$id_usuario]); */
             $vehiculos = DB::connection($conexion)->select('exec spActivosUsuarioConsultarV2 ?', [$id_usuario]);
             $alertas = DB::connection($conexion)->select('exec spD_AlertaConsultar ?,?', [$id_usuario,0]);
@@ -208,7 +208,7 @@ class SubsuarioController extends Controller
             $grupo_geocercas = DB::connection($conexion)->select('exec spGrupoGeocercaConsultar ?, ?', [$id_usuario, 0]);
             Cache::put($id_usuario, ['vehiculos' => $vehiculos, 'alertas' => $alertas, 'modulos' => $modulos, 'grupo_puntos' => $grupo_puntos, 'grupo_geocercas' => $grupo_geocercas, 'grupo_vehiculos' => $grupo_vehiculos]);
         	return response()->json(Cache::get($id_usuario));
-        }
+        /* } */
 
         /* $categorias = DB::connection($conexion)->select('exec spLlenarCombo ?', ['CATEGORIASUB']); */
         //$categorias = DB::connection($conexion)->table('SubUsuarioCategoria')->select('IdCategoria', 'Descripcion')->get();
@@ -259,7 +259,6 @@ class SubsuarioController extends Controller
 
         try
         {
-
             DB::connection($conexion)->beginTransaction();
 
             $result = DB::connection($conexion)->select('DECLARE @parIdSubUsuario int
@@ -299,6 +298,8 @@ class SubsuarioController extends Controller
                 DB::connection($conexion)->insert('exec spActivoSubUsuarioIngresar ?,?,?', [$vehiculo, $id_usuario, $result[0]->idsubusuario]);
             }
 
+            if(sizeof($vehiculos_asignados) == 0) DB::connection($conexion)->insert('exec spActivoSubUsuarioIngresarVirtual ?,?', [$id_usuario, $result[0]->idsubusuario]);
+
             /* foreach($geocercas_asignadas as $geocerca)
             {
                 DB::insert('exec spGeocercaSubUsuarioIngresar ?,?,?', [$geocerca, $id_usuario, $result[0]->idsubusuario]);
@@ -331,8 +332,7 @@ class SubsuarioController extends Controller
 
             DB::connection($conexion)->commit();
 
-            return response()->json(['sms' => 'ok']);
-
+            return response()->json(['sms' => 'ok', 'ejecutar' => (sizeof($vehiculos_asignados) == 0)]);
         }
         catch(Exception $e)
         {
@@ -391,7 +391,7 @@ class SubsuarioController extends Controller
 
         /* $grupo_vehiculos = DB::connection($conexion)->select('exec spGrupoConsultar ?', [$id_usuario]); */
 
-        if(Cache::has($id_usuario))
+        /* if(Cache::has($id_usuario))
         {
             $vehiculos = Cache::get($id_usuario)['vehiculos'];
             $alertas = Cache::get($id_usuario)['alertas'];
@@ -401,7 +401,7 @@ class SubsuarioController extends Controller
             $grupo_geocercas = Cache::get($id_usuario)['grupo_geocercas'];
         }
         else
-        {
+        { */
             $vehiculos = DB::connection($conexion)->select('exec spActivosUsuarioConsultarV2 ?', [$id_usuario]);
             $alertas = DB::connection($conexion)->select('exec spD_AlertaConsultar ?,?', [$id_usuario,0]);
             $modulos = DB::connection($conexion)->select('exec spModuloConsultar ?', [$id_usuario]);
@@ -410,7 +410,7 @@ class SubsuarioController extends Controller
             $grupo_geocercas = DB::connection($conexion)->select('exec spGrupoGeocercaConsultar ?, ?', [$id_usuario, 0]);
 
             Cache::put($id_usuario,['vehiculos' => $vehiculos, 'alertas' => $alertas, 'modulos' => $modulos, 'grupo_puntos' => $grupo_puntos, 'grupo_vehiculos' => $grupo_vehiculos, 'grupo_geocercas' => $grupo_geocercas]);
-        }
+        /* } */
 
         //los recursos que tiene el subusuario, se consulta para saber cuales estan checkeados
         $vehiculos_pertenecen = DB::connection($conexion)->select('exec spActivoSubUsuarioConsultar ?,?', [$id_usuario, $id]);

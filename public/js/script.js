@@ -1162,17 +1162,10 @@ document.getElementById('confirmar_eliminacion_subusuario').addEventListener('cl
     .then(res => {
         document.body.style.cursor = 'default';
 
+        document.getElementById('botones_subusuarios_grupos').classList.add('d-none');
+
         if(res.sms == 'ok')
         {
-            /* $.toast({
-                heading: 'Eliminado',
-                text: 'Subusuario eliminado con exito',
-                position: 'bottom-center',
-                icon: 'success',
-                hideAfter: 1000,
-                loader: false
-            }); */
-
             new Notification({
                 text: 'Subusuario eliminado con éxito',
                 style: {
@@ -1197,14 +1190,6 @@ document.getElementById('confirmar_eliminacion_subusuario').addEventListener('cl
 
     })
     .catch(error => {
-        /* $.toast({
-            heading: 'Error',
-            text: 'Ocurrió un error al eliminar el Subusuario',
-            position: 'bottom-center',
-            icon: 'error',
-            hideAfter: 1000,
-            loader: false
-        }); */
 
         new Notification({
             text: 'Ocurrio un error al eliminar el Subusuario',
@@ -1223,7 +1208,7 @@ document.getElementById('confirmar_eliminacion_subusuario').addEventListener('cl
             pauseOnHover: false,
             pauseOnFocusLoss: false
         });
-    });
+    });s
 
 })
 //FIN CONFIRMACION ELIMINACION SUBUSUARIO
@@ -2593,7 +2578,7 @@ function getParameterByName(name)
 {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-    results = regex.exec(location.search);
+    results = regex.exec(location.search.toLowerCase());
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
 
@@ -2963,7 +2948,8 @@ function ajustar_altura(talla_errores)
 //al presionar el boton principal de subusuarios se reinicia todos los parametros de busqueda
 document.getElementById('boton_reiniciar_subusuarios').addEventListener('click', ()=>{
     $('#grupos').DataTable().$('tr.selected').removeClass('selected');
-
+	$('#grupos').DataTable().rows().deselect();
+	
     busqueda.grupo = 0;
 
     busqueda.categorias = [];
@@ -3852,6 +3838,7 @@ document.getElementById('confirmar_eliminacion_varios_subusuarios').addEventList
             pauseOnFocusLoss: false
         });
 
+        document.getElementById('botones_subusuarios_grupos').classList.add('d-none');
         $('#subusuarios').DataTable().ajax.reload();
         $('#modal_eliminar_varios_subusuarios').modal('hide');
     });
