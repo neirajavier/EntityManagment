@@ -1208,7 +1208,7 @@ document.getElementById('confirmar_eliminacion_subusuario').addEventListener('cl
             pauseOnHover: false,
             pauseOnFocusLoss: false
         });
-    });s
+    });
 
 })
 //FIN CONFIRMACION ELIMINACION SUBUSUARIO
@@ -2949,7 +2949,7 @@ function ajustar_altura(talla_errores)
 document.getElementById('boton_reiniciar_subusuarios').addEventListener('click', ()=>{
     $('#grupos').DataTable().$('tr.selected').removeClass('selected');
 	$('#grupos').DataTable().rows().deselect();
-	
+
     busqueda.grupo = 0;
 
     busqueda.categorias = [];
