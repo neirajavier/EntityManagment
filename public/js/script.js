@@ -1261,12 +1261,12 @@ document.getElementById('boton_guardar_subusuario').addEventListener('click', ()
 
     for (let i = 0; i < grupopuntos_totales; i++)
     {
-        if($('#grupopuntos_subusuario').DataTable().row(i).node().children[0].children[0].checked) vehiculos_asignados.push($('#grupopuntos_subusuario').DataTable().row(i).data()[1]);
+        if($('#grupopuntos_subusuario').DataTable().row(i).node().children[0].children[0].checked) grupopuntos_asignados.push($('#grupopuntos_subusuario').DataTable().row(i).data()[1]);
     }
 
     for (let i = 0; i < grupogeocercas_totales; i++)
     {
-        if($('#grupogeocercas_subusuario').DataTable().row(i).node().children[0].children[0].checked) vehiculos_asignados.push($('#grupogeocercas_subusuario').DataTable().row(i).data()[1]);
+        if($('#grupogeocercas_subusuario').DataTable().row(i).node().children[0].children[0].checked) grupogeocercas_asignadas.push($('#grupogeocercas_subusuario').DataTable().row(i).data()[1]);
     }
 
     for (let i = 0; i < grupovehiculos_totales; i++)
